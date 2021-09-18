@@ -1,0 +1,12 @@
+<mat-card class="side-banner-card" *ngIf="isBannerCardVisible()">
+  <div class="header" mat-card-title>
+    <span class="subtitle-1 text-color-black title">
+      {{ title }}
+    </span>
+  </div>
+
+  <ng-content></ng-content>
+  <div class="action" *ngIf="banner.callToActionType === 'ADD_TO_CART'">
+    <button mat-flat-button color="primary" (click)="addProductToCart()">Sepete Ekle</button>
+  </div>
+</mat-card>

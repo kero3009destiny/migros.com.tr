@@ -1,0 +1,13 @@
+<h1>
+  <a
+    class="{{ customClass }}"
+    [skipLocationChange]="skipLocationChange"
+    (click)="sendGtmClick()"
+    [routerLink]="['', prettyName]"
+    [queryParams]="queryParams"
+    [state]="{ referrerEventId: referrerEventId }"
+    [class.disabled]="prettyName === undefined || !asLink"
+  >
+    {{ productName }}
+  </a>
+</h1>

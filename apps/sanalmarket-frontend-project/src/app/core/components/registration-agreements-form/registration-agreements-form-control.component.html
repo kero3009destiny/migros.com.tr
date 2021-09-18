@@ -1,0 +1,34 @@
+<div [formGroup]="registrationAgreementsForm">
+  <div class="row">
+    <span class="mat-caption-normal">
+      <a class="text-color-orange" (click)="onClickPersonalDataAgreement()" href="javascript:void(0)"
+        >Kişisel Verilerin Korunması Hakkında Aydınlatma Metni
+      </a>
+      için tıklayın.
+    </span>
+  </div>
+  <div class="row checkbox">
+    <mat-checkbox class="fe-checkbox-label-caption" color="primary" formControlName="permitMembership" required>
+      <span class="mat-caption-normal">
+        <a class="text-color-orange" (click)="onClickMembershipAgreement()" href="javascript:void(0)"
+          >Üyelik Sözleşmesi</a
+        >
+        ve
+        <a class="text-color-orange" (click)="onClickExplicitConsent()" href="javascript:void(0)">Açık Rıza Metni</a>
+        kapsamında kişisel verilerimin işlenmesine ve paylaşılmasına onay veriyorum.
+        <mat-error *ngIf="isPermitMembershipNotAccepted()"> Lütfen onaylayın. </mat-error>
+      </span>
+    </mat-checkbox>
+  </div>
+  <div class="row checkbox">
+    <mat-checkbox class="fe-checkbox-label-caption" color="primary" formControlName="permitContact">
+      <span class="mat-caption-normal">
+        Migros Sanalmarket indirim ve kampanyalarından anında haberdar olmak için
+        <a class="text-color-orange" (click)="onClickKvkMembershipAgreement()" href="javascript:void(0)"
+          >Migros Ticaret A.Ş. Migros Sanalmarket Ticari İletişim İzni Metni</a
+        >
+        kapsamında iletişim izni veriyorum.
+      </span>
+    </mat-checkbox>
+  </div>
+</div>

@@ -1,0 +1,175 @@
+<div *ngIf="isMediumScreen" class="dialog__header">
+  <button (click)="dismissDialog()">
+    <i class="icon icon-dismiss--grey"></i>
+  </button>
+</div>
+<h3>{{ currentStep.title }}</h3>
+<mat-dialog-content class="dialog__container otp-send" *ngIf="currentStep.name === 'send'">
+  <p>Üyelik işlemini onaylamak için telefon numaranızı girerek doğrulama işlemi yapın.</p>
+  <form
+    class="phone-send-form"
+    [formGroup]="sendFormGroup"
+    feAppSubmitThrottle
+    (throttleSubmit)="sendPhoneNumber()"
+    [throttleFormValid]="sendFormGroup.valid"
+  >
+    <mat-form-field color="accent" appearance="outline">
+      <mat-label>Cep telefonu</mat-label>
+      <input
+        id="otp-dialog-phone__input"
+        type="tel"
+        maxlength="10"
+        matInput
+        autocomplete="tel"
+        formControlName="phoneNumber"
+      />
+      <mat-hint align="start"> Telefon numaranızı başında 0 olmadan giriniz </mat-hint>
+      <mat-error id="otp-dialog-phone__empty-error" *ngIf="phoneNumber.invalid && phoneNumber.errors.required">
+        Lütfen telefon numaranızı giriniz.
+      </mat-error>
+      <mat-error id="otp-dialog-phone__unValid-error" *ngIf="phoneNumber.invalid && phoneNumber.errors.pattern">
+        Telefon numaranızı 5XXXXXXXXX şeklinde giriniz.
+      </mat-error>
+    </mat-form-field>
+    <button id="otp-dialog-phone__send-button" type="submit" class="button-primary">Şifre Gönder</button>
+  </form>
+</mat-dialog-content>
+<mat-dialog-content class="dialog__container otp-verify" *ngIf="currentStep.name === 'verify'">
+  <p>
+    <strong>{{ phoneNumberValue }}</strong> numaralı cep telefonunuza tek kullanımlık şifre gönderilmiştir.<br />
+    <strong>{{ tryAgainEnableInSeconds / 60 }} dakika</strong> içerisinde şifre ulaşmaz ise tekrar gönder butonu ile
+    yeni şifre talep edebilirsiniz.
+  </p>
+  <fe-timer-bar
+    #timerBar
+    [tryAgainTimeout]="tryAgainEnableInSeconds"
+    (tictoc)="onCountdownTicToc($event)"
+    (retry)="onRetry()"
+  ></fe-timer-bar>
+  <form
+    class="phone-verify-form"
+    [formGroup]="verifyFormGroup"
+    feAppSubmitThrottle
+    (throttleSubmit)="verifyPhoneNumber(code.value)"
+    [throttleFormValid]="verifyFormGroup.valid"
+  >
+    <mat-form-field color="accent" appearance="outline">
+      <mat-label>SMS kodu</mat-label>
+      <input id="otp-dialog-code__input" type="text" maxlength="6" matInput formControlName="code" />
+      <mat-error *ngIf="code.invalid && code.errors.pattern"> Lütfen geçerli bir SMS kodunu giriniz. </mat-error>
+      <mat-error *ngIf="code.invalid && code.errors.required"> Lütfen SMS kodunu giriniz. </mat-error>
+    </mat-form-field>
+    <div class="phone-verify-form__actions">
+      <button id="otp-dialog-code__confirm-button" type="submit" class="button-primary">Onayla</button>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-content class="dialog__container otp-verify" *ngIf="currentStep.name === 'verify-email'">
+  <p>
+    <strong>{{ email }}</strong> adresine tek kullanımlık şifre gönderilmiştir.<br />
+    <strong>{{ tryAgainEnableInSeconds / 60 }} dakika</strong> içerisinde şifre ulaşmaz ise tekrar gönder butonu ile
+    yeni şifre talep edebilirsiniz.
+  </p>
+  <fe-timer-bar
+    #timerBar
+    [tryAgainTimeout]="tryAgainEnableInSeconds"
+    (tictoc)="onCountdownTicToc($event)"
+    (retry)="resendEmail()"
+  ></fe-timer-bar>
+  <form
+    class="phone-verify-form"
+    [formGroup]="verifyEmailFormGroup"
+    feAppSubmitThrottle
+    (throttleSubmit)="verifyEmail()"
+    [throttleFormValid]="verifyEmailFormGroup.valid"
+  >
+    <mat-form-field color="accent" appearance="outline">
+      <mat-label>Email kodu</mat-label>
+      <input id="email-dialog-code__input" type="number" maxlength="6" matInput formControlName="code" />
+      <mat-error *ngIf="code.invalid && code.errors.pattern"> Lütfen geçerli bir kod giriniz. </mat-error>
+      <mat-error *ngIf="code.invalid && code.errors.required"> Lütfen Email kodunu giriniz. </mat-error>
+    </mat-form-field>
+    <div class="phone-verify-form__actions">
+      <button id="email-dialog-code__confirm-button" type="submit" class="button-primary">Onayla</button>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-content
+  class="dialog__container otp-verify verify-membership"
+  *ngIf="currentStep.name === 'verify-membership-email'"
+>
+  <span class="subtitle-2 text-color-black">
+    E-posta adresine gelen kodu girerek doğrulama işlemini tamamla. <br />
+  </span>
+  <fe-timer-bar
+    #timerBar
+    [tryAgainTimeout]="tryAgainEnableInSeconds"
+    (tictoc)="onCountdownTicToc($event)"
+    (retry)="onRetry()"
+    id="otp-dialog_email-verify-timer"
+  ></fe-timer-bar>
+
+  <form
+    class="phone-verify-form"
+    [formGroup]="verifyFormGroup"
+    feAppSubmitThrottle
+    (throttleSubmit)="claimVerificationMail(code.value)"
+    [throttleFormValid]="verifyFormGroup.valid"
+  >
+    <mat-form-field id="otp-verify-email-code" color="accent" appearance="outline">
+      <mat-label class="subtitle-2 text-color-black">E-posta Doğrulama Kodu</mat-label>
+      <input
+        id="otp-dialog-email-code__input"
+        feOnlyNumbers
+        type="tel"
+        maxlength="6"
+        matInput
+        cdkFocusInitial
+        formControlName="code"
+      />
+      <mat-error *ngIf="code.invalid && code.errors.pattern">
+        Lütfen geçerli bir E-posta Doğrulama kodu giriniz.</mat-error
+      >
+      <mat-error *ngIf="code.invalid && code.errors.required"> Lütfen E-posta Doğrulama kodunu giriniz.</mat-error>
+    </mat-form-field>
+
+    <div class="phone-verify-form__actions">
+      <button
+        [disabled]="code.invalid"
+        id="otp-dialog-e-mail-code__confirm-button"
+        type="submit"
+        class="button-primary"
+      >
+        Doğrula
+      </button>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-content class="dialog__container otp-account-not-found" *ngIf="currentStep.name === 'accountNotFound'">
+  <p>Girdiğiniz telefon numarası ile eşleşen bir hesap bilgisi bulunamadı.</p>
+  <div class="otp-account-not-found__bottom">
+    <button
+      id="otp-dialog__redirect-to-recovery"
+      class="button-primary"
+      routerLink="/sifremi-unuttum"
+      (click)="dismissDialog()"
+    >
+      Hesabımı Kurtar
+    </button>
+    <span
+      >Henüz üye değilseniz
+      <a id="otp-dialog__redirect-to-register" class="button-link--green" routerLink="/kayit" (click)="dismissDialog()"
+        >Üye Olun</a
+      ></span
+    >
+  </div>
+</mat-dialog-content>
+<button
+  id="otp-dialog__cancel-button"
+  class="dismiss-button button-link"
+  *ngIf="!isMediumScreen"
+  type="button"
+  (click)="dismissDialog()"
+>
+  İptal
+</button>

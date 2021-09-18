@@ -1,0 +1,34 @@
+<div class="special-discounts" *ngIf="!isLoading() && !isCartCampaignsEmpty()">
+  <mat-expansion-panel [expanded]="isDesktop()">
+    <mat-expansion-panel-header id="special-discount-header">
+      <span class="text-color-success subtitle-2 special-discounts-header">
+        Sepetinize Özel Fırsatlar
+        <span *ngIf="getTotalCartCampaignProductsNumber()">({{ getTotalCartCampaignProductsNumber() }} ürün)</span>
+      </span>
+    </mat-expansion-panel-header>
+
+    <mat-tab-group animationDuration="0">
+      <mat-tab *ngFor="let cartCampaign of getCartCampaigns()" class="text-color-black">
+        <ng-template matTabLabel>{{ cartCampaign.name }}</ng-template>
+        <ng-template matTabContent>
+          <div class="special-discounts-info">
+            <span class="subtitle-2 text-color-black">{{ cartCampaign.title }}</span>
+            <p class="mat-caption-normal text-color-grey">{{ cartCampaign.description }}</p>
+          </div>
+
+          <fe-carousel [carouselItems]="cartCampaign.storeProductInfos" type="any" padding="0 2.25rem">
+            <ng-template #carouselCard let-carouselItem>
+              <sm-special-discount-product-card
+                class="carousel-item"
+                [product]="carouselItem"
+                [cartItem]="getCartItem(carouselItem)"
+                feGtm
+                [gtm]="getGtmData(carouselItem, cartCampaign.name)"
+              ></sm-special-discount-product-card>
+            </ng-template>
+          </fe-carousel>
+        </ng-template>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-expansion-panel>
+</div>

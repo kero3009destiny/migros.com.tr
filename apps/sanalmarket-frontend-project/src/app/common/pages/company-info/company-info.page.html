@@ -1,0 +1,8 @@
+<div class="faqs-page" *ngIf="isPageContentLoaded()">
+  <ng-container>
+    <div class="faqs-page__menu">
+      <h2 class="faqs-page__title">{{getPageContentQuestion() }}</h2>
+      <div class="faqs-page__menu-title mat-caption-normal" [innerHtml]="getPageContentAnswer() | feSanitizeHtml"></div>
+    </div>
+  </ng-container>
+</div>

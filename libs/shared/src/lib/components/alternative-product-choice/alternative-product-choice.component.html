@@ -1,0 +1,16 @@
+<div class="cart-choice-box">
+  <h2>
+    {{ title }}
+  </h2>
+  <mat-radio-group>
+    <mat-radio-button
+      *ngFor="let choice of cartChoices"
+      [value]="choice.value"
+      color="primary"
+      (change)="onCartChoiceChange($event)"
+      [checked]="choice.value === initialValue"
+    >
+      <span>{{ choice.label }}</span>
+    </mat-radio-button>
+  </mat-radio-group>
+</div>

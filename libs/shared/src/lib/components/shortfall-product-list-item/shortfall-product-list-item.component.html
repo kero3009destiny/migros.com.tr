@@ -1,0 +1,12 @@
+<fe-product-image
+  [image]="{ urls: product.dimensionImageUrlMap }"
+  [productName]="product.name"
+  [imageType]="'CART'"
+></fe-product-image>
+<div class="product-info">
+  <fe-product-name [productName]="product.name" [productId]="product.productId"></fe-product-name>
+  <fe-product-shortfall-info
+    [fallCount]="product.previousQuantity - product.newQuantity"
+    [inCartCount]="product.newQuantity"
+  ></fe-product-shortfall-info>
+</div>

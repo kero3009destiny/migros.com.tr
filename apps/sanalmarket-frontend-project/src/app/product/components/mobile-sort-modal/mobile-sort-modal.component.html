@@ -1,0 +1,23 @@
+<div matDialogTitle>
+  <fe-icon-button mat-dialog-close [icon]="getTimesIcon()" class="float-right"></fe-icon-button>
+  <h3 class="text-align-center">Sırala</h3>
+</div>
+
+<div matDialogContent class="content">
+  <mat-radio-group (change)="onSortCriteriaChange($event)" color="primary" [value]="getInitialOption()">
+    <mat-radio-button
+      class="mat-body-2 radio-group"
+      *ngFor="let sortOption of getSortCriteriaOptions()"
+      [value]="sortOption"
+    >
+      {{ sortOption.name }}
+    </mat-radio-button>
+  </mat-radio-group>
+</div>
+
+<div class="actions">
+  <mat-divider></mat-divider>
+  <div class="button-container">
+    <button (click)="onConfirm()" class="button" mat-flat-button color="primary">Sırala</button>
+  </div>
+</div>

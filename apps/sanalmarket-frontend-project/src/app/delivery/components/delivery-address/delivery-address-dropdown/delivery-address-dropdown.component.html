@@ -1,0 +1,33 @@
+<h3 class="text-align-center">Siparişini nereye getirelim?</h3>
+<form class="delivery-zone-form" [formGroup]="deliveryZoneFormGroup">
+  <fe-dropdown
+    id="delivery-address-dropdown_city"
+    formControlName="cityId"
+    placeholder="İl"
+    [options]="cities"
+    [required]="false"
+    [isSearchVisible]="true"
+  >
+  </fe-dropdown>
+  <fe-dropdown
+    id="delivery-address-dropdown_town"
+    formControlName="townId"
+    placeholder="İlçe"
+    [options]="towns"
+    [required]="false"
+    [isSearchVisible]="true"
+    [class.disabled]="isTownDisabled()"
+  >
+  </fe-dropdown>
+  <fe-dropdown
+    id="delivery-address-dropdown_district"
+    formControlName="serviceAreaObjectId"
+    placeholder="Mahalle"
+    [options]="districts"
+    [required]="false"
+    [isSearchVisible]="true"
+    [class.disabled]="isDistrictDisabled()"
+    (ngModelChange)="submitDeliveryZone()"
+  >
+  </fe-dropdown>
+</form>

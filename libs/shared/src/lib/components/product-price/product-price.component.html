@@ -1,0 +1,13 @@
+<div [ngClass]="{ 'promotion-wrapper': hasPriceDiscount && showPromotionLabel }">
+  <div *ngIf="showPromotion && !hasPriceDiscount" class="promotion">
+    <span class="promotion">{{ promotion.value }}</span>
+  </div>
+  <div *ngIf="!showPromotion && hasPriceDiscount" class="price-old">
+    <span class="amount">{{ regularPrice | feFormatPrice }} <span class="currency">TL</span></span>
+  </div>
+  <div class="price-new subtitle-1">
+    <span class="amount"> {{ shownPrice | feFormatPrice }} <span class="currency">TL</span> </span>
+    <ng-content select="[info]"></ng-content>
+    <ng-content select="[unit]"></ng-content>
+  </div>
+</div>

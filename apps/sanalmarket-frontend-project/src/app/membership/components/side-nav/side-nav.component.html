@@ -1,0 +1,148 @@
+<div class="container">
+  <div class="nav-header__logged-in" *ngIf="isUserLoggedIn()">
+    <div class="user-avatar">
+      <fa-icon [icon]="userAltIcon" size="lg"></fa-icon>
+    </div>
+    <div class="user-info">
+      <div class="name mat-headline text-color-black text-align-center">
+        {{ getUserName() }}
+      </div>
+      <div class="email mat-body-2 text-color-grey text-align-center" *ngIf="isUserEmailDefined()">
+        {{ getUserEmail() }}
+      </div>
+    </div>
+    <div class="user-money">
+      <img class="money-logo" src="assets/logos/money/money-logo.svg" />
+      <div class="mat-caption-normal">
+        <a routerLink="/uyelik/puanlarim" *ngIf="isCrmVerified()">
+          {{ getUserMoneyPoints() | feFormatPrice }}
+          <fa-icon [icon]="arrowIcon"></fa-icon>
+        </a>
+        <a routerLink="/money-kayit" *ngIf="!isCrmVerified()">
+          Üye Ol, Fırsatları Yakala !
+          <fa-icon [icon]="arrowIcon"></fa-icon>
+        </a>
+      </div>
+    </div>
+    <!-- <div class="money-gold-wrapper">
+      <sm-money-gold-banner [navItem]="true"></sm-money-gold-banner>
+    </div> -->
+  </div>
+  <div class="nav-header__logged-out" *ngIf="!isUserLoggedIn()">
+    <div class="subtitle-1 text-color-black text-align-left">Hesabım</div>
+    <div class="mat-headline text-color-black text-align-center">Merhaba 👋</div>
+  </div>
+  <div class="nav-body">
+    <ng-container *ngIf="isUserLoggedIn()">
+      <!-- This will not be shown on the menu for now -->
+      <sm-side-nav-link
+        [routerLink]="getServiceAreaRoute()"
+        [linkIcon]="mapMarkedAltIcon"
+        linkTitle="Teslimat Bölgesi Tercihim"
+        [linkDetail]="getUserDistrictName()"
+        *ngIf="false"
+      ></sm-side-nav-link>
+      <!-- ------ -->
+      <sm-side-nav-link
+        [routerLink]="getMembershipInformation()"
+        [linkIcon]="userAltIcon"
+        linkTitle="Üyelik Bilgilerim"
+      ></sm-side-nav-link>
+      <sm-side-nav-link [routerLink]="getUserAddressesRoute()" [linkIcon]="addressBookIcon" linkTitle="Adreslerim">
+      </sm-side-nav-link>
+      <sm-side-nav-link [routerLink]="getUserOrdersRoute()" [linkIcon]="bagsShoppingIcon" linkTitle="Siparişlerim">
+      </sm-side-nav-link>
+      <sm-side-nav-link
+        [routerLink]="getFavouriteProductsRoute()"
+        [linkIcon]="heartIcon"
+        linkTitle="Favori Ürünlerim"
+        *ngIf="!isPortfolioKurban()"
+      >
+      </sm-side-nav-link>
+      <sm-side-nav-link
+        [routerLink]="getUserPointsRoute()"
+        [linkIcon]="giftCardIcon"
+        linkTitle="Puan ve Çeklerim"
+        *ngIf="!isPortfolioKurban()"
+      >
+      </sm-side-nav-link>
+      <sm-side-nav-link
+        [routerLink]="getHealthyLifeRoute()"
+        [linkIcon]="heartbeatIcon"
+        *ngIf="isPortfolioMarket()"
+        linkTitle="Sağlıklı Yaşam Yolculuğum"
+      ></sm-side-nav-link>
+      <!-- This will not be shown on the menu for now -->
+      <sm-side-nav-link
+        [routerLink]="getSettingsRoute()"
+        [linkIcon]="userCogIcon"
+        linkTitle="Hesap Ayarları"
+        *ngIf="false"
+      >
+      </sm-side-nav-link>
+      <!-- ------ -->
+    </ng-container>
+    <ng-container *ngIf="!isUserLoggedIn()">
+      <sm-side-nav-link
+        [routerLink]="getLogInRoute()"
+        [linkIcon]="userCircleIcon"
+        linkTitle="Giriş Yap veya Üye Ol"
+        [routerLinkActiveOptions]="{ exact: true }"
+        routerLinkActive="active"
+      >
+      </sm-side-nav-link>
+      <sm-side-nav-link
+        *ngIf="!isPortfolioHemen()"
+        [routerLink]="getServiceAreaRoute()"
+        [linkIcon]="mapMarkedAltIcon"
+        linkTitle="Teslimat Bölgesi Tercihim"
+      ></sm-side-nav-link>
+      <sm-side-nav-link
+        (click)="getOrderTrackingRoute()"
+        [linkIcon]="bagsShoppingIcon"
+        linkTitle="Sipariş Takibi"
+        linkDetail="Üye olmayan kullanıcılar için"
+      ></sm-side-nav-link>
+    </ng-container>
+  </div>
+  <div class="nav-footer">
+    <div class="customer-contact">
+      <div class="icon">
+        <fa-icon [icon]="phoneIcon"></fa-icon>
+      </div>
+      <div class="info">
+        <div class="contact-number mat-subheading-2 text-color-orange">0850 200 40 00</div>
+        <div class="mat-caption-normal text-color-grey">Müşteri Hizmetleri</div>
+      </div>
+    </div>
+    <div class="whatsapp-contact">
+      <div class="icon">
+        <img src="/assets/logos/social/whatsapp-skeleton.svg" alt="WhatsApp Logo" />
+      </div>
+      <div class="info">
+        <div class="text mat-caption-normal text-color-grey">
+          Siparişin durumunu <a href="https://wa.me/905303001300" class="phone-number">5303001300</a> No’lu Whatsapp
+          hattımızdan öğrenebilirsiniz.
+        </div>
+      </div>
+    </div>
+    <a
+      *ngIf="isUserLoggedIn()"
+      class="logout mat-caption-normal text-color-error"
+      (click)="onClickLogout()"
+      href="javascript:void(0)"
+    >
+      Çıkış Yap
+    </a>
+    <div class="external-links mobile-only-v2">
+      <div class="row mat-caption-normal text-align-center" *ngIf="isUserLoggedIn()">
+        <span class="text">Öneri ve Talep Formu</span>
+        <fa-icon [icon]="externalLinkIcon"></fa-icon>
+      </div>
+      <div class="row mat-caption-normal text-align-center" (click)="onClickPersonalDataAgreement()">
+        <span class="text">Kişisel Verilerin Korunması Hakkında Aydınlatma Yazısı</span>
+        <fa-icon [icon]="externalLinkIcon"></fa-icon>
+      </div>
+    </div>
+  </div>
+</div>

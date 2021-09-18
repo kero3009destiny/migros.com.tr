@@ -1,0 +1,62 @@
+<h3 class="text-align-center" mat-dialog-title>{{ getTitle() }}</h3>
+<mat-dialog-content>
+  <fe-icon-button
+    *ngIf="Phase.OPTIONS !== getPhase()"
+    class="return-button"
+    (click)="onClickReturned()"
+    [icon]="returnIcon"
+  >
+  </fe-icon-button>
+  <fe-icon-button class="close-button" (click)="onClickClosed()" [icon]="closeIcon"> </fe-icon-button>
+  <ng-container content *ngIf="Phase.OPTIONS === getPhase()">
+    <div class="subtitle-2" *ngIf="getUser$() | async as user">Merhaba {{ user.firstName }},</div>
+    <h1 class="sub-title">Siparişini nasıl getirelim?</h1>
+    <div class="delivery-options">
+      <fe-selectable-card
+        (click)="onClickAddressSelected()"
+        class="delivery-option delivery-option--home"
+        id="delivery-options-modal_home"
+        *ngIf="isPhaseAvailable(Phase.ADDRESS)"
+      >
+        <ng-container primary>
+          <img alt="address" class="icon" src="assets/images/delivery/address.svg" />
+          <div class="subtitle-1 text-align-center">Adresime Gelsin</div>
+        </ng-container>
+      </fe-selectable-card>
+      <fe-selectable-card
+        (click)="onClickStoreSelected()"
+        class="delivery-option delivery-option--store"
+        id="delivery-options-modal_store"
+        *ngIf="isPhaseAvailable(Phase.STORE)"
+      >
+        <ng-container primary>
+          <img alt="store" class="icon" src="assets/images/delivery/store.svg" />
+          <div>
+            <div class="subtitle-1 text-align-center">Mağazadan Alacağım</div>
+            <div class="text-color-success mat-caption-normal free-delivery--label">Ücretsiz Teslimat!</div>
+          </div>
+        </ng-container>
+      </fe-selectable-card>
+      <fe-selectable-card
+        *ngIf="isFoundationEnabled() && isPhaseAvailable(Phase.FOUNDATION)"
+        (click)="onClickFoundationSelected()"
+        class="delivery-option delivery-option--donation"
+        id="delivery-options-modal_donation"
+      >
+        <ng-container primary>
+          <img alt="foundation" class="icon" src="assets/images/delivery/foundation.svg" />
+          <div class="subtitle-1 text-color-black text-align-center">Bağış Yapacağım</div>
+        </ng-container>
+      </fe-selectable-card>
+    </div>
+  </ng-container>
+  <ng-container content *ngIf="Phase.ADDRESS === getPhase()">
+    <sm-delivery-address (deliveryZoneChanged)="onDeliveryZoneChanged($event)"></sm-delivery-address>
+  </ng-container>
+  <ng-container content *ngIf="Phase.STORE === getPhase()">
+    <sm-delivery-store (deliveryZoneChanged)="onDeliveryZoneChanged($event)"></sm-delivery-store>
+  </ng-container>
+  <ng-container content *ngIf="Phase.FOUNDATION === getPhase()">
+    <sm-delivery-foundation (deliveryZoneChanged)="onDeliveryZoneChanged($event)"></sm-delivery-foundation>
+  </ng-container>
+</mat-dialog-content>

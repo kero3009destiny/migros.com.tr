@@ -1,0 +1,25 @@
+<div class="product-modal">
+  <div class="product-modal__button--dismiss">
+    <button mat-button (click)="onDismissClick()">X</button>
+  </div>
+  <div class="product-modal__content">
+    <div class="product-modal__header">
+      <h1 mat-dialog-title>Ürün Notu Ekle</h1>
+    </div>
+    <form [formGroup]="productNoteFormGroup">
+      <mat-form-field color="accent" class="product-modal__form-field" appearance="outline">
+        <textarea
+          matInput
+          cdkTextareaAutosize
+          cdkAutosizeMinRows="4"
+          formControlName="productNote"
+          placeholder="Notunuz"
+        ></textarea>
+        <mat-error *ngIf="productNoteFormGroup.invalid">Lütfen geçerli bir ürün notu giriniz.</mat-error>
+      </mat-form-field>
+    </form>
+    <div mat-dialog-actions class="product-modal__footer" (click)="onSubmit()">
+      <button>Kaydet</button>
+    </div>
+  </div>
+</div>

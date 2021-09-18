@@ -1,0 +1,29 @@
+<mat-form-field appearance="outline" color="accent" [hideRequiredMarker]="true">
+  <mat-label class="subtitle-2 text-color-black">{{ placeholder }}</mat-label>
+  <fa-icon *ngIf="icon" class="icon-prefix" matPrefix [icon]="icon"></fa-icon>
+  <mat-select
+    [placeholder]="placeholder"
+    (selectionChange)="onChanged($event)"
+    [required]="required"
+    [value]="selectedOption"
+    (closed)="onClose()"
+    [panelClass]="getPanelClasses()"
+    [errorStateMatcher]="matcher"
+    [formControl]="control"
+  >
+    <input
+      type="text"
+      role="search"
+      *ngIf="isSearchVisible"
+      [(ngModel)]="searchKey"
+      (input)="filterOptions($event.target.value); $event.preventDefault()"
+    />
+    <div [class.scrollable]="scrollable">
+      <mat-option *ngIf="isFirstItemEmpty"></mat-option>
+      <mat-option class="mat-body-2" *ngFor="let option of filteredOptions" [value]="option">
+        {{ option?.name }}
+      </mat-option>
+    </div>
+  </mat-select>
+  <mat-error>Bu alan zorunludur.</mat-error>
+</mat-form-field>

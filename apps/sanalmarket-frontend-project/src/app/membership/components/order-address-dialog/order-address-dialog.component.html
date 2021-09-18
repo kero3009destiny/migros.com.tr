@@ -1,0 +1,41 @@
+<div matDialogTitle>
+  <fe-icon-button class="close-button" mat-dialog-close [icon]="getCloseIcon()"> </fe-icon-button>
+  <div class="subtitle-1 text-align-center text-color-black">{{ getTitle() }}</div>
+</div>
+
+<div mat-dialog-content class="address-selector-wrapper">
+  <div class="invoice-addresses-wrapper">
+    <ng-container *ngFor="let invoiceAddress of getInvoiceAddressList(); let i = index">
+      <div class="address" *ngIf="isInvoiceAddressVisible(i)" (click)="changeInvoiceAddress(invoiceAddress.id)">
+        <div class="title-delete-edit-address-detailed-wrapper">
+          <div class="title-delete-edit-wrapper">
+            <div class="title subtitle-2">
+              {{ invoiceAddress.name }}
+            </div>
+            <div class="edit-icon" (click)="onClickEditButton(invoiceAddress, true, $event)"></div>
+            <div class="delete-icon" (click)="onClickDeleteButton(invoiceAddress, true, $event)"></div>
+          </div>
+          <div class="address-detailed mat-caption-normal text-color-grey">
+            {{ invoiceAddress.fullAddress }}
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <div
+      class="load-more mat-caption text-color-orange"
+      *ngIf="isLoadMoreInvoiceAddressBtnVisible()"
+      (click)="onClickLoadMoreInvoiceAddress()"
+    >
+      <fa-icon [icon]="doubleDownIcon"></fa-icon>Diger Fatura Adreslerim
+    </div>
+    <div class="add-button" (click)="onClickAddNewInvoiceAddress()">
+      <a>
+        <div class="add-icon"></div>
+        Yeni Fatura Adresi Ekle
+      </a>
+    </div>
+    <p *ngIf="isSuccessMessageVisible()" class="subtitle-2 text-color-success text-align-center">
+      Fatura Adresi Güncellendi <fa-icon [icon]="getCheckIcon()"></fa-icon>
+    </p>
+  </div>
+</div>

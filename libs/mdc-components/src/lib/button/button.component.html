@@ -1,0 +1,10 @@
+<button *ngIf="!outlined || isDisabled" mat-flat-button [disabled]="isDisabled" color="primary" [type]="type">
+  <fa-icon *ngIf="icon && iconPosition === 'left'" [icon]="icon"></fa-icon>
+  {{ label }}
+  <fa-icon *ngIf="icon && iconPosition === 'right'" [icon]="icon"></fa-icon>
+</button>
+<button *ngIf="outlined && !isDisabled" mat-stroked-button [disabled]="isDisabled" color="primary" [type]="type">
+  <fa-icon *ngIf="icon && iconPosition === 'left'" [icon]="icon"></fa-icon>
+  {{ label }}
+  <fa-icon *ngIf="icon && iconPosition === 'right'" [icon]="icon"></fa-icon>
+</button>

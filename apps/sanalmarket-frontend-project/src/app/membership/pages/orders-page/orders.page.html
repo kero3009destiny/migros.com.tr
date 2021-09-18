@@ -1,0 +1,81 @@
+<sm-mobile-breadcrumb [pageName]="'Siparişlerim'"></sm-mobile-breadcrumb>
+<div class="container">
+  <div class="orders-page">
+    <h2 class="text-color-black desktop-only">Siparişlerim</h2>
+    <mat-tab-group *ngIf="!isDetailActive() else detail">
+      <mat-tab>
+        <ng-template mat-tab-label> {{ getTabLabel() }}</ng-template>
+        <ng-template matTabContent>
+          <mat-form-field appearance="outline" color="accent">
+            <mat-select (selectionChange)="onChangeFilter($event)" [value]="selectedFilterOption">
+              <mat-option class="mat-body-2 option" *ngFor="let option of filterOptions" [value]="option.value">
+                {{ option.name }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+
+          <ng-container *ngIf="!isOrdersEmpty() else noOrders">
+            <sm-past-order-list-item
+              [isActiveOrder]="true"
+              *ngFor="let order of activeOrders"
+              [order]="order"
+              (openOrderDetails)="openOrderDetail(order)"
+              (downloadInvoice)="onDownloadInvoice($event)"
+              (openOrderFeedback)="onOpenOrderFeedback()"
+            >
+            </sm-past-order-list-item>
+            <ng-container *ngFor="let month of getMonths()">
+              <p class="subtitle-1 text-color-black" *ngIf="!isMonthEmpty(month)">{{month + ', ' + getYear(month)}}</p>
+              <sm-past-order-list-item
+                *ngFor="let order of orderMap.get(month)"
+                [order]="order"
+                [isActiveOrder]="false"
+                (openOrderDetails)="openOrderDetail(order)"
+                (downloadInvoice)="onDownloadInvoice($event)"
+              >
+              </sm-past-order-list-item>
+            </ng-container>
+          </ng-container>
+        </ng-template>
+      </mat-tab>
+      <mat-tab>
+        <ng-template mat-tab-label>Kategori</ng-template>
+
+        <ng-template matTabContent>
+          <sm-user-orders-category></sm-user-orders-category>
+        </ng-template>
+      </mat-tab>
+    </mat-tab-group>
+
+    <ng-template #detail>
+      <sm-order-detail
+        (openOrderFeedback)="onOpenOrderFeedback()"
+        (cancelOrder)="onCancelOrder($event, removeDialog)"
+        (openDeliveryForm)="onOpenDeliveryForm($event)"
+        (downloadInvoice)="onDownloadInvoice($event)"
+        (openOrderRate)="onOpenOrderRateDialog($event)"
+        [order]="getSelectedOrder()"
+        (closeDetailModeEvent)="onCloseDetail()"
+      ></sm-order-detail>
+    </ng-template>
+  </div>
+
+  <ng-template #noOrders>
+    <div class="no-orders">
+      <p class="mat-body-2 text-color-black">
+        Son {{ selectedFilterOption }} ay içerisinde vermiş olduğunuz sipariş bulunmuyor. Şimdi sipariş vererek
+        alışverişe başlayabilirsiniz.
+      </p>
+      <button mat-flat-button color="primary" routerLink="/">Alışverişe Başla</button>
+    </div>
+  </ng-template>
+
+  <ng-template #removeDialog>
+    <div class="remove-modal">
+      <fe-icon-button class="close-button" mat-dialog-close [icon]="getTimesIcon()" cdk-focus-start></fe-icon-button>
+      <h3 class="text-color-black">Siparişi İptal Et</h3>
+      <p class="mat-caption-normal">Siparişi iptal etmek istediğine emin misin ?</p>
+      <fe-button [mat-dialog-close]="true" label="İptal Et"></fe-button>
+    </div>
+  </ng-template>
+</div>

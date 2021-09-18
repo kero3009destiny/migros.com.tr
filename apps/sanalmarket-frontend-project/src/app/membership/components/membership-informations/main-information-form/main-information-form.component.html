@@ -1,0 +1,102 @@
+<form
+  *ngIf="formGroup"
+  [formGroup]="formGroup"
+  feAppSubmitThrottle
+  [throttleFormValid]="formGroup.valid"
+  [class.money-register]="isNewRegister"
+>
+  <mat-form-field
+    id="membership-phone"
+    color="accent"
+    appearance="outline"
+    [class.error-hint]="getFormField('phoneNumber').invalid"
+  >
+    <mat-label class="subtitle-2 text-color-black">TELEFON NUMARASI</mat-label>
+    <input
+      type="tel"
+      matInput
+      autocomplete="tel"
+      feOnlyNumbers
+      formControlName="phoneNumber"
+      placeholder="5XXXXXXXXX"
+      feMdcMaskedInput
+      [maskOptions]="maskOptions"
+      [readonly]="isPhoneNumberReadOnly()"
+      (blur)="onBlurPhone()"
+      #phoneNumber
+    />
+    <span
+      *ngIf="isPhoneNumberReadOnly() && !isPhoneNumberSaved()"
+      (click)="onChangePhone($event)"
+      matSuffix
+      class="mat-caption-normal text-color-orange field-state"
+    >
+      Değiştir
+    </span>
+    <span
+      *ngIf="!isPhoneNumberReadOnly()"
+      (mousedown)="onSavePhone($event)"
+      matSuffix
+      class="mat-caption-normal text-color-orange field-state"
+    >
+      Kaydet
+    </span>
+    <span *ngIf="isPhoneNumberSaved()" matSuffix class="mat-caption-normal text-color-success field-state saved">
+      Değişiklikler Kaydedildi
+    </span>
+    <span *ngIf="isPhoneNumberSaved()" matSuffix class="text-color-success saved-icon">
+      <fa-icon [icon]="savedIcon"></fa-icon>
+    </span>
+    <span *ngIf="isNewRegister" matSuffix class="mat-caption-normal phone-verified">
+      ONAYLI
+      <fa-icon [icon]="verifiedIcon"></fa-icon>
+    </span>
+    <mat-hint *ngIf="isPhoneNumberReadOnly()" align="start" class="mat-caption-normal phone-verified">
+      ONAYLI
+      <fa-icon [icon]="verifiedIcon"></fa-icon>
+    </mat-hint>
+    <mat-hint *ngIf="isPhoneNumberReadOnly()" align="end" class="mat-caption-normal text-color-grey phone-hint">
+      Telefon numaranızı yılda sadece 2 kez değiştirebilirsiniz.
+    </mat-hint>
+    <mat-hint *ngIf="getFormField('phoneNumber').invalid" class="subtitle-2 phone-error">
+      Lütfen geçerli bir telefon numarası giriniz.
+    </mat-hint>
+  </mat-form-field>
+
+  <mat-form-field id="membership-email" color="accent" appearance="outline">
+    <mat-label class="subtitle-2 text-color-black">E-POSTA ADRESİ</mat-label>
+    <input type="email" matInput formControlName="email" [readonly]="isEmailReadOnly()" (blur)="onBlurEmail()" #email />
+    <span
+      *ngIf="isEmailReadOnly() && !isEmailSaved()"
+      (click)="onChangeEmail($event)"
+      matSuffix
+      class="mat-caption-normal text-color-orange field-state"
+    >
+      Değiştir
+    </span>
+    <span
+      *ngIf="!isEmailReadOnly()"
+      (mousedown)="onSaveEmail($event)"
+      matSuffix
+      class="mat-caption-normal text-color-orange field-state"
+    >
+      Kaydet
+    </span>
+    <span *ngIf="isEmailSaved()" matSuffix class="mat-caption-normal text-color-success field-state saved">
+      Değişiklikler Kaydedildi
+    </span>
+    <span *ngIf="isEmailSaved()" matSuffix class="text-color-success saved-icon">
+      <fa-icon [icon]="savedIcon"></fa-icon>
+    </span>
+    <mat-hint
+      (click)="onClikVerifyEmail()"
+      *ngIf="!isEmailVerified() && isEmailReadOnly()"
+      class="mat-caption-normal text-color-error email-verify"
+    >
+      <fa-icon [icon]="infoIcon"></fa-icon>
+      <span>E-posta adresini doğrula</span>
+      <fa-icon [icon]="chevronIcon"></fa-icon>
+    </mat-hint>
+    <mat-error>Lütfen geçerli bir e-posta adresi giriniz.</mat-error>
+  </mat-form-field>
+</form>

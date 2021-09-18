@@ -1,0 +1,322 @@
+<div class="home-page-wrapper mdc-layout-grid__inner" *ngIf="!isLoading()">
+  <!-- SLIDER BANNERS -->
+  <!-- ************** -->
+  <div class="mdc-layout-grid__cell--span-12">
+    <sm-swiper-banner
+      class="banners"
+      *ngIf="getMainPageSliderBanners()"
+      [banners]="getMainPageSliderBanners()"
+      [inViewport]="isBannerVisible()"
+      feDeferLoad
+      (insideViewPort)="onInsideViewPort()"
+      (outsideViewPort)="onOutsideViewPort()"
+    ></sm-swiper-banner>
+  </div>
+  <!-- UNDER SLIDER BANNERS -->
+  <!-- ************** -->
+  <div class="under-slider-banners mdc-layout-grid__cell--span-12">
+    <a
+      [href]="underSliderBanner.callToActionUrl"
+      (click)="onClickBanner(underSliderBanner, $event)"
+      *ngFor="let underSliderBanner of getMainPageUnderSliderBanners()"
+    >
+      <img
+        feLazyLoad
+        class="under-slider-banner"
+        [src]="underSliderBanner.imageUrl"
+        [alt]="underSliderBanner.identifier"
+      />
+    </a>
+  </div>
+  <!-- UNRATED ORDERS -->
+  <!-- ************** -->
+  <div class="section mdc-layout-grid__cell--span-12" *ngIf="isUnratedOrdersVisible()">
+    <div class="d-flex">
+      <div class="section-title below-unrated-orders mat-headline text-color-black">Değerlendirilmemiş Siparişler</div>
+      <div class="see-all text-color-orange mat-body-2" (click)="onClickAllUnratedOrders()">
+        Tümünü Gör
+        <fa-icon [icon]="faChevronRight"></fa-icon>
+      </div>
+    </div>
+    <div class="unrated-orders">
+      <div
+        class="order"
+        [@presenceAnimationFaster]
+        *ngFor="let unratedOrder of getUnratedOrders(); trackBy: trackByUnratedOrders"
+      >
+        <div class="inner">
+          <div class="inner-left">
+            <div class="inner-left-top">
+              <div class="product-images">
+                <img
+                  class="item"
+                  feLazyLoad
+                  [src]="productImages.images[0].urls.PRODUCT_LIST"
+                  [alt]="productImages.name"
+                  *ngFor="let productImages of getSampleStoreProducts(unratedOrder.orderId); let i = index"
+                />
+                <div
+                  class="item extra-indicator mat-body-2 text-color-grey"
+                  *ngIf="
+                    getUnratedOrderSampleImagesDelta(
+                      getSampleStoreProducts(unratedOrder.orderId).length,
+                      unratedOrder.itemCount
+                    )
+                  "
+                >
+                  +{{
+                    getUnratedOrderSampleImagesDelta(
+                      getSampleStoreProducts(unratedOrder.orderId).length,
+                      unratedOrder.itemCount
+                    )
+                  }}
+                </div>
+              </div>
+              <div class="order-no-date-quantity">
+                <span class="text-color-black mat-caption">Sipariş No: {{ unratedOrder.orderId }}</span>
+                <span class="text-color-grey mat-caption"
+                  >{{ getUnratedOrderDate(unratedOrder.deliveredAt) }} • {{ unratedOrder.itemCount }} Ürün</span
+                >
+              </div>
+            </div>
+            <div class="inner-left-bottom text-color-success">
+              <fa-icon class="saved-icon" [icon]="savedIcon"></fa-icon>
+              <span class="mat-caption-normal">{{ getUnratedOrderInfoText(unratedOrder) }}</span>
+            </div>
+          </div>
+          <button mat-flat-button class="button-primary" color="primary" (click)="onOpenOrderRateDialog(unratedOrder)">
+            Değerlendir
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- SHOPPING TABS - WEB -->
+  <!-- ************** -->
+  <ng-template [ngIf]="!isMobile()" [ngIfElse]="shoppingTabsMobile">
+    <div class="section mdc-layout-grid__cell--span-12" *ngIf="isShoppingListVisible()">
+      <div class="d-flex">
+        <div class="section-title mat-headline text-color-black">İlgini Çekebilecek Ürünler</div>
+        <div class="see-all text-color-orange mat-body-2" (click)="onClickShoppingListSeeAllBtn()">
+          Tümünü Gör
+          <fa-icon [icon]="faChevronRight"></fa-icon>
+        </div>
+      </div>
+      <mat-tab-group (selectedTabChange)="onTabShoppingListChanged($event)" #container>
+        <mat-tab *ngFor="let shoppingList of getTabShoppingLists()" [label]="shoppingList.name">
+          <div class="container-wrapper">
+            <div class="prev-btn" (click)="scrollTo(container, 'left')"></div>
+            <div class="list-page-items-container in-mat-tab-group">
+              <sm-list-page-item
+                class="
+                  list-item
+                  mdc-layout-grid__cell--span-3-desktop
+                  mdc-layout-grid__cell--span-3-tablet
+                  mdc-layout-grid__cell--span-2-phone
+                "
+                *ngFor="let product of shoppingList.itemInfos; trackBy: trackByFnShoppingList"
+                [cartItem]="getCartItem(product)"
+                [product]="product"
+                feGtm
+                [gtm]="getGtmData(product, shoppingList.name)"
+                [pageItemLocation]="'Shopping List'"
+              >
+              </sm-list-page-item>
+            </div>
+            <div
+              class="next-btn"
+              *ngIf="isArrowButtonsVisible(shoppingList?.itemInfos?.length)"
+              (click)="scrollTo(container, 'right')"
+            ></div>
+            <div class="fade-out"></div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </ng-template>
+  <!-- SHOPPING TABS - MOBILE -->
+  <!-- ************** -->
+  <ng-template #shoppingTabsMobile>
+    <div class="section mdc-layout-grid__cell--span-12" *ngFor="let shoppingList of getTabShoppingLists()">
+      <div class="d-flex">
+        <div class="section-title mat-headline text-color-black" (click)="onClickShoppingList(shoppingList)">
+          {{ shoppingList.name }}
+        </div>
+      </div>
+      <div class="list-page-items-container">
+        <sm-list-page-item
+          class="
+            list-item
+            mdc-layout-grid__cell--span-3-desktop
+            mdc-layout-grid__cell--span-3-tablet
+            mdc-layout-grid__cell--span-2-phone
+          "
+          *ngFor="let product of shoppingList.itemInfos; trackBy: trackByFnShoppingList"
+          [cartItem]="getCartItem(product)"
+          [product]="product"
+          feGtm
+          [gtm]="getGtmData(product, shoppingList.name)"
+          [pageItemLocation]="'Shopping List'"
+        >
+        </sm-list-page-item>
+      </div>
+      <button
+        mat-stroked-button
+        color="primary"
+        class="see-all-button text-color-orange mat-body-2"
+        (click)="onClickShoppingList(shoppingList)"
+      >
+        Tümünü Gör
+      </button>
+      <div class="fade-out"></div>
+    </div>
+  </ng-template>
+  <!-- MONEY REGISTRATION -->
+  <!-- ************** -->
+  <div
+    class="money-registration-wrapper mdc-layout-grid__cell--span-12"
+    *ngIf="isMoneyRegistrationVisible()"
+    (click)="onClickMoneyRegistration()"
+  >
+    <div class="text-wrapper text-color-white">
+      <div class="card"></div>
+      <div class="money-text">
+        <div>Migros Mobil Uygulaması'nda</div>
+        <div class="stroked">KAZAN <span class="money">MONEY</span>'LERİ</div>
+        <div class="stroked">HARCA <span class="money">MONEY</span>'LERİ</div>
+      </div>
+      <div class="mat-h2">
+        <div class="text">Üye ol, Fırsatları Yakala!</div>
+        <fa-icon [icon]="arrowCircleRight"></fa-icon>
+      </div>
+    </div>
+  </div>
+  <!-- MIGROSU KESFET (CATEGORIES) -->
+  <!-- ************** -->
+  <div class="section mdc-layout-grid__cell--span-12">
+    <div class="section-title mat-headline text-color-black">Migros'u Keşfet</div>
+    <div class="categories-wrapper">
+      <div
+        class="category-wrapper"
+        *ngFor="let category of getTopLevelCategories(); trackBy: trackByTopLevelCategories"
+      >
+        <a class="category-card" (click)="onClickCategory(category)">
+          <img feLazyLoad [src]="getCategoryImgSrc(category)" [alt]="category.name" class="image" />
+        </a>
+        <div class="category-name mat-caption">{{ category.name }}</div>
+      </div>
+      <div
+        class="category-card categories-see-all mat-caption-normal text-color-black"
+        *ngIf="isMobile() && getTopLevelCategories().length === 11"
+        (click)="onClickSeeAllCategories()"
+      >
+        Tümünü Gör <fa-icon [icon]="faChevronRight"></fa-icon>
+      </div>
+    </div>
+  </div>
+  <!-- MAIN SHOPPING LISTS -->
+  <!-- ************** -->
+  <ng-template
+    ngFor
+    let-shoppingList
+    let-i="index"
+    [ngForOf]="getMainShoppingLists()"
+    [ngForTrackBy]="trackByFnMainShoppingList"
+  >
+    <div class="section mdc-layout-grid__cell--span-12">
+      <div class="d-flex">
+        <div class="section-title mat-headline text-color-black" (click)="onClickShoppingList(shoppingList)">
+          {{ shoppingList.name }}
+        </div>
+        <div
+          class="see-all text-color-orange mat-body-2"
+          *ngIf="isSeeAllButtonVisible(shoppingList)"
+          (click)="onClickShoppingList(shoppingList)"
+        >
+          Tümünü Gör
+          <fa-icon [icon]="faChevronRight"></fa-icon>
+        </div>
+      </div>
+      <div class="image-items-wrapper">
+        <img
+          *ngIf="shoppingList?.imageUrls[0]?.urls?.HOMEPAGE"
+          (click)="onClickShoppingList(shoppingList)"
+          [src]="shoppingList.imageUrls[0]?.urls.HOMEPAGE"
+          [alt]="shoppingList.name"
+          feLazyLoad
+        />
+        <div class="container-wrapper">
+          <div
+            class="prev-btn"
+            *ngIf="isArrowButtonsVisible(shoppingList?.itemInfos?.length)"
+            (click)="scrollTo(container, 'left')"
+          ></div>
+          <div class="list-page-items-container" #container>
+            <sm-list-page-item
+              class="
+                list-item
+                mdc-layout-grid__cell--span-3-desktop
+                mdc-layout-grid__cell--span-3-tablet
+                mdc-layout-grid__cell--span-2-phone
+              "
+              *ngFor="let product of shoppingList.itemInfos; trackBy: trackByFnShoppingList"
+              [cartItem]="getCartItem(product)"
+              [product]="product"
+              feGtm
+              [gtm]="getGtmData(product, shoppingList.name)"
+              [pageItemLocation]="'Shopping List'"
+            >
+            </sm-list-page-item>
+          </div>
+          <div
+            class="next-btn"
+            *ngIf="isArrowButtonsVisible(shoppingList?.itemInfos?.length)"
+            (click)="scrollTo(container, 'right')"
+          ></div>
+        </div>
+      </div>
+      <button
+        mat-stroked-button
+        color="primary"
+        class="see-all-button text-color-orange mat-body-2"
+        *ngIf="isSeeAllButtonVisible(shoppingList)"
+        (click)="onClickShoppingList(shoppingList)"
+      >
+        Tümünü Gör
+      </button>
+      <div class="fade-out"></div>
+    </div>
+
+    <ng-template [ngIf]="i === 0 && getMainPageMiddleBanners()">
+      <!-- MIDDLE BANNER -->
+      <a
+        [href]="getMainPageMiddleBanners()[0].callToActionUrl"
+        class="mdc-layout-grid__cell--span-12"
+        (click)="onClickBanner(getMainPageMiddleBanners()[0], $event)"
+      >
+        <img class="middle-banner-img" [src]="getMainPageMiddleBanners()[0].imageUrl" />
+      </a>
+    </ng-template>
+  </ng-template>
+
+  <!-- HEMEN - UYGULAMAYI İNDİR -->
+
+  <div class="download-app-wrapper mdc-layout-grid__cell--span-12" *ngIf="isPortfolioHemen()">
+    <img class="phone-image" src="assets/images/phone-11.webp" />
+    <div>
+      <h2>Hemen Yükle</h2>
+      <div class="mat-body text-color-black">
+        Sen de Migros güvencesiyle hızlı teslimat avantajlarından faydalanmak istiyorsan uygulamayı hemen yükle,
+        alışverişe başla.
+      </div>
+      <div class="logos">
+        <a href="{{ storeObj.link }}" *ngFor="let storeObj of getStoreObjects()">
+          <img [src]="getStoreImageSource(storeObj.link)" />
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW TO -->
+  <sm-how-to class="mdc-layout-grid__cell--span-12"></sm-how-to>
+</div>

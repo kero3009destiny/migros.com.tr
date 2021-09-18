@@ -1,0 +1,15 @@
+<mat-dialog-content>
+  <div class="wrapper">
+    <fe-icon-button class="close-button" mat-dialog-close [icon]="closeIcon" cdk-focus-start></fe-icon-button>
+    <p class="mat-subheading-2 text-color-black text-align-center title">Üyelik Sözleşmelerini Onayla</p>
+    <form [formGroup]="completeMembershipFormGroup">
+      <sm-register-agreements-form formControlName="registrationAgreements"></sm-register-agreements-form>
+      <fe-button
+        [isDisabled]="isCompleteMembershipDisabled()"
+        (click)="onClickDialogCompleteMembershipButton()"
+        type="submit"
+        label="Üye Ol"
+      ></fe-button>
+    </form>
+  </div>
+</mat-dialog-content>

@@ -1,0 +1,10 @@
+<div class="money-banner">
+  <div class="text-wrapper" *ngIf="isCrmVerified">
+    <span class="subtitle-2">Üyelik bilgileriniz Money bilgileriniz ile eşleştirilmiştir!</span>
+  </div>
+  <div (click)="navigateMoneyRegisterPage()" class="text-wrapper" *ngIf="!isCrmVerified">
+    <span class="subtitle-2">Üye Ol, Fırsatları Yakala !</span>
+    <fa-icon [icon]="arrowIcon"></fa-icon>
+  </div>
+  <img src="/assets/images/money-card/money-club-card.png" alt="" />
+</div>

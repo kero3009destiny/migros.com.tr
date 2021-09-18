@@ -1,0 +1,41 @@
+<div class="closest-delivery-time-wrapper">
+  <div class="header-wrapper">
+    <div class="title-close-btn-wrapper">
+      <span class="mat-headline text-color-black">En Yakın Teslimat Saatleri</span>
+      <fa-icon class="text-color-grey" (click)="onClickClose()" [icon]="closeIcon"></fa-icon>
+    </div>
+    <div class="pickpoint-text-wrapper">
+      <span class="mat-caption-normal text-color-black">
+        <span class="icon-location-wrapper"> <fa-icon [icon]="mapMarkerAlt"></fa-icon> {{ getLocationName() }}</span>
+        için sipariş teslimat uygunluğu aşağıda listelenmiştir.
+      </span>
+    </div>
+    <div class="info-text mat-caption text-color-info">
+      Sipariş teslimat zamanını sipariş bitirme aşamasında seçebilirsin.
+    </div>
+  </div>
+  <div class="delivery-times-wrapper">
+    <table class="days-wrapper text-color-black">
+      <tr *ngFor="let day of getDateTimeSlotMapKeys(); let i = index">
+        <th>
+          <div class="day-name-wrapper">
+            <div class="name mat-caption text-color-black">{{ getDayName(day, i) }}</div>
+            <div class="date overline text-color-grey">{{ getDate(day) }}</div>
+          </div>
+        </th>
+        <div class="timeslots">
+          <td *ngFor="let dayTimeslotObject of getDateTimeslotsOfDay(day)">
+            <ng-template [ngIf]="dayTimeslotObject?.active === false" [ngIfElse]="timeSlothsAvailable">
+              <div class="timeslot slots-full">Günlük kapasitemiz doldu</div>
+            </ng-template>
+            <ng-template #timeSlothsAvailable>
+              <div class="timeslot" *ngFor="let timeslot of dayTimeslotObject | keyvalue">
+                {{ getDateTimeslotsOfDayValue(timeslot) }}
+              </div>
+            </ng-template>
+          </td>
+        </div>
+      </tr>
+    </table>
+  </div>
+</div>

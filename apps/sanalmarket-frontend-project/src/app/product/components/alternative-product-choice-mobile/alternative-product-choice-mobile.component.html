@@ -1,0 +1,11 @@
+<div class="alternative-product-choice-container">
+  <ng-content select="[deliveryChoice]"></ng-content>
+  <div class="content">
+    <fa-icon [icon]="getRepeatIcon()"></fa-icon>
+    <div class="mat-caption description text-color-black">
+      Alternatif Ürün Tercihi
+      <button color="primary" mat-button (click)="openAlternativeProductChoiceModal()">Değiştir</button>
+      <span class="mat-caption-normal sub-caption">{{ getChoiceLabel() }}</span>
+    </div>
+  </div>
+</div>

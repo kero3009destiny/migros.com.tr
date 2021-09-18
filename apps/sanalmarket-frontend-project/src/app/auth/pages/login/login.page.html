@@ -1,0 +1,84 @@
+<div *ngIf="!isFaqsOpened else loginFaq" class="login">
+  <mat-card class="login__content">
+    <mat-card-header class="justify-content-center">
+      <h1 class="text-color-orange text-align-center">Giriş Yap</h1>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="login-page__form">
+        <p class="subtitle-2 text-align-center text-color-black">Cep telefonu numaranı girerek devam et</p>
+        <form
+          [formGroup]="loginFormGroup"
+          feAppSubmitThrottle
+          (throttleSubmit)="onLoginSubmit()"
+          [throttleFormValid]="loginFormGroup.valid"
+        >
+          <mat-form-field id="login_phone-input" color="accent" appearance="outline" [hideRequiredMarker]="true">
+            <mat-label class="subtitle-2 text-color-black">Telefon Numarası</mat-label>
+            <input
+              type="tel"
+              matInput
+              feOnlyNumbers
+              autocomplete="tel"
+              required
+              feMdcMaskedInput
+              [maskOptions]="maskOptions"
+              formControlName="phoneNumber"
+            />
+            <button
+              type="button"
+              color="accent"
+              matSuffix
+              mat-icon-button
+              aria-label="Clear"
+              *ngIf="getPhoneNumber().value"
+              (click)="clear('phoneNumber')"
+            >
+              <fa-icon [icon]="clearIcon"></fa-icon>
+            </button>
+            <mat-error
+              id="login__phone-number-error--empty"
+              *ngIf="getPhoneNumber().invalid && getPhoneNumber().errors.required"
+            >
+              Lütfen telefon numaranızı giriniz.
+            </mat-error>
+            <mat-error
+              id="login__phone-number-error--unValid"
+              *ngIf="getPhoneNumber().invalid && getPhoneNumber().errors.pattern"
+            >
+              Telefon numaranızı 05XXXXXXXXX şeklinde giriniz.
+            </mat-error>
+          </mat-form-field>
+
+          <fe-button
+            [isDisabled]="getPhoneNumber().invalid"
+            id="login__submit-button"
+            type="submit"
+            label="Giriş Yap"
+          ></fe-button>
+        </form>
+      </div>
+    </mat-card-content>
+    <mat-card-actions class="bg-basic-50">
+      <span class="mat-body-2 text-color-grey">
+        Henüz hesabın yoksa
+        <a id="login__redirect-to-register" class="text-color-orange subtitle-2" routerLink="/kayit">Üye Ol</a>
+      </span>
+    </mat-card-actions>
+  </mat-card>
+  <div class="login__links">
+    <a id="login__redirect-to-recovery" class="mat-caption text-color-grey" routerLink="/sifremi-unuttum"
+      >Giriş Yapamıyorum</a
+    >
+    <a id="login__open-otp-faqs-button" class="mat-caption text-color-grey" (click)="showFaqs()">
+      Sıkça Sorulan Sorular
+    </a>
+  </div>
+</div>
+
+<ng-template #loginFaq>
+  <div class="faqs">
+    <mat-card class="faqs__content">
+      <sm-login-faqs [faqs]="faqs" (closeFaq)="onCloseFaq()"></sm-login-faqs>
+    </mat-card>
+  </div>
+</ng-template>

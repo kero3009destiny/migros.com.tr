@@ -1,0 +1,16 @@
+<div matDialogTitle>
+  <fa-icon class="text-color-grey" [mat-dialog-close]="false" [icon]="getTimesIcon()"></fa-icon>
+  <h3 class="text-align-center text-color-orange">{{ getTitle() }}</h3>
+</div>
+<div matDialogContent>
+  <p class="subtitle-2 text-color-black info">İndirimlerden faydalanmak için hesap oluştur veya giriş yap</p>
+
+  <button mat-flat-button matDialogClose color="primary" routerLink="/kayit">Üye Ol</button>
+  <button mat-stroked-button matDialogClose color="primary" routerLink="/giris">Giriş Yap</button>
+
+  <p class="mat-caption-normal text-color-grey anonymous-option-divider">veya</p>
+
+  <button mat-button class="subtitle-2 text-color-grey continue-without-register" [mat-dialog-close]="true">
+    Üye olmadan devam et
+  </button>
+</div>

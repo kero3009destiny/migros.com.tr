@@ -1,0 +1,44 @@
+<mat-dialog-content>
+  <mat-tab-group
+    (selectedTabChange)="onDeliveryTabChange($event)"
+    *ngIf="isPickPointTabVisible(); else onlyDeliveryTab"
+  >
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <div class="tab-header">
+          <img class="tab-header__img" src="assets/logos/adresime-gelsin-passive.svg" />
+          <div class="tab-header__label">Adrese Teslim</div>
+        </div>
+      </ng-template>
+      <div class="address-label">Siparişinizi nereye teslim edelim?</div>
+      <fe-delivery-zone-select-form
+        #districtZoneForm
+        [serviceAreaObjectType]="getDistrictServiceAreaType()"
+      ></fe-delivery-zone-select-form>
+    </mat-tab>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <div class="tab-header">
+          <img class="tab-header__img--pickpoint" src="assets/icons/tikla-gel-al.png" />
+          <div class="tab-header__label">Mağazadan Teslim</div>
+        </div>
+        <div class="new-label">YENİ</div>
+      </ng-template>
+      <div class="address-label">Siparişinizi nereden almak istersiniz?</div>
+      <fe-delivery-zone-select-form
+        #pickpointZoneForm
+        [serviceAreaObjectType]="getPickpointServiceAreaType()"
+      ></fe-delivery-zone-select-form>
+    </mat-tab>
+  </mat-tab-group>
+  <ng-template #onlyDeliveryTab>
+    <div class="address-label">Siparişinizi nereye teslim edelim?</div>
+    <fe-delivery-zone-select-form
+      #districtZoneForm
+      [serviceAreaObjectType]="getDistrictServiceAreaType()"
+    ></fe-delivery-zone-select-form>
+  </ng-template>
+</mat-dialog-content>
+<mat-dialog-actions align="center">
+  <button id="save-new-delivery-zone" class="button-primary" (click)="submitDeliveryZone($event)">Kaydet</button>
+</mat-dialog-actions>

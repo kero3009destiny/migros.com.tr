@@ -1,0 +1,75 @@
+<mat-card>
+  <mat-card-content class="complete-membership">
+    <ng-container *ngIf="!membershipCompleted">
+      <div class="block opportunities">
+        <p class="mat-subheading-2 text-color-black text-align-left complete-membership__title">
+          Üye Ol fırsatlardan hemen faydalan!
+        </p>
+        <div class="complete-membership__row">
+          <img
+            srcset="
+              /assets/icons/percent/icon.png,
+              /assets/icons/percent/icon@2x.png 2x,
+              /assets/icons/percent/icon@3x.png 3x
+            "
+          />
+          <p class="mat-body-2 text-color-black text-align-left">Sana özel kampanya ve indirimler</p>
+        </div>
+        <div class="complete-membership__row">
+          <img
+            srcset="/assets/icons/cash/icon.png, /assets/icons/cash/icon@2x.png 2x, /assets/icons/cash/icon@3x.png 3x"
+          />
+          <p class="mat-body-2 text-color-black text-align-left">İster kapıda nakit öde</p>
+        </div>
+        <div class="complete-membership__row">
+          <img
+            srcset="
+              /assets/icons/credit-card/icon.png,
+              /assets/icons/credit-card/icon@2x.png 2x,
+              /assets/icons/credit-card/icon@3x.png 3x
+            "
+          />
+          <p class="mat-body-2 text-color-black text-align-left">İster kapıda kredi kartıyla öde</p>
+        </div>
+        <button class="mobile-only" mat-flat-button color="primary" (click)="onClickMobileCompleteMembershipButton()">
+          Üye Ol
+        </button>
+      </div>
+      <div class="block agreements desktop-only">
+        <p class="mat-subheading-2 text-color-black text-align-left">Üyelik Sözleşmelerini Onayla</p>
+        <form
+          [formGroup]="completeMembershipFormGroup"
+          feAppSubmitThrottle
+          (throttleSubmit)="onCompleteMembership()"
+          [throttleFormValid]="isCompleteMembershipFormGroupValid()"
+        >
+          <sm-register-agreements-form formControlName="registrationAgreements"></sm-register-agreements-form>
+          <fe-button
+            [isDisabled]="isCompleteMembershipDisabled()"
+            (click)="onClickCompleteMembershipButton()"
+            type="submit"
+            label="Üye Ol"
+          ></fe-button>
+        </form>
+      </div>
+    </ng-container>
+    <div *ngIf="membershipCompleted" class="complete-membership-success">
+      <div class="text-color-success mat-subheading-2 text-align-center">Tebrikler! Üyeliğin tamamlandı.</div>
+      <div class="info">
+        <p class="mat-caption-normal text-color-black text-align-center">
+          Sanal Market üyesi olarak yaptığın alışverişlerinde indirimlerden faydalanarak kazançlı alışverişin tadını
+          çıkar.
+        </p>
+        <p class="mat-caption-normal text-color-black text-align-center">
+          Unutuğun bir şey varsa siparişine ek yapabilir, siparişinin durumunu takip edebilirsin.
+        </p>
+      </div>
+      <div>
+        <a routerLink="/siparislerim" class="subtitle-2 text-color-info" skipLocationChange>
+          Siparişlerim
+          <fa-icon [icon]="faChevronRight"></fa-icon>
+        </a>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,33 @@
+<div class="mat-dialog-icon" *ngIf="data.icon">
+  <i [ngClass]="['icon', 'icon-modal-' + data.icon]"></i>
+</div>
+<h1>{{ data.title }}</h1>
+<mat-dialog-content>
+  <p>{{ data.message }}</p>
+  <div class="portal-content" *ngIf="data.portal">
+    <ng-template [cdkPortalOutlet]="data.portal"></ng-template>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="center">
+  <button
+    id="dialog__cancel-button"
+    *ngIf="data.showCancelButton"
+    mat-button
+    (click)="closeDialog({ confirmed: false })"
+    class="modal__btn modal__btn--cancel button-secondary"
+  >
+    {{ data.cancelMessage }}
+  </button>
+  <button
+    mat-button
+    id="dialog__confirm-button"
+    (click)="closeDialog({ confirmed: true })"
+    [ngClass]="{
+      'modal__btn modal__btn--confirm': true,
+      'button-hollow': data.state === 'danger',
+      'button-primary': data.state !== 'danger'
+    }"
+  >
+    {{ data.confirmMessage }}
+  </button>
+</mat-dialog-actions>

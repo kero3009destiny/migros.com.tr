@@ -1,0 +1,184 @@
+<div class="product-detail-page" *ngIf="getProduct()">
+  <div id="dsa-category-id">
+    <div>{{ getDsaText() }}</div>
+  </div>
+  <div class="mobile-only-v2 mobile-header text-color-white">
+    <fa-icon (click)="onClickBackButton()" [icon]="backIcon"></fa-icon>
+    <div class="content">
+      <h3>Ürün Detayı</h3>
+    </div>
+  </div>
+  <fe-breadcrumb [breadcrumbs]="getBreadcrumbs()"></fe-breadcrumb>
+  <div class="product-detail-wrapper">
+    <sm-product-images
+      [allowTouchMove]="isMobile()"
+      [zoom]="isMobile()"
+      [bullets]="isMobile()"
+      [images]="getProduct().images"
+      (productImageClicked)="onClickProductImage($event)"
+      [activeIndex]="getActiveIndex()"
+    >
+    </sm-product-images>
+
+    <div class="product-details">
+      <h3 class="text-color-black">{{ getProduct().name }}</h3>
+      <a
+        class="text-color-info subtitle-2 brand-name"
+        [routerLink]="['', getProduct().brand.prettyName]"
+        [state]="{ referrerEventId: getProduct().referrerEventId }"
+      >
+        {{ getProduct().brand.name }}
+      </a>
+
+      <div class="price">
+        <fe-product-price [shownPrice]="getProduct().shownPrice" [regularPrice]="getProduct().regularPrice">
+        </fe-product-price>
+
+        <div class="tamim-discount mat-caption text-color-success" *ngIf="isDiscountVisible()">
+          <span> {{ getDiscountLabel() }} </span>
+        </div>
+      </div>
+
+      <ng-template [ngIf]="isBadgesVisible()">
+        <mat-divider></mat-divider>
+
+        <sm-product-discounts [product]="getProduct()"></sm-product-discounts>
+      </ng-template>
+
+      <mat-divider></mat-divider>
+
+      <div class="unit-wrapper" *ngIf="getProduct()">
+        <p class="subtitle-2 text-color-black unit" *ngIf="!hasAlternativeUnit()">
+          {{ getUnitLabel(getProduct().unit) }}
+        </p>
+        <p *ngIf="hasAlternativeUnit()" class="mat-caption-normal text-color-grey">
+          ( 1 <span>{{ getUnitLabel(getProduct().alternativeUnit) }}</span>
+          &asymp;
+          <span> {{getProduct().alternativeUnitValue / getProduct().unitAmount}} </span>
+          <span> {{ getUnitLabel(getProduct().unit) }} </span> )
+        </p>
+        <mat-radio-group
+          (change)="onChangeUnitSelection($event)"
+          *ngIf="hasAlternativeUnit()"
+          [value]="getSelectedUnit()"
+        >
+          <mat-radio-button color="primary" [value]="getProduct().unit" [disabled]="!isInSale()">
+            <span class="subtitle-2 text-color-black unit"> {{ getUnitLabel(getProduct().unit) }}</span>
+          </mat-radio-button>
+          <mat-radio-button color="primary" [value]="getProduct().alternativeUnit" [disabled]="!isInSale()">
+            <span class="subtitle-2 text-color-black unit">{{getUnitLabel(getProduct().alternativeUnit)}}</span>
+          </mat-radio-button>
+        </mat-radio-group>
+      </div>
+
+      <p class="mat-caption-normal text-color-error" *ngIf="!isInSale()">Bu ürün stokta yoktur</p>
+      <div class="actions">
+        <sm-product-actions
+          [amount]="getItemAmount()"
+          [maxAmount]="getMaxAmount()"
+          [unit]="getUnit()"
+          [status]="getProduct().status"
+          (updated)="onUpdateCart($event)"
+          (maxAmountReached)="onReachMaxAmount($event)"
+          [noPointerEventOnDecreaseToZero]="true"
+          [incrementAmount]="getIncrementAmount()"
+          [initialIncrementAmount]="getInitialIncrementAmount()"
+          [reminderVisibility]="false"
+          [iconButton]="false"
+          [hasAlternativeUnit]="hasAlternativeUnit()"
+        >
+        </sm-product-actions>
+        <div class="favourite-container" *ngIf="isFavourite(); then favourite; else notFavourite"></div>
+      </div>
+      <sm-product-note-popover
+        *ngIf="getCartItem()"
+        [productId]="getProduct().id"
+        [productName]="getProduct().name"
+        [initialNote]="getNote()"
+        (productNoteUpdated)="onUpdateProductNote()"
+      >
+        <ng-container popover-trigger>
+          <span [ngClass]="{ edit: !isProductNoteEmpty() }">
+            <fa-icon [icon]="getNoteIcon()"></fa-icon> {{ !isProductNoteEmpty() ? 'Notu Düzenle' : 'Ürün Notu Ekle' }}
+          </span>
+        </ng-container>
+      </sm-product-note-popover>
+    </div>
+  </div>
+
+  <sm-product-list-slider
+    *ngIf="segmentifySimilarProducts.length"
+    [itemInfos]="segmentifySimilarProducts"
+    title="Sepetine Ekleyebileceğin Diğer Ürünler"
+  >
+  </sm-product-list-slider>
+
+  <div class="product-tabs-wrapper" *ngIf="!isPropertiesEmpty() || hasDescription()">
+    <fe-product-detail-tabs
+      [productDescription]="getProduct().description"
+      [migros]="true"
+      [productProperties]="getProduct().properties"
+    >
+    </fe-product-detail-tabs>
+  </div>
+  <a
+    *ngIf="isUserAuthenticated()"
+    class="mat-caption-normal text-color-orange product-feedback"
+    href="javascript:void(0)"
+    (click)="onClickAdviceDialog()"
+  >
+    Bu sayfayı iyileştirmek ister misiniz?
+    <fa-icon [icon]="getChevronRightIcon()"></fa-icon>
+  </a>
+
+  <sm-product-list-slider
+    *ngIf="segmentifyRelatedProducts.length"
+    [itemInfos]="segmentifyRelatedProducts"
+    title="Birlikte Alınan Ürünler"
+  >
+  </sm-product-list-slider>
+</div>
+
+<ng-template #notFavourite>
+  <fa-icon
+    (click)="onClickAddFavouriteProduct(getProduct().id)"
+    class="favourite favourite--empty"
+    [icon]="getHeartEmptyIcon()"
+  >
+  </fa-icon>
+</ng-template>
+<ng-template #favourite>
+  <fa-icon
+    (click)="onClickRemoveFavouriteProduct(getProduct().id)"
+    class="favourite favourite--full"
+    [icon]="getHeartFullIcon()"
+  >
+  </fa-icon>
+</ng-template>
+
+<div class="sticky-add-button mobile-only-v2" [class.mobile-app-popup-is-open]="isOpenMobileAppPopup()">
+  <fe-product-price
+    *ngIf="getProduct()"
+    class="product-price"
+    [shownPrice]="getProduct().shownPrice"
+    [regularPrice]="getProduct().regularPrice"
+  >
+  </fe-product-price>
+
+  <sm-product-actions
+    *ngIf="getProduct()"
+    [amount]="getCartAmount()"
+    [maxAmount]="getProduct().maxAmount"
+    [unit]="getProduct().unit"
+    [status]="getProduct().status"
+    (updated)="onUpdate($event, getProduct())"
+    (maxAmountReached)="onReachMaxAmount($event)"
+    [noPointerEventOnDecreaseToZero]="true"
+    [incrementAmount]="getIncrementAmount()"
+    [initialIncrementAmount]="getProduct().initialIncrementAmount"
+    [reminderVisibility]="false"
+    [iconButton]="false"
+    [hasAlternativeUnit]="hasAlternativeUnit()"
+  >
+  </sm-product-actions>
+</div>

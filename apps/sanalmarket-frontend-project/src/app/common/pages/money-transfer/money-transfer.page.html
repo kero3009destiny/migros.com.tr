@@ -1,0 +1,34 @@
+<div class="banner">
+  <h1>Para Transferi</h1>
+  <p>
+    81 ilde, banka hesabına ihtiyaç duymadan, mağazaların açık olduğu saatlerde, Migros'tan Migros'a para transferi!
+  </p>
+  <div class="banner-icons">
+    <div class="banner-icon">
+      <fa-icon [icon]="markerIcon"></fa-icon>
+      <p>81 İlde</p>
+    </div>
+    <div class="banner-icon">
+      <fa-icon [icon]="calendarIcon"></fa-icon>
+      <p>Haftanın Her Günü</p>
+    </div>
+    <div class="banner-icon">
+      <fa-icon [icon]="historyIcon"></fa-icon>
+      <p>Anında</p>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="header">
+    <a href=""
+      ><img
+        src="https://migros-dali-storage-prod.global.ssl.fastly.net/sanalmarket/custom/gonder-al-logo.421956ae-83b1dd72.png"
+        alt=""
+    /></a>
+    <span
+      >Sıkça sorulan sorular için
+      <a routerLink="/para-transferi-hakkinda-bilgilendirme">tıklayınız.</a>
+    </span>
+  </div>
+  <sm-money-transfer-tabs></sm-money-transfer-tabs>
+</div>

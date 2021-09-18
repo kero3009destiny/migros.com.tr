@@ -1,0 +1,31 @@
+<div class="invoice-address-modal">
+  <h2 class="text-align-center" mat-dialog-title>Yeni Fatura Adresi Ekle</h2>
+  <fe-icon-button
+    id="add-invoice-address-modal-close-button"
+    class="close-button"
+    (click)="onClickCloseBtn()"
+    [icon]="closeIcon"
+  >
+  </fe-icon-button>
+  <mat-tab-group class="address-form" [selectedIndex]="getFormState()" (selectedTabChange)="onTabSelected()">
+    <mat-tab *ngIf="isPersonalInvoiceTabVisible()" id="add-invoice-address-modal-personal-tab">
+      <ng-template mat-tab-label>
+        <span>{{ PERSONAL_TAB.label }}</span>
+      </ng-template>
+      <ng-template matTabContent>
+        <sm-personal-invoice-address-form
+          (addressFormSubmit)="submitPersonalAddressForm($event)"
+        ></sm-personal-invoice-address-form>
+      </ng-template>
+    </mat-tab>
+    <mat-tab *ngIf="isCorporateInvoiceTabVisible()" id="add-invoice-address-modal-corporate">
+      <ng-template mat-tab-label>
+        <span>{{ CORPORATE_TAB.label }}</span>
+      </ng-template>
+      <ng-template matTabContent>
+        <sm-corporate-invoice-address-form (addressFormSubmit)="submitCorporateAddressForm($event)">
+        </sm-corporate-invoice-address-form>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+</div>

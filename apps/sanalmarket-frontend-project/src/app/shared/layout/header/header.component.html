@@ -1,0 +1,269 @@
+<div class="header-wrapper">
+  <sm-additonal-order
+    [additionalOrderStatus]="getAdditionalOrderStatus()"
+    (additionalOrderStarted)="startAdditionalOrder($event)"
+    (additionalOrderExited)="exitAdditionalOrder()"
+  ></sm-additonal-order>
+  <!-- HEADER TABS, SANALMARKET - ELEKTRONIK - KURBAN -->
+  <div class="header-top" *ngIf="isHeaderTopVisible()" [ngClass]="getHeaderClass()">
+    <a
+      class="sanalmarket-logo-tab header-tab"
+      [class.selected]="isSanalmarketSelected()"
+      (click)="setSelectedTab(sanalmarketTab)"
+    ></a>
+    <a
+      class="hemen-logo-tab header-tab"
+      [class.selected]="isHemenSelected()"
+      *ngIf="isHemenTabVisible()"
+      (click)="setSelectedTab(hemenTab)"
+    ></a>
+    <a
+      class="elektronik-logo-tab header-tab"
+      [class.selected]="isElectronicSelected()"
+      *ngIf="isElectronicTabVisible()"
+      (click)="setSelectedTab(elektronikTab)"
+    ></a>
+    <a
+      class="kurban-logo-tab header-tab"
+      [class.selected]="isKurbanSelected()"
+      *ngIf="isKurbanTabVisible()"
+      (click)="setSelectedTab(kurbanTab)"
+    ></a>
+    <div class="anonymous">
+      <!--ORDER TRACK -->
+      <div class="login-signup-wrapper track-wrapper" *ngIf="!isAuthenticated()" (click)="onClickTrack()">
+        <div class="inner inner-track text-color-white">
+          <div class="text mat-caption">Sipariş Takibi</div>
+          <div class="carrot">
+            <fa-icon [icon]="faChevronRight"></fa-icon>
+          </div>
+        </div>
+      </div>
+      <!-- LOGIN-SIGNUP -->
+      <div class="login-signup-wrapper" *ngIf="!isAuthenticated()" (click)="onClickLoginSignup()">
+        <div class="inner text-color-white">
+          <div class="icon"></div>
+          <div class="text mat-caption">Üye Ol veya Giriş Yap</div>
+          <div class="carrot">
+            <fa-icon [icon]="faChevronDown"></fa-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- PROFILE DROPDOWN -->
+    <fe-account-dropdown *ngIf="isAuthenticated()" [user]="getUser()">
+      <ng-container fe-account-dropdown>
+        <div class="account-menu-button" mat-button [matMenuTriggerFor]="menu">
+          <div class="inner text-color-white">
+            <div class="icon"></div>
+            <div class="text-username-wrapper">
+              <div class="text mat-caption">Hesabım</div>
+              <div class="username overline">
+                <span *ngIf="getUser().firstName; else nameless">
+                  {{ getUser().firstName + ' ' + getUser().lastName }}
+                </span>
+                <ng-template #nameless>
+                  <span class="account-menu-button--text account-menu-button--text--email">
+                    {{ getUser().email }}
+                  </span>
+                </ng-template>
+              </div>
+            </div>
+            <div class="carrot">
+              <fa-icon [icon]="faChevronDown"></fa-icon>
+            </div>
+          </div>
+          <i class="account-menu-button--icon icon--smaller icon icon-down-chevron"></i>
+        </div>
+        <mat-menu #menu="matMenu" class="mat-account-dropdown-menu" xPosition="before">
+          <button id="account-dropdown-coupon" mat-menu-item (click)="onClickMenuItem('bilgilerim')">
+            <div class="sm-popover-icon-wrapper mat-body-2">
+              <div class="sm-popover-icon settings"></div>
+              Üyelik Bilgilerim
+            </div>
+          </button>
+          <button id="account-dropdown-adresses" mat-menu-item (click)="onClickMenuItem('adreslerim')">
+            <div class="sm-popover-icon-wrapper mat-body-2">
+              <div class="sm-popover-icon address"></div>
+              Adreslerim
+            </div>
+          </button>
+          <button id="account-dropdown-order" mat-menu-item (click)="onClickMenuItem('siparislerim')">
+            <div class="sm-popover-icon-wrapper mat-body-2">
+              <div class="sm-popover-icon orders"></div>
+              Siparişlerim
+            </div>
+          </button>
+          <button
+            id="account-dropdown-favorite"
+            mat-menu-item
+            (click)="onClickMenuItem('favorilerim')"
+            *ngIf="!isKurbanSelected()"
+          >
+            <div class="sm-popover-icon-wrapper mat-body-2">
+              <div class="sm-popover-icon favorite"></div>
+              Favori Ürünlerim
+            </div>
+          </button>
+          <button
+            id="account-dropdown-points"
+            mat-menu-item
+            (click)="onClickMenuItem('puanlarim')"
+            *ngIf="!isKurbanSelected()"
+          >
+            <div class="sm-popover-icon-wrapper mat-body-2">
+              <div class="sm-popover-icon points"></div>
+              Puan ve Çeklerim
+            </div>
+          </button>
+          <button
+            id="account-dropdown-shoppingList"
+            mat-menu-item
+            (click)="onClickMenuItem('saglikli-yasam')"
+            *ngIf="isMarketSelected()"
+          >
+            <div class="sm-popover-icon-wrapper mat-body-2">
+              <div class="sm-popover-icon healty-life"></div>
+              Sağlıklı Yaşam Yolculuğum
+            </div>
+          </button>
+          <button id="account-dropdown-signOut" mat-menu-item (click)="onAccountDropdownLogoutClick()">
+            <div class="sm-popover-icon-wrapper mat-body-2">
+              <div class="sm-popover-icon signout"></div>
+              Çıkış Yap
+            </div>
+          </button>
+        </mat-menu>
+      </ng-container>
+    </fe-account-dropdown>
+  </div>
+  <div class="header-middle" *ngIf="!isKurbanSelected()">
+    <!-- ADDRESS, DELIVERY TIME -->
+    <sm-header-address-delivery-time></sm-header-address-delivery-time>
+    <!-- SEARCH BAR -->
+    <fe-product-search-combobox
+      (click)="onClickSearchCombobox()"
+      [migros]="true"
+      [triggerAutoFocus]="false"
+      role="searchbox"
+    ></fe-product-search-combobox>
+    <sm-cart-dropdown [cartInfo]="getCardInfo()" #cartDropdown></sm-cart-dropdown>
+  </div>
+  <div class="header-bottom" *ngIf="isHeaderBottomVisible() && !isKurbanSelected()">
+    <!-- MAIN MENU TABS -->
+    <div class="tabs">
+      <div
+        class="tab mat-caption text-color-black"
+        (mouseenter)="onMouseEnterBottomTab(categories)"
+        (mouseleave)="onMouseLeaveBottomTab($event)"
+      >
+        <div class="categories-icon"></div>
+        KATEGORİLER
+        <div class="hovered-bar" [@presenceAnimationFaster] *ngIf="isCategoriesHovered()"></div>
+      </div>
+      <a
+        [routerLink]="['', 'kampanyalar']"
+        class="tab mat-caption text-color-black campaings"
+        (mouseenter)="onMouseEnterBottomTab(promotions)"
+        (mouseleave)="onMouseLeaveBottomTab()"
+      >
+        KAMPANYALAR
+        <div class="hovered-bar" [@presenceAnimationFaster] *ngIf="isPromotionsHovered()"></div>
+      </a>
+      <a
+        *ngIf="!isHemenSelected()"
+        [routerLink]="isElectronicSelected() ? '/migroskop-urunleri-l-8d0bf81' : '/migroskop-urunleri-dt-3'"
+        class="tab mat-caption text-color-black"
+        (mouseenter)="onMouseEnterBottomTab(migroskop)"
+        (mouseleave)="onMouseLeaveBottomTab()"
+      >
+        MİGROSKOP
+        <div class="hovered-bar" [@presenceAnimationFaster] *ngIf="isMigroskopHovered()"></div>
+      </a>
+      <a
+        *ngIf="!isElectronicSelected()"
+        routerLink="/coklu-indirim-kampanyalari-ve-hediyeli-urunler-dt-1"
+        class="tab mat-caption text-color-black"
+        (mouseenter)="onMouseEnterBottomTab(multipleDiscounts)"
+        (mouseleave)="onMouseLeaveBottomTab()"
+      >
+        ÇOKLU İNDİRİMLER
+        <div class="hovered-bar" [@presenceAnimationFaster] *ngIf="isMultipleDiscountsHovered()"></div>
+      </a>
+      <a
+        hidden
+        routerLink="/migros-sanal-markete-ozel-sansli-saatler-l-33d2357"
+        class="tab mat-caption text-color-black"
+        (mouseenter)="onMouseEnterBottomTab(luckyHours)"
+        (mouseleave)="onMouseLeaveBottomTab()"
+      >
+        ŞANSLI SAATLER
+        <div class="hovered-bar" [@presenceAnimationFaster] *ngIf="isLuckyHoursHovered()"></div>
+      </a>
+      <a
+        *ngIf="!isElectronicSelected()"
+        routerLink="/money-indirimli-market-urunleri-dt-5"
+        class="tab mat-caption text-color-black"
+        (mouseenter)="onMouseEnterBottomTab(moneyDiscounts)"
+        (mouseleave)="onMouseLeaveBottomTab()"
+      >
+        MONEY İNDİRİMLİ
+        <div class="hovered-bar" [@presenceAnimationFaster] *ngIf="isMoneyDiscountsHovered()"></div>
+      </a>
+      <!-- DISABLED FOR NOW -->
+      <a
+        routerLink="/gordugunuze-inanin-dt-2"
+        class="tab mat-caption text-color-black"
+        (mouseenter)="onMouseEnterBottomTab(gorInan)"
+        (mouseleave)="onMouseLeaveBottomTab()"
+        hidden
+      >
+        GÖR İNAN
+        <div class="hovered-bar" [@presenceAnimationFaster] *ngIf="isGorInanHovered()"></div>
+      </a>
+      <div
+        class="categories-sub-categories-wrapper"
+        [@presenceAnimationFaster]
+        [class.expanded]="isWrapperExpanded()"
+        (mouseleave)="onMouseLeaveSubCategoriesWrapper()"
+        *ngIf="isCategoriesSubCategoriesWrapperOpened()"
+      >
+        <div class="categories-wrapper">
+          <!-- CATEGORIES, do not change 'categories-wrapper' class name, wrapper closes onmouseleave according to its name -->
+          <a
+            class="categories mat-caption-normal text-color-black"
+            *ngFor="let category of getProductCategories()"
+            [class.hovered-category]="isHoveredCategory(category)"
+            (mouseenter)="onMouseEnterCategory(category)"
+            (click)="onMouseLeaveSubCategoriesWrapper()"
+            [routerLink]="category.data.prettyName"
+          >
+            {{ category.data.name }}
+          </a>
+        </div>
+        <!-- SUB-CATEGORIES -->
+        <div class="sub-categories-wrapper">
+          <div class="sub-category-wrapper" *ngFor="let subCategory of getHoveredCategory()?.children">
+            <a
+              [routerLink]="subCategory.data.prettyName"
+              (click)="onMouseLeaveSubCategoriesWrapper()"
+              class="category-name mat-caption text-color-orange"
+              >{{ subCategory.data.name }}</a
+            >
+            <div class="sub-sub-categories-wrapper">
+              <a
+                [routerLink]="subSubCategory.data.prettyName"
+                (click)="onMouseLeaveSubCategoriesWrapper()"
+                class="mat-caption-normal text-color-black"
+                *ngFor="let subSubCategory of subCategory.children; let i = index"
+              >
+                {{ subSubCategory.data.name }}<span *ngIf="subCategory.children.length - 1 !== i">,</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="backdrop" [@presenceAnimationFaster] *ngIf="isCategoriesSubCategoriesWrapperOpened()"></div>
+  </div>
+</div>

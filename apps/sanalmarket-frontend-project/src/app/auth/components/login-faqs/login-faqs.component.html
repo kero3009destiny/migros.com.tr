@@ -1,0 +1,10 @@
+<mat-card-header>
+  <fe-icon-button class="return-button" [icon]="returnIcon" (click)="closeFaqs()"></fe-icon-button>
+  <h3 mat-card-title class="text-color-black mat-headline">Sıkça Sorulan Sorular</h3>
+</mat-card-header>
+<mat-card-content>
+  <div *ngFor="let faq of faqs">
+    <h3 class="text-color-orange">{{ faq?.question }}</h3>
+    <p class="mat-caption-normal text-color-grey">{{ faq?.answer }}</p>
+  </div>
+</mat-card-content>

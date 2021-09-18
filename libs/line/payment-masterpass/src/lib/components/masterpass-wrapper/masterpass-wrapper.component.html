@@ -1,0 +1,14 @@
+<ng-container *ngIf="!disabled">
+  <fe-masterpass-check-user></fe-masterpass-check-user>
+  <fe-masterpass-link-user></fe-masterpass-link-user>
+  <fe-masterpass-list-cards [checkoutId]="checkoutId">
+    <ng-template [ngTemplateOutlet]="creditCardForm"></ng-template>
+    <fe-masterpass-register
+      [isCandidateCardValid]="candidateValid"
+      [registerCandidateCardInfo]="registerCandidateCardInfo"
+    ></fe-masterpass-register>
+  </fe-masterpass-list-cards>
+  <fe-masterpass-purchase></fe-masterpass-purchase>
+</ng-container>
+<ng-container *ngIf="disabled"><ng-template [ngTemplateOutlet]="creditCardForm"></ng-template></ng-container>
+<ng-template #creditCardForm><ng-content></ng-content></ng-template>

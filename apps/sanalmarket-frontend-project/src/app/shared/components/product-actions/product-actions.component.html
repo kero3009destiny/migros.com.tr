@@ -1,0 +1,41 @@
+<div *ngIf="!noCartOperations && inCart" class="product-actions">
+  <button
+    [attr.no-pointer-event]="noPointerEventOnDecreaseToZero && localAmount === 1"
+    class="product-decrease"
+    (click)="$event.stopPropagation(); decrease()"
+  >
+    <fa-icon [icon]="getTrashIcon()" *ngIf="isTrashIconVisible()"></fa-icon>
+    <fa-icon [icon]="getMinusIcon()" *ngIf="!isTrashIconVisible()"></fa-icon>
+  </button>
+  <div class="product-amount">
+    <span class="amount mat-caption">{{ shownLocalAmount }}</span>
+    <span class="unit text-color-grey">{{ getUnitLabel() }}</span>
+  </div>
+  <button
+    aria-label="Sepetteki ürün sayısını arttır"
+    class="product-increase"
+    (click)="$event.stopPropagation(); increase()"
+  >
+    <fa-icon [icon]="getPlusIcon()"></fa-icon>
+  </button>
+</div>
+
+<fa-icon
+  *ngIf="!inCart && iconButton"
+  [icon]="getPlusIcon()"
+  (click)="add()"
+  class="add-to-cart-button"
+  [ngClass]="{ disabled: noCartOperations }"
+>
+</fa-icon>
+
+<button
+  [disabled]="noCartOperations"
+  mat-flat-button
+  color="primary"
+  class="product-detail-add"
+  *ngIf="!inCart && !iconButton"
+  (click)="add()"
+>
+  {{ getAddToCartButtonLabel() }}
+</button>

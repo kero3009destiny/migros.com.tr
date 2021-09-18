@@ -1,0 +1,87 @@
+<div class="container">
+  <div class="banner-wrapper">
+    <div class="banner">
+      <div class="banner--content-wrapper">
+        <div class="logo">
+          <img feLazyLoad src="assets/logos/money-gold/money-gold-logo@2x.png" alt="money-gold-logo" />
+          <span>'a</span>
+        </div>
+        <span class="title">ÜYE OL!</span>
+        <span class="subtitle">Money’nin Ekstra Avantajlı Dünyasına Sen de Katıl!</span>
+        <div class="monthly-advantage">
+          Ayda <span class="price">9,99 TL</span>’ye herkes avantajlı Money Gold üyesi olabilir.
+        </div>
+      </div>
+      <div class="banner--image-wrapper">
+        <img feLazyLoad src="assets/images/money-gold/money-gold.png" alt="money-gold-image" />
+      </div>
+    </div>
+  </div>
+
+  <div class="descriptions-wrapper">
+    <div class="descriptions">
+      <div class="description" *ngFor="let description of descriptions">
+        <img feLazyLoad [src]="baseImagePath + description.image" [alt]="description.title" />
+        <span class="description-title">{{ description.title }}</span>
+        <span class="description-text">{{ description.body }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="monthly-gain">
+    <span class="title">Aylık 9,99₺ ödeyen bir Money Gold üyesinin toplam aylık kazancı 60,00 ₺’dir.</span>
+    <span class="subtitle">*Bir ayda 4 siparişi olan müşteriler için hesaplanmıştır.</span>
+    <a href="https://www.money.com.tr/gold" target="_blank" class="register-button subtitle-2">Money Gold’a Üye Ol</a>
+  </div>
+  <a href="https://www.money.com.tr/gold" target="_blank" class="register-button mat-caption-normal mobile"
+    >Money Gold’a Üye Ol</a
+  >
+
+  <div class="all-advantages">
+    <div class="advantage" *ngFor="let advantage of advantages">
+      <div class="detail">
+        <span class="title">{{ advantage.title }}</span>
+        <span class="subtitle">{{ advantage.body }}</span>
+      </div>
+      <img feLazyLoad [src]="baseImagePath + advantage.image" [alt]="advantage.title" />
+    </div>
+  </div>
+
+  <div class="monthly-gain">
+    <span class="title">Ücretsiz ve hızlı teslimat, Kampanyalar ve daha fazlası</span>
+    <span class="subtitle">Ayda minimum 60TL kazanç sağlamak için hemen üye ol!</span>
+    <span class="subtitle desktop-only">● Yenilenen faturalandırma ● İstediğin zaman üyeliği sonlandır</span>
+    <a href="https://www.money.com.tr/gold" target="_blank" class="register-button subtitle-2">Money Gold’a Üye Ol</a>
+  </div>
+  <a href="https://www.money.com.tr/gold" target="_blank" class="register-button mat-caption-normal mobile"
+    >Money Gold’a Üye Ol</a
+  >
+
+  <div class="faq">
+    <span class="title">Sıkça Sorulan Sorular</span>
+    <mat-accordion>
+      <mat-expansion-panel
+        *ngFor="let faq of faqs; let i = index;"
+        [expanded]="isExpanded(i)"
+        (opened)="setStep(i)"
+        (closed)="onClosed(i)"
+        hideToggle
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title> {{ faq.title }} </mat-panel-title>
+          <mat-panel-description>
+            <fa-icon class="toggle" [icon]="isExpanded(i) ? minusIcon : plusIcon"></fa-icon>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <span>
+          {{ faq.body }}
+          <ng-container *ngIf="faq.otherBody">
+            <br />
+            <br />
+            {{ faq.otherBody }}
+          </ng-container>
+        </span>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+</div>

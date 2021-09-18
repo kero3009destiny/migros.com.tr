@@ -1,0 +1,48 @@
+<div class="page-row" *ngIf="getShownPageIndexes().length > 1">
+  <button
+    [disabled]="pageIndex === 1"
+    mat-flat-button
+    class="button button--icon button--nonselected"
+    color="accent"
+    (click)="onPageChanged(1)"
+  >
+    <fa-icon [icon]="toFirstPageIcon"></fa-icon>
+  </button>
+  <button
+    [disabled]="pageIndex === 1"
+    mat-flat-button
+    class="button button--icon button--nonselected"
+    color="accent"
+    (click)="onPageChanged(pageIndex - 1)"
+  >
+    <fa-icon [icon]="toPrevPageIcon"></fa-icon>
+  </button>
+  <button
+    mat-flat-button
+    [color]="getPageRowColor(shownPageIndex)"
+    class="button"
+    [class.button--nonselected]="shownPageIndex !== pageIndex"
+    (click)="onPageChanged(shownPageIndex)"
+    *ngFor="let shownPageIndex of getShownPageIndexes()"
+  >
+    {{ shownPageIndex }}
+  </button>
+  <button
+    [disabled]="pageIndex === totalPageCount"
+    mat-flat-button
+    class="button button--icon button--nonselected"
+    color="accent"
+    (click)="onPageChanged(pageIndex + 1)"
+  >
+    <fa-icon [icon]="toNextPageIcon"></fa-icon>
+  </button>
+  <button
+    [disabled]="pageIndex === totalPageCount"
+    mat-flat-button
+    class="button button--icon button--nonselected"
+    color="accent"
+    (click)="onPageChanged(totalPageCount)"
+  >
+    <fa-icon [icon]="toLastPageIcon"></fa-icon>
+  </button>
+</div>

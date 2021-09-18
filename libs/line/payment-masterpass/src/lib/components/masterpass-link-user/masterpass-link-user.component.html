@@ -1,0 +1,19 @@
+<form #linkMasterPassForm>
+  <input type="hidden" name="msisdn" />
+  <input type="hidden" name="token" />
+  <input type="hidden" name="referenceNo" value="101252836185" />
+  <input type="hidden" name="sendSmsLanguage" value="tur" />
+  <input type="hidden" name="sendSms" value="N" />
+</form>
+<div class="container" *ngIf="isUserLinkable$ | async as isUserLinkable">
+  <img src="/assets/images/masterpass.png" alt="masterpass-logo" class="image" />
+  <div class="info-container">
+    <div class="text-container" *ngIf="user$ | async as user">
+      <span class="phone">{{ user.phoneNumber }}</span> cep telefonu ile Masterpass'e kayıtlı kartlarınız var. Bu
+      kartları {{ companyName }}'da da kullanmak istiyor musunuz?
+    </div>
+    <div class="button-container">
+      <Button class="button-primary" (click)="onLinkAccepted()">Evet</Button>
+    </div>
+  </div>
+</div>

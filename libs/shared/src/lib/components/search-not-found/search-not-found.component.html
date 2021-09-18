@@ -1,0 +1,14 @@
+<div class="search-container--empty">
+  <i class="icon icon-noresult-wind"></i>
+  <div class="search-info-text">
+  <span class="search-info search-bold" *ngIf="searchQueryParams.q">{{ searchQueryParams.q | json | titlecase }} </span>
+  <span class="search-info">  ile ilgili sonuç bulamadık :(</span>
+  </div>
+  <span class="search-info" *ngIf="!searchQueryParams.q">Üzgünüz sonuç bulamadık :(</span>
+  <h5 class="search-bold">Önerilerimiz</h5>
+  <p class="search-container-text">
+    Yazdığınız kelimenin doğru olduğunu kontrol edebilirsiniz:
+    <span class="search-bold"> {{ searchQueryParams.q }}</span>
+  </p>
+  <p class="search-container-text">Benzer başka bir kelime ile aramayı deneyebilirsiniz</p>
+</div>

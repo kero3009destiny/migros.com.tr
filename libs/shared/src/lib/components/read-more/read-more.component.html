@@ -1,0 +1,4 @@
+<div class="read-more">
+  <div [style.height]="isCollapsed() ? maxHeight + 'px' : 'auto'"><ng-content></ng-content></div>
+  <span *ngIf="isCollapsed()" (click)="onClickToggle()" class="read-more__toggle">{{ label }}</span>
+</div>

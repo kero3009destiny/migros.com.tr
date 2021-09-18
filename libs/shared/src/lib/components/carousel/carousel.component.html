@@ -1,0 +1,14 @@
+<div
+  class="carousel-container"
+  [ngClass]="{ 'any-carousel': !isImageCarousel() }"
+  [ngStyle]="{ padding: getPaddingValue() }"
+>
+  <div *ngFor="let carouselItem of carouselItems" class="carousel">
+    <figure *ngIf="isImageCarousel()" (click)="onImageClick(carouselItem)">
+      <img [src]="getImageSrc(carouselItem)" />
+    </figure>
+    <div *ngIf="!isImageCarousel()">
+      <ng-container *ngTemplateOutlet="carouselTemplateRef; context: { $implicit: carouselItem }"></ng-container>
+    </div>
+  </div>
+</div>

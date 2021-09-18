@@ -1,0 +1,23 @@
+<div class="mobile-only-v2">
+  <fe-line-checkout-summary-mobile
+    [isCartPage]="isCartPage"
+    [isContinueButtonDisabled]="isContinueButtonDisabled"
+    [checkoutInfo]="getCheckoutInfo()"
+    (continueClicked)="onClickContinue()"
+  >
+    <section deliveryChoice>
+      <ng-content select="[deliveryChoice]"></ng-content>
+    </section>
+  </fe-line-checkout-summary-mobile>
+</div>
+<div class="desktop-only-v2">
+  <fe-line-checkout-summary-desktop
+    [isContinueButtonDisabled]="isContinueButtonDisabled"
+    [checkoutInfo]="getCheckoutInfo()"
+    (continueClicked)="onClickContinue()"
+    [isCartPage]="isCartPage"
+  >
+    <ng-content></ng-content>
+    <ng-content select="[priceLeft]"></ng-content>
+  </fe-line-checkout-summary-desktop>
+</div>

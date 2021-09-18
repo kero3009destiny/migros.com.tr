@@ -1,0 +1,23 @@
+<h2 class="text-color-black coupons">Çeklerim</h2>
+<ng-container *ngIf="getHasCheques()">
+  <div class="coupon" *ngFor="let cheque of getCheques()">
+    <div class="left">
+      <div class="subtitle-1 text-color-black coupon-title">{{ cheque.name }}</div>
+      <div class="mat-caption text-color-grey">Kullanım Koşulları</div>
+      <div class="mat-caption-normal text-color-grey">{{ cheque.userDescription }}</div>
+    </div>
+    <div class="right">
+      <h2 class="text-color-white price">{{ getPriceText(cheque) }}</h2>
+      <div class="amount-info">
+        <div class="mat-caption-normal text-color-grey">Çek No:</div>
+        <div class="code" (click)="copyToClipboard(cheque.identifier)">
+          <div class="text-color-orange subtitle-2 coupon-code">{{ cheque.identifier }}</div>
+          <fa-icon class="text-color-orange copy-logo" [icon]="getCopyIcon()"></fa-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+<div class="no-coupon" *ngIf="!getHasCheques()">
+  <div class="mat-body-2 text-color-grey">{{ getMessage() }}</div>
+</div>

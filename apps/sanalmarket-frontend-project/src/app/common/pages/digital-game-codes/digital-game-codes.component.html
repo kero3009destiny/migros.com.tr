@@ -1,0 +1,41 @@
+<div class="digital-game-codes-wrapper">
+  <div class="banner">
+    <div>Dijital Oyun Kodları</div>
+    <div>(E-PIN)</div>
+    <div>En popüler oyunlara ait E-Pin'ler şimdi Migros kasalarında satışta</div>
+  </div>
+  <div class="inner">
+    <!-- TODO remove comment when FAQ for sm is done, route onClick function
+    <div class="faq-questions mat-body-2 text-color-grey">Sıkça sorulan sorular için
+      <span class="text-color-orange" (click)="onClickFaq()">tıklayınız</span>
+    </div>
+    -->
+    <mat-tab-group dynamicHeight>
+      <mat-tab label="Oyunlar">
+        <div class="games-wrapper"></div>
+      </mat-tab>
+      <mat-tab label="Nasıl Alınır?">
+        <div class="how-to-buy-wrapper"></div>
+      </mat-tab>
+      <mat-tab label="E-PIN'ler">
+        <div class="e-pins-wrapper">
+          <div class="e-pin-wrapper" *ngFor="let ePin of getEPins()">
+            <div class="logo" [ngClass]="ePin.name"></div>
+            <div class="title mat-headline">
+              {{ ePin.title }}
+            </div>
+            <div class="name-value-wrapper" *ngFor="let eEPinValuePrice of ePin.value_price">
+              <div class="value mat-body">
+                {{ eEPinValuePrice.value }}
+              </div>
+              <div class="price subtitle-2">{{ eEPinValuePrice.price }} TL</div>
+            </div>
+          </div>
+          <!-- empty divs for grid -->
+          <div class="e-pin-wrapper"></div>
+          <div class="e-pin-wrapper"></div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>

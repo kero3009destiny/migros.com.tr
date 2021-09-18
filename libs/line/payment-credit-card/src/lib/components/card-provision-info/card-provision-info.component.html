@@ -1,0 +1,10 @@
+<div class="container" [@presenceAnimation] *ngIf="cardProvisionInfoAvailable() | async">
+  <div class="subtitle-2 text-color-info header">
+    <fa-icon class="header--icon" [icon]="infoCircleIcon"></fa-icon>
+    <div>Banka Provizyonu Hakkında</div>
+  </div>
+  <div class="mat-caption-normal text-color-info">
+    Sipariş tutarı kartınızda provizyonda bekler, siparişiniz size teslim edildiğinde sadece teslim aldığınız ürünlerin
+    ücreti kartınızdan çekilir, tedarik edilmeyen ürünler için ücret ödemezsiniz.
+  </div>
+</div>

@@ -1,0 +1,12 @@
+<div class="category" *ngIf="isComponentVisible()">
+  <div class="category-title" (click)="toggle()">
+    {{ category.categoryName }} ({{ category.itemInfos.length }})
+    <fa-icon [icon]="getIcon()"></fa-icon>
+  </div>
+
+  <div class="category-item-list" [class.hidden]="!isOpen()">
+    <ng-container *ngFor="let itemInfo of category.itemInfos">
+      <sm-item-detail class="item" [itemInfo]="itemInfo"></sm-item-detail>
+    </ng-container>
+  </div>
+</div>

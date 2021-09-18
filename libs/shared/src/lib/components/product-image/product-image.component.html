@@ -1,0 +1,10 @@
+<a
+  (click)="sendGtmClick()"
+  [routerLink]="['', prettyName]"
+  [queryParams]="queryParams"
+  [state]="{ referrerEventId: referrerEventId }"
+  [class.disabled]="prettyName === undefined || !asLink"
+>
+  <img *ngIf="lazyLoad" [src]="getImageUrl(imageType)" alt="{{ productName }}" feLazyLoad />
+  <img *ngIf="!lazyLoad" [src]="getImageUrl(imageType)" alt="{{ productName }}" />
+</a>

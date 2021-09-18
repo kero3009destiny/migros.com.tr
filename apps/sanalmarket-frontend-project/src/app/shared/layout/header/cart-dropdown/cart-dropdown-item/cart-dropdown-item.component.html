@@ -1,0 +1,48 @@
+<div class="cart-dropdown-item">
+  <fe-product-image
+    (gtmClick)="sendGtmClickEvent(cartItem)"
+    [image]="cartItem.product.images[0]"
+    [prettyName]="cartItem.product.prettyName"
+    [productName]="cartItem.product.name"
+    [referrerEventId]="cartItem.referrerEventId"
+    [imageType]="'PRODUCT_LIST'"
+  >
+  </fe-product-image>
+  <div>
+    <div class="name-delete-wrapper">
+      <fe-product-name
+        (gtmClick)="sendGtmClickEvent(cartItem)"
+        [productName]="cartItem.product.name"
+        [prettyName]="cartItem.product.prettyName"
+        [customClass]="'migros'"
+        [productId]="cartItem.item.productId"
+        [referrerEventId]="cartItem.referrerEventId"
+      >
+      </fe-product-name>
+      <fa-icon class="delete-button" [icon]="trashIcon" (click)="deleteItem()"></fa-icon>
+    </div>
+    <fe-product-discount-label [badges]="cartItem.product.badges"></fe-product-discount-label>
+    <div class="actions-price-wrapper">
+      <sm-product-actions
+        #action
+        [amount]="cartItem.item.amount"
+        [maxAmount]="cartItem.product.maxAmount"
+        [unit]="cartItem.item.unit"
+        [status]="cartItem.product.status"
+        (updated)="onUpdate($event)"
+        [reminderVisibility]="false"
+        (maxAmountReached)="onMaxAmountReached($event)"
+        [noPointerEventOnDecreaseToZero]="true"
+        [incrementAmount]="getIncrementAmount(cartItem)"
+        [initialIncrementAmount]="getInitialIncrementAmount(cartItem)"
+      >
+      </sm-product-actions>
+      <fe-product-price
+        [showPromotionLabel]="true"
+        [regularPrice]="cartItem.totalRegularPrice"
+        [shownPrice]="cartItem.revenue"
+      >
+      </fe-product-price>
+    </div>
+  </div>
+</div>

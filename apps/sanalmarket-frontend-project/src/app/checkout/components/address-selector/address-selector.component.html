@@ -1,0 +1,215 @@
+<ng-template [ngIf]="!isLoading()">
+  <div class="wrapper">
+    <div class="address-selector-wrapper">
+      <!-- FOUNDATION -->
+      <ng-template [ngIf]="isFoundationWrapperVisible()">
+        <div class="instruction-foundation-wrapper">
+          <div class="instruction subtitle-1">Bağış Kurumu</div>
+          <div class="foundation-wrapper">
+            <div class="foundation">
+              <div class="header">
+                <img class="logo" [src]="getSelectedFoundation().iconUrl" />
+                <div class="name subtitle-1">{{ getSelectedFoundation().name }}</div>
+              </div>
+              <div class="footer">
+                <div class="icon-information">
+                  <fa-icon [icon]="infoIcon"></fa-icon>
+                </div>
+                <div class="text text-color-info mat-caption-normal">
+                  Siparişiniz <span>{{ getSelectedFoundation().name }}</span> aracığılıyla ihtiyaç sahiplerine
+                  bağışlanacaktır.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+      <!-- PICK POINT -->
+      <ng-template [ngIf]="isPickPointWrapperVisible()">
+        <div class="instruction-pick-point-wrapper">
+          <div class="instruction subtitle-1">Siparişini teslim alacağın mağaza</div>
+          <div class="pick-point-wrapper">
+            <div class="foundation">
+              <div class="header">
+                <img class="logo" [src]="getTiklaGelAlSrc()" />
+                <div class="logo-name-full-address-wrapper">
+                  <div class="logo-migros"></div>
+                  <div class="name subtitle-2">{{ getSelectedPickPoint().name }}</div>
+                  <div class="full-address mat-caption-normal text-color-grey">
+                    {{ getSelectedPickPoint().fullAddress }}
+                  </div>
+                </div>
+              </div>
+              <div class="footer">
+                <div class="icon-information">
+                  <fa-icon [icon]="infoIcon"></fa-icon>
+                </div>
+                <div class="text text-color-info mat-caption-normal">
+                  Siparişini <span>Tıkla Gel Al</span> noktasından teslim alabilirsin.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+      <!-- DELIVERY ADDRESSES -->
+      <div class="delivery-addresses-wrapper" *ngIf="isDeliverAddressesWrapperVisible()" [@presenceAnimation]>
+        <div class="instruction-same-as-delivery-checkbox-wrapper">
+          <div class="instruction subtitle-1">
+            Teslimat Adresi Seç
+            <mat-checkbox
+              *ngIf="hasVisibleDeliveryAddress()"
+              [checked]="isInvoiceSameAsDeliveryAddress()"
+              [color]="'primary'"
+              (change)="onChangeInvoiceSameAsDeliveryAddressCheckbox($event.checked)"
+            >
+              <span class="mat-caption">Fatura adresim aynı</span>
+            </mat-checkbox>
+          </div>
+        </div>
+        <div class="delivery-addresses-inner-wrapper">
+          <mat-radio-group>
+            <ng-template ngFor let-address [ngForOf]="getDeliveryAddressList()" let-i="index">
+              <div
+                class="address"
+                id="address-selector-{{ i }}"
+                [@presenceAnimation]
+                (click)="onClickDeliveryAddress(address)"
+                [class.selected]="isDeliveryAddressSelected(address, i)"
+                *ngIf="isDeliveryAddressVisible(i)"
+              >
+                <mat-radio-button
+                  class="address-button"
+                  color="primary"
+                  value="{{ address }}"
+                  [checked]="isDeliveryAddressSelected(address, i)"
+                >
+                  <div class="title-delete-edit-address-detailed-wrapper">
+                    <div class="title-delete-edit-wrapper">
+                      <div class="title subtitle-2">
+                        {{ address.name }}
+                      </div>
+                      <fe-icon-button
+                        class="accesibility-button"
+                        aria-label="Adresi Düzenle"
+                        (click)="onClickEditButton(address, false, $event)"
+                        id="address-selector-edit-button-{{ i }}"
+                        class="edit-button"
+                        [icon]="penIcon"
+                      >
+                      </fe-icon-button>
+                      <fe-icon-button
+                        class="accesibility-button"
+                        aria-label="Adresi Sil"
+                        (click)="onClickDeleteButton(address, false, $event)"
+                        id="address-selector-delete-button-{{ i }}"
+                        class="delete-button"
+                        [icon]="trashIcon"
+                      >
+                      </fe-icon-button>
+                    </div>
+                    <div class="address-detailed mat-caption-normal text-color-grey">
+                      {{ address.fullAddress }}
+                    </div>
+                  </div>
+                </mat-radio-button>
+              </div>
+            </ng-template>
+          </mat-radio-group>
+          <button
+            class="add-address-wrapper"
+            id="address-selector-add-delivery"
+            *ngIf="!isAnonymous()"
+            (click)="onClickAddNewDeliveryAddress()"
+          >
+            <fa-icon class="text-color-orange add-plus-icon" [icon]="plusIcon"></fa-icon>
+            <div class="text mat-caption text-color-orange">Teslimat Adresi Ekle</div>
+          </button>
+          <div
+            class="load-more-checkbox-wrapper mat-caption text-color-orange"
+            id="address-selector-load-more-delivery"
+            *ngIf="isLoadMoreDeliveryAddressBtnVisible()"
+          >
+            <div class="icon-load-more" (click)="onClickLoadMoreDeliveryAddress()">
+              <fa-icon [icon]="doubleDownIcon"></fa-icon>
+              Diger Teslimat Adreslerim
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- INVOICE ADDRESSES -->
+      <div class="invoice-addresses-wrapper" [@presenceAnimation] *ngIf="isInvoiceAddressesWrapperVisible()">
+        <div class="instruction second-row subtitle-1">Fatura Adreslerim</div>
+        <mat-radio-group>
+          <ng-template ngFor let-invoiceAddress let-i="index" [ngForOf]="getInvoiceAddressList()">
+            <div
+              id="address-selector-select-invoice"
+              class="address"
+              [@presenceAnimation]
+              (click)="onClickInvoiceAddress(invoiceAddress)"
+              [class.selected]="isInvoiceAddressSelected(invoiceAddress, i)"
+              *ngIf="isInvoiceAddressVisible(i)"
+            >
+              <mat-radio-button
+                class="address-button"
+                color="primary"
+                value="{{ invoiceAddress }}"
+                [checked]="isInvoiceAddressSelected(invoiceAddress, i)"
+              >
+                <div class="title-delete-edit-address-detailed-wrapper">
+                  <div class="title-delete-edit-wrapper">
+                    <div class="title subtitle-2">
+                      {{ invoiceAddress.name }}
+                    </div>
+                    <fe-icon-button
+                      class="accesibility-button"
+                      aria-label="Adresi Düzenle"
+                      (click)="onClickEditButton(invoiceAddress, true, $event)"
+                      id="address-selector-invoice-edit-button-{{ i }}"
+                      class="edit-button"
+                      [icon]="penIcon"
+                    >
+                    </fe-icon-button>
+                    <fe-icon-button
+                      class="accesibility-button"
+                      aria-label="Adresi Sil"
+                      (click)="onClickDeleteButton(invoiceAddress, true, $event)"
+                      id="address-selector-invoice-delete-button-{{ i }}"
+                      class="delete-button"
+                      [icon]="trashIcon"
+                    >
+                    </fe-icon-button>
+                  </div>
+                  <div class="address-detailed mat-caption-normal text-color-grey">
+                    {{ invoiceAddress.fullAddress }}
+                  </div>
+                </div>
+              </mat-radio-button>
+            </div>
+          </ng-template>
+        </mat-radio-group>
+        <button class="add-address-wrapper" id="address-selector-add-invoice" (click)="onClickAddNewInvoiceAddress()">
+          <fa-icon class="text-color-orange add-plus-icon" [icon]="plusIcon"></fa-icon>
+          <div class="text mat-caption text-color-orange">Fatura Adresi Ekle</div>
+        </button>
+        <div
+          id="address-selector-load-more-invoice"
+          class="load-more mat-caption text-color-orange"
+          *ngIf="isLoadMoreInvoiceAddressBtnVisible()"
+          (click)="onClickLoadMoreInvoiceAddress()"
+        >
+          <fa-icon [icon]="doubleDownIcon"></fa-icon>
+          Diger Fatura Adreslerim
+        </div>
+      </div>
+    </div>
+    <div class="checkout-summary-delivery-note-wrapper">
+      <fe-line-checkout-summary
+        (continueClicked)="onSubmit()"
+        [checkoutInfo]="getCheckoutInfo()"
+      ></fe-line-checkout-summary>
+      <sm-add-delivery-note (deliveryNoteChange)="onDeliveryNoteChange($event)"></sm-add-delivery-note>
+    </div>
+  </div>
+</ng-template>

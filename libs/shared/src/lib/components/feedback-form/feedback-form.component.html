@@ -1,0 +1,80 @@
+<h5>İletişim Formu</h5>
+<form
+  class="feedback-form"
+  [formGroup]="feedbackFormGroup"
+  feAppSubmitThrottle
+  (throttleSubmit)="onFormSubmit()"
+  [throttleFormValid]="feedbackFormGroup.valid"
+>
+  <div class="row">
+    <mat-form-field class="feedback-form__first-name" color="accent" appearance="outline">
+      <mat-label>İsim</mat-label>
+      <input type="text" matInput formControlName="firstName" />
+      <mat-error *ngIf="getFirstName().invalid && feedbackFormGroup.invalid"> Lütfen isminizi giriniz. </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="feedback-form__last-name" color="accent" appearance="outline">
+      <mat-label>Soyisim</mat-label>
+      <input type="text" matInput formControlName="lastName" />
+      <mat-error *ngIf="getLastName().invalid && feedbackFormGroup.invalid"> Lütfen soyisminizi giriniz. </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="row">
+    <mat-form-field color="accent" appearance="outline">
+      <mat-label>E-posta Adresi</mat-label>
+      <input type="email" autocomplete="email" matInput formControlName="email" />
+      <mat-error *ngIf="getEmail().invalid && feedbackFormGroup.invalid"> Lütfen e-postanızı giriniz. </mat-error>
+    </mat-form-field>
+
+    <mat-form-field color="accent" appearance="outline">
+      <mat-label>Telefon numaranız</mat-label>
+      <input
+        id="feedback__phone-number-input"
+        type="tel"
+        maxlength="10"
+        matInput
+        autocomplete="tel"
+        formControlName="phoneNumber"
+      />
+      <mat-hint *ngIf="showHint" align="start"> Telefon numaranızı başında 0 olmadan giriniz. </mat-hint>
+      <mat-error
+        id="feedback__phone-number-error--empty"
+        *ngIf="getPhoneNumber().invalid && getPhoneNumber().errors.required"
+      >
+        Lütfen telefon numaranızı giriniz.
+      </mat-error>
+      <mat-error
+        id="feedback__phone-number-error--unValid"
+        *ngIf="getPhoneNumber().invalid && getPhoneNumber().errors.pattern"
+      >
+        Telefon numaranızı 5XXXXXXXXX şeklinde giriniz.
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <mat-form-field class="feedback-form__reason" color="accent" appearance="outline">
+    <mat-label>Konu</mat-label>
+    <select matNativeControl formControlName="reason">
+      <ng-container *ngIf="reasons">
+        <option label="-- Seçiniz --"></option>
+        <option *ngFor="let reason of reasons" value="{{ reason.name }}">{{ reason.message }}</option>
+      </ng-container>
+    </select>
+    <mat-error *ngIf="getReason().invalid && feedbackFormGroup.invalid"> Lütfen konu seçiniz. </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="feedback-form__message-text" color="accent" appearance="outline">
+    <mat-label>Mesajınız</mat-label>
+    <textarea matInput formControlName="messageText"></textarea>
+    <mat-error *ngIf="getMessageText().invalid && getMessageText().errors.required">
+      Lütfen mesajınızı giriniz.
+    </mat-error>
+
+    <mat-error *ngIf="getMessageText().invalid && getMessageText().errors.minlength">
+      Mesajınız minimum 20 karakter olmalıdır.
+    </mat-error>
+    <mat-hint *ngIf="showHint" align="end"> Minimum 20 karakter </mat-hint>
+  </mat-form-field>
+  <button class="button-primary" type="submit">Gönder</button>
+</form>

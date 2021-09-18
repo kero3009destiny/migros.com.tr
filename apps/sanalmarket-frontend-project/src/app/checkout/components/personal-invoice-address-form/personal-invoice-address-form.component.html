@@ -1,0 +1,147 @@
+<form
+  *ngIf="addressFormGroup"
+  class="delivery-zone-form"
+  [formGroup]="addressFormGroup"
+  feAppSubmitThrottle
+  (throttleSubmit)="submitPersonalAddressForm()"
+  [throttleFormValid]="addressFormGroup.valid"
+>
+  <div class="row">
+    <mat-form-field class="row-items" appearance="outline">
+      <mat-label>Adres İsmi, Örn: Ofis, Yazlık, Ev</mat-label>
+      <input
+        id="add-invoice-address-modal-name"
+        matInput
+        required
+        type="text"
+        label="Adres İsmi"
+        formControlName="name"
+      />
+      <mat-error>Lütfen adres ismi giriniz.</mat-error>
+    </mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="row-items" appearance="outline">
+      <mat-label>Ad</mat-label>
+      <input
+        id="add-invoice-address-modal-first-name"
+        matInput
+        required
+        type="text"
+        feOnlyLetters
+        label="Ad"
+        formControlName="firstName"
+      />
+      <mat-error>Lütfen geçerli bir ad giriniz.</mat-error>
+    </mat-form-field>
+    <mat-form-field class="row-items" appearance="outline">
+      <mat-label>Soyad</mat-label>
+      <input
+        id="add-invoice-address-modal-last-name"
+        matInput
+        required
+        type="text"
+        feOnlyLetters
+        placeholder="Soyad"
+        formControlName="lastName"
+      />
+      <mat-error>Lütfen geçerli bir soyad giriniz.</mat-error>
+    </mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="address-form--city row-items" color="accent" appearance="outline" floatLabel="always">
+      <mat-label>İl</mat-label>
+      <select
+        required
+        id="add-invoice-address-modal-city"
+        matNativeControl
+        formControlName="cityId"
+        autocomplete="shipping street-address"
+      >
+        <ng-container *ngIf="getCities() as cities">
+          <option label="-- Seçiniz --" [value]="null"></option>
+          <option *ngFor="let city of cities" value="{{ city.id }}">{{ city.name }}</option>
+        </ng-container>
+      </select>
+      <mat-error>Lütfen il seçiniz.</mat-error>
+    </mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="address-form--town row-items" color="accent" appearance="outline" floatLabel="always">
+      <mat-label>İlçe</mat-label>
+      <select
+        required
+        id="add-invoice-address-modal-town"
+        matNativeControl
+        formControlName="townId"
+        autocomplete="shipping street-address"
+      >
+        <ng-container *ngIf="getTowns() as towns">
+          <option label="-- Seçiniz --" [value]="null"></option>
+          <option *ngFor="let town of towns" value="{{ town.id }}">{{ town.name }}</option>
+        </ng-container>
+      </select>
+      <mat-error>Lütfen ilçe seçiniz.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="address-form--district row-items" color="accent" appearance="outline" floatLabel="always">
+      <mat-label>Mahalle</mat-label>
+      <select
+        required
+        id="add-invoice-address-modal-district"
+        matNativeControl
+        formControlName="districtId"
+        autocomplete="shipping street-address"
+      >
+        <ng-container *ngIf="getDistricts() as districts">
+          <option label="-- Seçiniz --" [value]="null"></option>
+          <option *ngFor="let district of districts" value="{{ district.id }}">{{ district.name }}</option>
+        </ng-container>
+      </select>
+      <mat-error>Lütfen mahalle seçiniz.</mat-error>
+    </mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="address-form--street row-items" color="accent" appearance="outline" floatLabel="always">
+      <mat-label>Cadde - Sokak</mat-label>
+      <select
+        id="add-invoice-address-modal-street"
+        matNativeControl
+        formControlName="streetId"
+        autocomplete="shipping street-address"
+      >
+        <ng-container *ngIf="getStreets() as streets">
+          <option label="-- Seçiniz --" [value]="null"></option>
+          <option *ngFor="let street of streets" value="{{ street.id }}">{{ street.name }}</option>
+        </ng-container>
+      </select>
+    </mat-form-field>
+    <mat-form-field class="row-items" appearance="outline">
+      <mat-label>Bina ve Daire No</mat-label>
+      <input
+        id="add-invoice-address-modal-detail"
+        matInput
+        required
+        type="text"
+        label="Bina ve Daire No"
+        formControlName="detail"
+      />
+      <mat-error>Lütfen bina ve daire no giriniz.</mat-error>
+    </mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="row-items address-box" appearance="outline">
+      <mat-label>Adres Tarifi </mat-label>
+      <input
+        id="add-invoice-address-modal-direction"
+        matInput
+        type="text"
+        label="Adres Tarifi (Opsiyonel)"
+        formControlName="direction"
+      />
+    </mat-form-field>
+  </div>
+  <div class="row">
+    <fe-button id="add-invoice-address-modal-save-button" class="save-button" label="Kaydet" type="submit"></fe-button>
+  </div>
+</form>

@@ -1,0 +1,60 @@
+<mat-card class="container">
+  <div class="summary">
+    <div class="subtitle-1">Sepet Özeti</div>
+    <div class="mat-body-2 text-color-grey text-align-right">{{ getProductCount() }} Ürün</div>
+
+    <div class="summary-content mat-body-2">
+      <p>Toplam Tutar</p>
+      <p>{{ checkoutInfo.productPrice | feFormatPrice }} TL</p>
+      <div class="delivery-price" *ngIf="getDeliveryPrice() > 0">
+        <p>Teslimat Tutarı</p>
+        <p class="price">
+          <span
+            [ngClass]="{
+              'text-linethrough':
+                DeliveryFeeStatus.DISCOUNTED_PRICED === getDiscountFeeStatus() ||
+                DeliveryFeeStatus.DISCOUNTED_FREE === getDiscountFeeStatus()
+            }"
+            >{{ getDeliveryPrice() | feFormatPrice }} <span class="currency">TL</span></span
+          >
+          <span *ngIf="DeliveryFeeStatus.DISCOUNTED_PRICED === getDiscountFeeStatus()">
+            {{ getShownDeliveryPrice() | feFormatPrice }} <span class="currency">TL</span>
+          </span>
+          <ng-container *ngIf="DeliveryFeeStatus.DISCOUNTED_FREE === getDiscountFeeStatus()">
+            <span class="font-weight-bolder text-color-success free">Ücretsiz</span>
+          </ng-container>
+        </p>
+      </div>
+
+      <div class="discounts">
+        <ng-container *ngIf="checkoutInfo.shownProductDiscount > 0">
+          <p>Migros İndirimi</p>
+          <p>-{{ checkoutInfo.shownProductDiscount | feFormatPrice }} TL</p>
+        </ng-container>
+
+        <ng-container *ngIf="checkoutInfo.shownLineDiscount > 0">
+          <p>Sepet İndirimi</p>
+          <p>-{{ checkoutInfo.shownLineDiscount | feFormatPrice }} TL</p>
+        </ng-container>
+
+        <ng-container *ngIf="checkoutInfo.lineSpecialDiscount > 0">
+          <p>Gördüğüne İnan</p>
+          <p>-{{ checkoutInfo.lineSpecialDiscount | feFormatPrice }} TL</p>
+        </ng-container>
+
+        <ng-container *ngIf="!!getUsedSidePayment()">
+          <div class="side-payment">
+            <p>{{ getSidePaymentLabel(getUsedSidePayment().type) }}</p>
+            <button class="subtitle-2" mat-button color="primary" (click)="onRemoveSidePaymentClick()">Kaldır</button>
+          </div>
+          <p>-{{ getUsedSidePayment().discount | feFormatPrice }} TL</p>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="subtitle-1">Ödenecek Tutar</div>
+    <div class="subtitle-1 text-align-right">{{ getRevenue$() | async | feFormatPrice }} TL</div>
+  </div>
+  <mat-divider></mat-divider>
+  <ng-content></ng-content>
+</mat-card>

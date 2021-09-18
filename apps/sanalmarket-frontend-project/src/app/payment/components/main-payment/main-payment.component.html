@@ -1,0 +1,118 @@
+<mat-radio-group color="primary" (change)="onSelectedRadioChange($event.value)" [value]="getSelectedRadio()">
+  <div
+    class="option-wrapper"
+    *ngIf="!arePaymentsClosed([PAYMENT_ENUM.Wallet, PAYMENT_ENUM.Loan])"
+    [ngClass]="getOptionWrapperClass(PAYMENT_ENUM.Wallet)"
+  >
+    <!-- todo close if all money pay options are closed  -->
+    <mat-radio-button class="payment-option" [value]="PAYMENT_RADIO_MAP.WALLET">
+      <div class="option-container container">
+        <div class="bkm-title">
+          <div class="text-color-black subtitle-2">MoneyPay ile Öde</div>
+          <div class="mat-caption-normal text-color-grey bkm-title-info">Colendi Hazır Limit ile 30 Gün Sonra Öde</div>
+        </div>
+        <div class="icon icon-money-pay"></div>
+      </div>
+    </mat-radio-button>
+    <fe-money-pay
+      [userPhoneNumber]="getPhoneNumber()"
+      *ngIf="isRadioSelected(PAYMENT_RADIO_MAP.WALLET)"
+      [closedPayments]="getClosedPayments()"
+      (selectedPaymentMethod)="onSelectedPaymentChange($event, PAYMENT_RADIO_MAP.WALLET)"
+    ></fe-money-pay>
+  </div>
+  <div
+    class="option-wrapper"
+    *ngIf="!arePaymentsClosed([PAYMENT_ENUM.CreditCard])"
+    [ngClass]="getOptionWrapperClass(PAYMENT_ENUM.CreditCard)"
+  >
+    <mat-radio-button class="payment-option" [value]="PAYMENT_RADIO_MAP.CREDIT_CARD">
+      <div class="option-container">
+        <span class="text-color-black">
+          <span class="desktop-only subtitle-2"> Kredi Kartı ile Online Öde </span>
+          <span class="mat-caption-normal text-color-grey description desktop-only"
+            >Tüm kredi kartları ile güvenli ödeme yapın.</span
+          >
+
+          <span class="mobile-only subtitle-2"> Kredi / Banka Kartı </span>
+          <span class="mat-caption-normal text-color-grey description mobile-only">Kredi kartı veya banka kartı</span>
+        </span>
+        <img src="assets/images/payment-credit-card/payment-credit-card.svg " alt="payment-credit-card" />
+      </div>
+    </mat-radio-button>
+    <sm-online-credit-card
+      *ngIf="isRadioSelected(PAYMENT_RADIO_MAP.CREDIT_CARD)"
+      [closedPayments]="getClosedPayments()"
+      (selectedPaymentMethod)="onSelectedPaymentChange($event, PAYMENT_RADIO_MAP.CREDIT_CARD)"
+    ></sm-online-credit-card>
+  </div>
+  <div
+    class="option-wrapper"
+    *ngIf="!arePaymentsClosed([PAYMENT_ENUM.CashOnDelivery, PAYMENT_ENUM.CreditCardOnDelivery])"
+    [ngClass]="getOptionWrapperClass(PAYMENT_ENUM.CashOnDelivery)"
+  >
+    <mat-radio-button class="payment-option" [value]="PAYMENT_RADIO_MAP.CASH_ON_DELIVERY">
+      <div class="option-container container">
+        <div class="bkm-title">
+          <div class="text-color-black subtitle-2">Kapıda Ödeme</div>
+          <div class="mat-caption-normal text-color-grey bkm-title-info">
+            Tüm kredi kartları veya banka kartları ile kapıda ödeme yapabilirsiniz
+          </div>
+        </div>
+        <fa-icon class="payment-door-icon" [icon]="deliveryPaymentIcon"></fa-icon>
+      </div>
+    </mat-radio-button>
+    <sm-payment-on-delivery
+      *ngIf="isRadioSelected(PAYMENT_RADIO_MAP.CASH_ON_DELIVERY)"
+      [checkoutId]="getCheckoutId()"
+      [closedPayments]="getClosedPayments()"
+      (paymentChanged)="onSelectedPaymentChange($event, PAYMENT_RADIO_MAP.CASH_ON_DELIVERY)"
+    ></sm-payment-on-delivery>
+  </div>
+  <div
+    class="option-wrapper"
+    *ngIf="!arePaymentsClosed([PAYMENT_ENUM.GarantiPay])"
+    [ngClass]="getOptionWrapperClass(PAYMENT_ENUM.GarantiPay)"
+  >
+    <mat-radio-button class="payment-option" [value]="PAYMENT_RADIO_MAP.GARANTI_PAY">
+      <div class="option-container container">
+        <div class="bkm-title">
+          <div class="text-color-black subtitle-2">Garanti Pay</div>
+          <div class="mat-caption-normal text-color-grey bkm-title-info">
+            Bonus Flaş uygulamanız üzerinden ödeme onayı vererek ödeme yapabilirsiniz.
+          </div>
+        </div>
+        <img src="/assets/images/garanti-pay/garanti-pay.svg" alt="garanti-pay-logo" class="garanti-pay-logo" />
+      </div>
+      <sm-instant-discount
+        [isSelected]="isRadioSelected(PAYMENT_RADIO_MAP.GARANTI_PAY)"
+        [paymentType]="PAYMENT_ENUM.GarantiPay"
+        [checkoutId]="getCheckoutId()"
+      ></sm-instant-discount>
+    </mat-radio-button>
+    <sm-garanti-pay *ngIf="isRadioSelected(PAYMENT_RADIO_MAP.GARANTI_PAY)"></sm-garanti-pay>
+  </div>
+  <div
+    class="option-wrapper"
+    *ngIf="!arePaymentsClosed([PAYMENT_ENUM.Bkm])"
+    [ngClass]="getOptionWrapperClass(PAYMENT_ENUM.Bkm)"
+  >
+    <mat-radio-button class="payment-option" [value]="PAYMENT_RADIO_MAP.BKM">
+      <div class="option-container container">
+        <div class="bkm-title">
+          <div class="text-color-black subtitle-2">BKM Express</div>
+          <div class="mat-caption-normal text-color-grey bkm-title-info">
+            Kartınızı ve ödeme türünü seçerek ödeme işlemini tamamlayın.
+          </div>
+        </div>
+        <img src="/assets/images/bkmexpress-logo.svg" alt="bkm-logo" class="bkm-icon" />
+      </div>
+      <sm-instant-discount
+        [isSelected]="isRadioSelected(PAYMENT_RADIO_MAP.BKM)"
+        [paymentType]="PAYMENT_ENUM.Bkm"
+        [checkoutId]="getCheckoutId()"
+      ></sm-instant-discount>
+    </mat-radio-button>
+    <sm-bkm *ngIf="isRadioSelected(PAYMENT_RADIO_MAP.BKM)" [checkoutInfo]="checkoutInfo"></sm-bkm>
+  </div>
+</mat-radio-group>

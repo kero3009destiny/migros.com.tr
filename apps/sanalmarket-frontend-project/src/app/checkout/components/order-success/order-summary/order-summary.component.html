@@ -1,0 +1,143 @@
+<mat-card>
+  <mat-card-header>
+    <ng-container [ngSwitch]="orderSummaryFields?.orderType">
+      <ng-container *ngSwitchCase="'DISTRICT_INSTANT'">
+        <img
+          srcset="
+            /assets/images/instant-delivery.png,
+            /assets/images/instant-delivery@2x.png 2x,
+            /assets/images/instant-delivery@3x.png 3x
+          "
+        />
+        <div class="info">
+          <p class="subtitle-2 text-color-black text-align-center">
+            Siparişin
+            <span class="text-color-orange"> {{ orderSummaryFields.etaInfo?.eta }} dakika </span>
+            içerisinde teslim edilecektir.
+          </p>
+          <div
+            *ngIf="isAnonymousOrderTrackInfoShown()"
+            class="mat-caption text-color-grey text-align-center anonymous-order-track-info"
+          >
+            <img src="/assets/logos/social/whatsapp.svg" />
+            <p>
+              Siparişinizin durumunu mobil uygulamamız üzerinden ya da
+              <span class="text-color-black">0530 300 1 300</span> no’lu WhatsApp hattı üzerinden öğrenebilirsiniz.
+            </p>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngSwitchCase="'DISTRICT_TIMESLOT'">
+        <img
+          srcset="/assets/images/msm-arac.png, /assets/images/msm-arac@2x.png 2x, /assets/images/msm-arac@3x.png 3x"
+        />
+        <div class="info">
+          <p class="subtitle-2 text-color-black text-align-center">
+            Siparişin
+            <span class="text-color-orange">
+              {{ orderSummaryFields.deliveryDate | date: 'dd.MM.y EEEE':'GMT+3' }}
+              {{ orderSummaryFields.timeSlotDetails }}
+            </span>
+            arasında teslim edilecektir.
+          </p>
+          <div
+            *ngIf="isAnonymousOrderTrackInfoShown()"
+            class="mat-caption text-color-grey text-align-center anonymous-order-track-info"
+          >
+            <img src="/assets/logos/social/whatsapp.svg" />
+            <p>
+              Siparişinizin durumunu mobil uygulamamız üzerinden ya da
+              <span class="text-color-black">0530 300 1 300</span> no’lu WhatsApp hattı üzerinden öğrenebilirsiniz.
+            </p>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngSwitchCase="'SHIPMENT'">
+        <img
+          srcset="
+            /assets/images/delivery-truck.png,
+            /assets/images/delivery-truck@2x.png 2x,
+            /assets/images/delivery-truck@3x.png 3x
+          "
+        />
+        <p class="subtitle-2 text-color-black text-align-center">
+          Siparişin en kısa sürede kargoya verilecektir. Kargonu siparişlerim altından takip edebilirsin.
+        </p>
+      </ng-container>
+      <ng-container *ngSwitchCase="'PICK_POINT'">
+        <img [srcset]="getPickPointImageSrc()" />
+        <p class="subtitle-2 text-color-black text-align-center">
+          Siparişini
+          <span class="text-color-orange">
+            {{ orderSummaryFields.deliveryDate | date: 'd.M.y EEEE':'GMT+3' }} {{ orderSummaryFields.timeSlotDetails }}
+          </span>
+          yukarıdaki Migros mağazasına giderek
+          <span class="text-color-orange">{{ getPickPointLabel() }}</span> noktasından teslim alabilirsin.
+        </p>
+      </ng-container>
+      <ng-container *ngSwitchCase="'FOUNDATION'">
+        <img srcset="/assets/images/love.png, /assets/images/love@2x.png 2x, /assets/images/love@3x.png 3x" />
+        <p class="subtitle-2 text-color-black text-align-center">
+          Siparişini <span class="text-color-error">{{ orderSummaryFields.deliveryAddressName }}</span>
+          adına ihtiyaç sahiplerine ulaştıracağız.
+        </p>
+      </ng-container>
+    </ng-container>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <mat-card-content>
+    <div class="mat-body-2 text-color-black row">
+      <p class="summary-label text-align-left">Sepetindeki Ürün Adedi</p>
+      <p class="summary-value text-align-right">{{ orderSummaryFields?.itemCount }}</p>
+    </div>
+    <div class="mat-body-2 text-color-black row">
+      <p class="summary-label text-align-left">Sipariş Tutarı</p>
+      <p class="summary-value text-align-right">{{ orderSummaryFields?.orderAmount | feFormatPrice }} TL</p>
+    </div>
+    <div class="mat-body-2 text-color-black row">
+      <p class="summary-label text-align-left">Teslimat Tutarı</p>
+      <p class="summary-value text-align-right">{{ deliveryFee | feFormatPrice }} TL</p>
+    </div>
+    <div class="mat-body-2 text-color-black row text-color-success" *ngIf="orderSummaryFields?.migrosDiscount > 0">
+      <p class="summary-label text-align-left">Migros İndirimi</p>
+      <p class="summary-value text-align-right">-{{ orderSummaryFields?.migrosDiscount | feFormatPrice }} TL</p>
+    </div>
+    <div class="mat-body-2 text-color-black row text-color-success" *ngIf="orderSummaryFields?.cartDiscount > 0">
+      <p class="summary-label text-align-left">Sepet İndirimi</p>
+      <p class="summary-value text-align-right">-{{ orderSummaryFields?.cartDiscount | feFormatPrice }} TL</p>
+    </div>
+    <div class="mat-body-2 text-color-black row text-color-success" *ngIf="orderSummaryFields?.specialDiscount > 0">
+      <p class="summary-label text-align-left">Gördüğüne İnan</p>
+      <p class="summary-value text-align-right">-{{ orderSummaryFields?.specialDiscount | feFormatPrice }} TL</p>
+    </div>
+    <div class="mat-body-2 text-color-black row text-color-success" *ngIf="orderSummaryFields?.couponDiscount > 0">
+      <p class="summary-label text-align-left">İndirim Çeki</p>
+      <p class="summary-value text-align-right">-{{ orderSummaryFields?.couponDiscount | feFormatPrice }} TL</p>
+    </div>
+    <div class="mat-body-2 text-color-black row text-color-success" *ngIf="orderSummaryFields?.instantDiscount > 0">
+      <p class="summary-label text-align-left">Anında İndirim</p>
+      <p class="summary-value text-align-right">-{{ orderSummaryFields?.instantDiscount | feFormatPrice }} TL</p>
+    </div>
+    <div class="text-color-black row">
+      <p class="summary-label subtitle-2 text-align-left">Genel Toplam</p>
+      <p class="summary-value subtitle-1 text-align-right">{{ orderSummaryFields?.overallTotal | feFormatPrice }} TL</p>
+    </div>
+    <div class="mat-caption-normal text-color-info text-align-left payment-info">
+      <ng-container *ngFor="let payment of orderSummaryFields?.payments">
+        <ng-container [ngSwitch]="payment.type" *ngIf="isSidePayment(payment)">
+          <fa-icon [icon]="faInfoCircle" size="lg"></fa-icon>
+          <p>
+            <span class="payment-info__amount">{{ payment.price | feFormatPrice }} TL </span>
+            <ng-container *ngSwitchCase="'CARD_REWARD'">banka puanı</ng-container>
+            <ng-container *ngSwitchCase="'GARANTI_PAY_REWARD'">banka puanı</ng-container>
+            <ng-container *ngSwitchCase="'MONEY_POINT'">money puan</ng-container>
+            <ng-container *ngSwitchCase="'PERSONNEL_BOND'">personel bonosu</ng-container>
+            <ng-container *ngSwitchCase="'CUSTOMER_BOND'">money pro puan</ng-container>
+            <ng-container *ngSwitchCase="'VOUCHER'">dijital alışveriş kodu</ng-container>
+            <ng-container> kullandın.</ng-container>
+          </p>
+        </ng-container>
+      </ng-container>
+    </div>
+  </mat-card-content>
+</mat-card>

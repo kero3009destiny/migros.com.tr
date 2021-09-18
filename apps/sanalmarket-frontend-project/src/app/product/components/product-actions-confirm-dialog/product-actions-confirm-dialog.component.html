@@ -1,0 +1,12 @@
+<div matDialogTitle>
+  <fe-icon-button mat-dialog-close [icon]="getTimesIcon()" class="float-right"></fe-icon-button>
+</div>
+
+<div matDialogContent class="dialog-content">
+  <fa-icon [icon]="getExclamationIcon()"></fa-icon>
+  <h3 class="mat-caption-normal text-color-black">{{ getContent() }}</h3>
+  <div class="actions">
+    <fe-button label="İptal" outlined="true" [mat-dialog-close]="false"></fe-button>
+    <fe-button label="Evet, Sil" [mat-dialog-close]="true"></fe-button>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+<ng-container *ngIf="data">
+  <div class="fall-product-list">
+    <fe-shortfall-product-list-item *ngFor="let product of data.productList" [product]="product">
+    </fe-shortfall-product-list-item>
+  </div>
+
+  <fe-alert danger *ngIf="data.priceLeftForCheckout > 0">
+    <ng-container body>
+      Sipariş verebilmeniz için sepetinize {{ getKurusToLiraRevenue(data.priceLeftForCheckout) }}TL'lik daha ürün
+      eklemeniz yeterlidir.
+    </ng-container>
+  </fe-alert>
+</ng-container>

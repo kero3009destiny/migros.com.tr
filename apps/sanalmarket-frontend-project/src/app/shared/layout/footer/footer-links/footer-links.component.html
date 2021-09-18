@@ -1,0 +1,118 @@
+<div class="links-wrapper" [ngClass]="{'lite':  isFooterLite}">
+  <div class="inner-grid">
+    <div class="mdc-layout-grid__cell--span-3 mdc-layout-grid__cell--span-12-phone">
+      <p class="title" (click)="onClickExpandContent('general')">
+        Migros Sanal Market
+        <fa-icon [icon]="getContentIcon('general')"></fa-icon>
+      </p>
+      <div class="content" [class.selected]="isContentOpen('general')">
+        <p class="link" *ngFor="let page of getGeneralLinks()">
+          <a [routerLink]="page.link" [queryParams]="page.queryParams">
+            {{ page.name }}
+          </a>
+        </p>
+      </div>
+      <p class="title" (click)="onClickExpandContent('corporate')">
+        Kurumsal
+        <fa-icon [icon]="getContentIcon('corporate')"></fa-icon>
+      </p>
+      <div class="content" [class.selected]="isContentOpen('corporate')">
+        <p class="link" *ngFor="let page of getCorporateLinks()">
+          <a [href]="page.link" target="_blank" rel="noopener">
+            {{ page.name }}
+          </a>
+        </p>
+      </div>
+    </div>
+    <div class="popular-pages mdc-layout-grid__cell--span-5 mdc-layout-grid__cell--span-12-phone">
+      <p class="title" (click)="onClickExpandContent('popular')">
+        Popüler Sayfalar
+        <fa-icon [icon]="getContentIcon('popular')"></fa-icon>
+      </p>
+      <div class="content" [class.selected]="isContentOpen('popular')">
+        <p class="link" *ngFor="let page of getPopularLinks()">
+          <a [routerLink]="page.link">
+            {{ page.name }}
+          </a>
+        </p>
+      </div>
+    </div>
+    <div
+      class="mdc-layout-grid__cell--span-4 mdc-layout-grid__cell--span-3-tablet mdc-layout-grid__cell--span-12-phone right-container"
+    >
+      <div
+        class="mdc-layout-grid__cell--span-6 mdc-layout-grid__cell--span-3-tablet mdc-layout-grid__cell--span-12-phone"
+      >
+        <p class="title" (click)="onClickExpandContent('newness')">
+          Migros'ta Yenilikler
+          <fa-icon [icon]="getContentIcon('newness')"></fa-icon>
+        </p>
+        <div class="content" [class.selected]="isContentOpen('newness')">
+          <p class="link" *ngFor="let page of getNewnessLinks()">
+            <a [routerLink]="page.link" routerLinkActive="active" *ngIf="page.link">
+              {{ page.name }}
+            </a>
+            <a [href]="page.externalLink" target="_blank" rel="noopener" *ngIf="page.externalLink">
+              {{ page.name }}
+            </a>
+          </p>
+        </div>
+        <p class="title">Mobil Uygulamalar</p>
+        <div class="mobile-app-link" *ngFor="let mobileAppLink of getMobileAppLinks()">
+          <a [href]="mobileAppLink.link" target="_blank" rel="noopener">
+            <img feLazyLoad [src]="mobileAppLink.imageUrl" alt="" />
+          </a>
+        </div>
+      </div>
+      <div
+        class="mdc-layout-grid__cell--span-6 mdc-layout-grid__cell--span-3-tablet mdc-layout-grid__cell--span-12-phone"
+      >
+        <p class="title">Bizi Takip Edin</p>
+        <div class="socials">
+          <a [href]="socialLink.link" target="_blank" rel="noopener" *ngFor="let socialLink of getSocialLinks()">
+            <img feLazyLoad [src]="socialLink.imageUrl" alt="" />
+          </a>
+        </div>
+        <div class="nearest-migros">
+          <a routerLink="en-yakin-migros">
+            <fa-icon [icon]="markerIcon"></fa-icon>
+            En Yakın Migros
+          </a>
+        </div>
+        <p class="title">Dijital Dergilerimiz</p>
+        <div class="digital" *ngFor="let digitalLink of getDigitalLinks()">
+          <a [href]="digitalLink.link" target="_blank" rel="noopener">
+            <span class="align-helper"></span>
+            <img feLazyLoad [src]="digitalLink.imageUrl" alt="" />
+            {{ digitalLink.name }}
+          </a>
+        </div>
+      </div>
+      <div
+        class="mdc-layout-grid__cell--span-12 mdc-layout-grid__cell--span-3-tablet mdc-layout-grid__cell--span-12-phone logos-wrapper"
+      >
+        <a href="https://www.money.com.tr/" target="_blank" rel="noopener">
+          <img feLazyLoad class="money logo" src="assets/logos/money/money-logo.png" alt="money-logo" />
+        </a>
+        <a href="https://migrostv.migros.com.tr/" target="_blank" rel="noopener">
+          <img feLazyLoad class="migros-tv logo" src="assets/logos/migros/migros-tv-logo.png" alt="migros-tv-logo" />
+        </a>
+        <a
+          href="https://www.money.com.tr/mc/money-ozelliklerini-kesfet/saglikli-yasam-yolculugum/123"
+          target="_blank"
+          rel="noopener"
+        >
+          <img
+            feLazyLoad
+            class="saglikli-yasam logo"
+            src="assets/logos/saglikli-yasam/saglikli-yasam.png"
+            alt="saglikli-yasam-logo"
+          />
+        </a>
+        <a href="https://migrostv.migros.com.tr/kadin-akademisi/" target="_blank" rel="noopener">
+          <img class="kadin-akademisi logo" src="assets/logos/migros/kadin-akademisi.png" alt="kadin-akademisi-logo" />
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

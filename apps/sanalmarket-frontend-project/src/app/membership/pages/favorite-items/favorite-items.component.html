@@ -1,0 +1,47 @@
+<div class="mobile-only-v2 mobile-header text-color-white">
+  <fa-icon (click)="onClickBackButton()" [icon]="backIcon"></fa-icon>
+  <div class="content">
+    <h3>Favori Ürünlerim</h3>
+    <div class="mat-caption-normal">{{ getTotalFavoriteItemsSize() }} Ürün</div>
+  </div>
+</div>
+<div class="page-wrapper" *ngIf="!isLoading()">
+  <div class="mat-headline text-color-black title">Favori Ürünlerim ({{ getTotalFavoriteItemsSize() }})</div>
+  <div class="favorite-items" *ngIf="hasFavoriteItems()">
+    <!-- TODO sorting will be done after backend work finished - PWA-97 -->
+    <mat-checkbox *ngIf="false" color="primary" class="filter-checkbox" (change)="onChangeFilter($event)">
+      <span class="mat-body-2"> Tarihe Göre Sırala </span>
+    </mat-checkbox>
+    <div class="categories" *ngFor="let category of getCategorizedFavoriteItems()">
+      <div class="category-name subtitle-1 text-color-black">{{ category[0] }} ({{ category[1].length }})</div>
+      <div class="favorite-items mdc-layout-grid__inner">
+        <sm-list-page-item
+          class="
+            list-item
+            mdc-layout-grid__cell--span-3-desktop
+            mdc-layout-grid__cell--span-3-tablet
+            mdc-layout-grid__cell--span-2-phone
+          "
+          [@presenceAnimationFaster]
+          *ngFor="let product of category[1]"
+          (unFavoured)="onRemoveProductFromList($event)"
+          [cartItem]="getCartItem(product)"
+          [product]="product"
+          feGtm
+          [gtm]="getGtmData(product)"
+          [pageItemLocation]="'Favorites Page'"
+        >
+        </sm-list-page-item>
+      </div>
+    </div>
+  </div>
+  <sm-pagination
+    (pageChanged)="onPageChanged($event)"
+    [pageIndex]="getPageIndex()"
+    [totalPageCount]="getTotalPageCount()"
+  ></sm-pagination>
+  <div class="no-items mat-body-2 text-color-black" *ngIf="!hasFavoriteItems()">
+    <fa-icon [icon]="heartEmptyIcon" class="text-color-grey"></fa-icon>
+    Henüz favorilerinize eklediğiniz bir ürün bulunmuyor.
+  </div>
+</div>

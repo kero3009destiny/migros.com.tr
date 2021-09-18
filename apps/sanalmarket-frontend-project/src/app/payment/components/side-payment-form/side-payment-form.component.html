@@ -1,0 +1,34 @@
+<div class="container">
+  <div class="mat-caption-normal text-color-grey">
+    <ng-content select="[description]"></ng-content>
+  </div>
+  <form
+    class="form"
+    [formGroup]="formGroup"
+    feAppSubmitThrottle
+    (throttleSubmit)="onSubmit()"
+    [throttleFormValid]="formGroup.valid || formGroup.disabled"
+  >
+    <mat-form-field color="accent" appearance="outline" [hideRequiredMarker]="true">
+      <input
+        *ngIf="type === 'number'; else word"
+        type="tel"
+        feMdcMaskedPrice
+        [maskOptions]="getMaskOptions()"
+        [formControlName]="getFormControlName()"
+        matInput
+        [placeholder]="getPlaceholder()"
+      />
+      <ng-template #word>
+        <input [formControlName]="getFormControlName()" matInput [maxLength]="16" [placeholder]="getPlaceholder()" />
+      </ng-template>
+      <span class="input-label subtitle-2" matSuffix>{{ suffix }}</span>
+      <mat-error *ngIf="hasFormControlRequiredError(getFormControl()); else invalidValue">
+        Bu alan zorunludur.
+      </mat-error>
+      <ng-template #invalidValue><mat-error>Bu alanı kontrol edin.</mat-error></ng-template>
+    </mat-form-field>
+    <fe-button *ngIf="!isUsed()" type="submit" class="submit-button" label="Kullan"></fe-button>
+    <fe-button *ngIf="isUsed()" [outlined]="true" type="submit" class="submit-button" label="İptal"></fe-button>
+  </form>
+</div>

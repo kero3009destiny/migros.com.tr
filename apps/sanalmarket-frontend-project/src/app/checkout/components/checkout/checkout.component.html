@@ -1,0 +1,8 @@
+<sm-order-is-shipment-warning *ngIf="isShipmentWarningVisible()"></sm-order-is-shipment-warning>
+<ng-container *ngIf="getCheckoutInfo$() | async as checkoutInfo">
+  <sm-additonal-order [checkout]="checkoutInfo.line"></sm-additonal-order>
+  <fe-line-checkout-steps [steps]="getSteps()" [checkoutId]="checkoutInfo.line.id"></fe-line-checkout-steps>
+</ng-container>
+<article>
+  <router-outlet></router-outlet>
+</article>

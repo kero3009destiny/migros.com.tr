@@ -1,0 +1,25 @@
+<ng-container *ngIf="installmentInfo$ | async as installmentInfo">
+  <h2 class="desktop-only">{{ title }}</h2>
+  <div class="subtitle-1 mobile-only">{{ title }}</div>
+  <div class="table">
+    <div class="table__header mat-caption">
+      <div></div>
+      <div>Taksit Seçeneği</div>
+      <div>Aylık Ödeme</div>
+      <div>Toplam</div>
+    </div>
+    <div class="table__row" *ngFor="let variant of installmentInfo.variants">
+      <div><mat-radio-button [value]="variant.count" (change)="installmentSelected($event)"> </mat-radio-button></div>
+      <div *ngIf="variant.count === 1">
+        <div class="subtitle-2">Peşin</div>
+      </div>
+      <div *ngIf="variant.count > 1" class="subtitle-2">{{ variant.count }} Taksit</div>
+      <div class="mat-body-2">{{ variant.singleAmount | feFormatPrice }} TL</div>
+      <div class="mat-body-2">{{ revenue | feFormatPrice }} TL</div>
+    </div>
+  </div>
+  <div class="mat-caption-normal text-color-grey info">
+    * Sadece Garanti, İşbankası ve Yapıkredi bankaları ve bu bankalarla anlaşmalı kredi kartları için taksit seçeneği
+    bulunmaktadır.
+  </div>
+</ng-container>

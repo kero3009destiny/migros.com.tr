@@ -1,0 +1,29 @@
+<div mat-dialog-title>
+  <fe-icon-button mat-dialog-close [icon]="getFaTimesIcon()" class="close-button"></fe-icon-button>
+  <h3 class="text-align-center text-color-black">Önerileriniz</h3>
+</div>
+
+<p class="body-2 text-color-black">
+  Bu ürünün sayfada belirtilen açıklamaları, fiyatı ve diğer özelliklerinin hatalı olduğuna inanıyorsan aşağıdaki
+  bilgileri doldurarak bize iletebilirsin.
+</p>
+
+<form
+  [formGroup]="productFeedbackForm"
+  feAppSubmitThrottle
+  (throttleSubmit)="onSubmitFeedback()"
+  [throttleFormValid]="productFeedbackForm.valid"
+>
+  <mat-radio-group *ngIf="!isReasonsEmpty()" formControlName="reason">
+    <mat-radio-button color="primary" *ngFor="let reason of getReasons()" [value]="reason.name">{{
+      reason.message
+    }}</mat-radio-button>
+  </mat-radio-group>
+
+  <div class="message">
+    <p class="body-2 text-color-black">Dilersen yorumunu detaylı olarak belirtebilirsin.</p>
+
+    <textarea rows="4" placeholder="Yorum yaz" formControlName="messageText"></textarea>
+  </div>
+  <button [disabled]="!productFeedbackForm.valid" mat-flat-button color="primary" type="submit">Gönder</button>
+</form>

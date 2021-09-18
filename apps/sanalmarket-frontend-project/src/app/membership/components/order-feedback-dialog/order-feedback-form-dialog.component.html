@@ -1,0 +1,7 @@
+<fe-icon-button class="close-button" mat-dialog-close [icon]="getTimesIcon()" cdk-focus-start></fe-icon-button>
+<fe-feedback-form
+  (sendFeedback)="onSendFeedback($event)"
+  [showHint]="false"
+  [initialValues]="getInitialFormValues()"
+  [reasons]="getReasons()"
+></fe-feedback-form>

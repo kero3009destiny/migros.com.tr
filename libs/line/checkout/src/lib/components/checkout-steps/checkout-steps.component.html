@@ -1,0 +1,19 @@
+<ng-container class="checkout-steps">
+  <a
+    *ngFor="let step of getSteps(); last as isLast"
+    [routerLink]="getUrl(step)"
+    routerLinkActive="active"
+    class="checkout-step disabled"
+    id="checkout-steps_{{ getStep(step) }}"
+  >
+    <div class="checkout-step__number">
+      <span>{{ getStep(step) }}</span>
+    </div>
+    <div class="checkout-step__title">
+      <span>{{ getTitle(step) }}</span>
+    </div>
+    <div class="checkout-step__arrow" *ngIf="!isLast">
+      <fa-icon [icon]="chevronRight"></fa-icon>
+    </div>
+  </a>
+</ng-container>

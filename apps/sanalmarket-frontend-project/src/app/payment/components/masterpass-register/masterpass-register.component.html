@@ -1,0 +1,64 @@
+<div class="masterpass-register-container">
+  <div class="approvement">
+    <mat-checkbox color="primary" (change)="onChangeCheckbox()" [checked]="registerAccepted">
+      <div class="checkbox-container">
+        <div class="text">
+          <p class="mat-caption-normal text-color-black">
+            Kredi kartı bilgilerimi <b>MasterCard </b> altyapısıyla saklamak istiyorum.
+          </p>
+          <p
+            class="mat-caption-normal text-color-orange agreement"
+            (click)="onClickAgreementRequested(); $event.preventDefault()"
+          >
+            Masterpass nedir?
+          </p>
+        </div>
+        <img class="logo" src="/assets/images/payment-masterpass/payment-masterpass.svg" alt="payment-masterpass" />
+      </div>
+    </mat-checkbox>
+  </div>
+  <form
+    [formGroup]="registerFormGroup"
+    feAppSubmitThrottle
+    (throttleSubmit)="onRegister()"
+    [throttleFormValid]="registerFormGroup.valid"
+    *ngIf="isRegisterAccepted()"
+  >
+    <mat-form-field appearance="outline">
+      <mat-label class="subtitle-2">Kartınıza vermek istediğiniz isim</mat-label>
+      <input matInput required formControlName="alias" />
+      <mat-error *ngIf="alias?.invalid && alias?.errors.required"> Bu alan zorunludur.</mat-error>
+    </mat-form-field>
+    <button mat-flat-button [disabled]="!isCandidateCardValid" color="primary" type="submit">Devam Et</button>
+  </form>
+</div>
+<form #registerCardForm *ngIf="!!registerCandidateCardInfo">
+  <input type="hidden" name="accountAliasName" value="{{ alias.value }}" />
+  <input type="hidden" name="rtaPan" value="{{ registerCandidateCardInfo.cardNumber }}" />
+  <input
+    type="hidden"
+    name="expiryDate"
+    value="{{ registerCandidateCardYearLastTwoNumber }}{{ registerCandidateCardInfo.expireMonth }}"
+  />
+  <input type="hidden" name="cvc" value="{{ registerCandidateCardInfo.cvv2 }}" />
+  <input type="hidden" name="msisdn" />
+  <!-- MFS register parameters start -->
+  <input type="hidden" name="token" />
+  <input type="hidden" name="referenceNo" value="101252836185" />
+  <input type="hidden" name="sendSmsLanguage" value="tur" />
+  <input type="hidden" name="setLanguage" value="tur" />
+  <!-- MFS constant parameters start -->
+  <input type="hidden" name="sendSms" value="N" />
+  <input type="hidden" name="actionType" value="A" />
+  <input type="hidden" name="clientIp" value="" />
+  <input type="hidden" name="delinkReason" value="" />
+  <input type="hidden" name="eActionType" value="A" />
+  <input type="hidden" name="cardTypeFlag" value="05" />
+  <input type="hidden" name="cpinFlag" value="Y" />
+  <input type="hidden" name="defaultAccount" value="Y" />
+  <input type="hidden" name="mmrpConfig" value="110010" />
+  <input type="hidden" name="identityVerificationFlag" value="Y" />
+  <input type="hidden" name="mobileAccountConfig" value="MWA" />
+  <input type="hidden" name="timeZone" value="+01" />
+  <input type="hidden" name="uiChannelType" value="6" />
+</form>

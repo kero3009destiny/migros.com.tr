@@ -1,0 +1,36 @@
+<div class="item-icon" (click)="onClickItem(itemInfo.product.prettyName)">
+  <img [src]="getImgSrc(itemInfo)" [alt]="itemInfo.product.name" />
+</div>
+<div class="item-details">
+  <fe-product-name
+    class="item-title"
+    customClass="text-color-black"
+    [productName]="itemInfo.product.name"
+    [prettyName]="itemInfo.product.prettyName"
+    [productId]="itemInfo.item.productId"
+  >
+  </fe-product-name>
+  <div class="item-no-stock" *ngIf="!isInSale(itemInfo)">Bu ürün stokta yoktur</div>
+  <div class="item-actions">
+    <fe-product-price
+      class="product-price"
+      [shownPrice]="itemInfo.product.shownPrice"
+      [regularPrice]="itemInfo.product.regularPrice"
+    >
+    </fe-product-price>
+
+    <sm-product-actions
+      [amount]="itemInfo?.item?.amount"
+      [maxAmount]="itemInfo.product.maxAmount"
+      [unit]="getUnit(itemInfo)"
+      [status]="itemInfo.product.status"
+      (updated)="onUpdate($event, itemInfo)"
+      (maxAmountReached)="onReachMaxAmount($event)"
+      [noPointerEventOnDecreaseToZero]="true"
+      [incrementAmount]="getIncrementAmount(itemInfo)"
+      [initialIncrementAmount]="itemInfo.product.initialIncrementAmount"
+      [reminderVisibility]="false"
+    >
+    </sm-product-actions>
+  </div>
+</div>

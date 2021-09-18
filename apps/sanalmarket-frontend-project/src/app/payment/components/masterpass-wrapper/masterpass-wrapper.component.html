@@ -1,0 +1,14 @@
+<div class="masterpass-wrapper" *ngIf="!disabled; else masterpassDisabled">
+  <fe-masterpass-check-user></fe-masterpass-check-user>
+  <sm-masterpass-link-user></sm-masterpass-link-user>
+  <sm-masterpass-card-list [checkoutId]="checkoutId">
+    <ng-template [ngTemplateOutlet]="creditCardForm"></ng-template>
+    <sm-masterpass-register
+      [isCandidateCardValid]="isCandidateCardValid()"
+      [registerCandidateCardInfo]="getRegisterCandidateCardInfo()"
+    ></sm-masterpass-register>
+  </sm-masterpass-card-list>
+  <fe-masterpass-purchase></fe-masterpass-purchase>
+</div>
+<ng-template #masterpassDisabled [ngTemplateOutlet]="creditCardForm"></ng-template>
+<ng-template #creditCardForm><ng-content></ng-content></ng-template>

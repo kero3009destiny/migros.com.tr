@@ -1,0 +1,52 @@
+<div class="home-page-wrapper mdc-layout-grid__inner">
+  <div class="section mdc-layout-grid__cell--span-12" [class.no-title]="!title">
+    <div class="d-flex" *ngIf="title">
+      <div class="section-title mat-headline text-color-black">{{ title }}</div>
+    </div>
+
+    <mat-tab-group
+      (selectedTabChange)="onTabShoppingListChanged($event)"
+      #container
+      [class.vertical]="listAlign === 'vertical'"
+    >
+      <mat-tab [label]="'shoppingList.name'">
+        <div class="container-wrapper" #container>
+          <div class="prev-btn" (click)="scrollTo(container, 'left')"></div>
+          <div class="horizontal-list-page-items-container in-mat-tab-group" *ngIf="listAlign === 'horizontal'">
+            <sm-list-page-item
+              style="min-width: 166px"
+              class="
+                list-item
+                mdc-layout-grid__cell--span-3-desktop
+                mdc-layout-grid__cell--span-3-tablet
+                mdc-layout-grid__cell--span-2-phone
+              "
+              *ngFor="let product of itemInfos; trackBy: trackByFnShoppingList"
+              [cartItem]="getCartItem(product)"
+              [product]="product"
+            >
+            </sm-list-page-item>
+          </div>
+
+          <div class="vertical-list-page-items-container in-mat-tab-group" *ngIf="listAlign === 'vertical'">
+            <sm-special-discount-product-card
+              class="list-item"
+              *ngFor="let product of itemInfos; trackBy: trackByFnShoppingList"
+              [product]="product"
+              [cartItem]="getCartItem(product)"
+              feGtm
+              [gtm]="getGtmData(product, 'sepetim-segmentify')"
+            >
+            </sm-special-discount-product-card>
+          </div>
+          <div
+            class="next-btn"
+            *ngIf="isArrowButtonsVisible(itemInfos?.length)"
+            (click)="scrollTo(container, 'right')"
+          ></div>
+          <div class="fade-out"></div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>

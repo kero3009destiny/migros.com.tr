@@ -1,0 +1,58 @@
+<div *ngIf="getCards() | async as cards">
+  <div class="list" *ngIf="cards.length > 0; else guest">
+    <mat-radio-group (change)="onSelected($event)">
+      <mat-radio-button color="primary" [value]="card" class="list-item" *ngFor="let card of cards">
+        <div class="option-container">
+          <span class="mat-caption text-color-black card-info">
+            {{ card.Name }}
+            <span class="text-color-grey card-number">{{ card.Value1 }}</span>
+          </span>
+          <img src="/assets/images/masterpass-card-logo.png" alt="masterpass-logo" class="image" />
+          <fe-icon-button [icon]="getTrashIcon()" (click)="onRemoveCard(card.Name)"></fe-icon-button>
+        </div>
+        <sm-instant-discount
+          [checkoutId]="checkoutId"
+          [cardNumber]="card.Value1"
+          [isSelected]="isCardSelected(card)"
+          [paymentType]="'MASTERPASS'"
+        ></sm-instant-discount>
+      </mat-radio-button>
+
+      <p class="mat-caption-normal text-color-grey note">
+        Masterpass'e kayıtlı kullanım süresi geçmiş veya geçersiz kartlar kullanılamamaktadır.
+      </p>
+
+      <mat-radio-button [value]="null" class="list-item" color="primary">
+        <div class="option-container">
+          <span class="mat-caption text-color-black card-info"> Farklı bir kart ile ödemek istiyorum. </span>
+        </div>
+      </mat-radio-button>
+      <ng-container [ngTemplateOutlet]="creditCardForm" *ngIf="selectedCard === 'NONE'"> </ng-container>
+      <sm-instant-discount [checkoutId]="checkoutId" [paymentType]="'CREDIT_CARD'"></sm-instant-discount>
+    </mat-radio-group>
+  </div>
+
+  <form #removeCardForm>
+    <input type="hidden" name="token" />
+    <input type="hidden" name="accountAliasName" />
+    <input type="hidden" name="msisdn" />
+    <input type="hidden" name="referenceNo" value="101252836185" />
+    <input type="hidden" name="sendSmsLanguage" value="tur" />
+    <input type="hidden" name="sendSms" value="N" />
+    <input type="hidden" name="setLanguage" value="tur" />
+  </form>
+  <form #updateUserForm>
+    <input type="hidden" name="token" />
+    <input type="hidden" name="oldValue" value="" />
+    <input type="hidden" name="theNewValue" />
+    <input type="hidden" name="valueType" value="USER_ID" />
+    <input type="hidden" name="msisdn" />
+    <input type="hidden" name="fP" />
+    <input type="hidden" name="referenceNo" value="101252836185" />
+    <input type="hidden" name="sendSmsLanguage" value="tur" />
+    <input type="hidden" name="sendSms" value="N" />
+    <input type="hidden" name="setLanguage" value="tur" />
+  </form>
+  <ng-template #guest> <ng-template [ngTemplateOutlet]="creditCardForm"></ng-template> </ng-template>
+</div>
+<ng-template #creditCardForm><ng-content></ng-content></ng-template>

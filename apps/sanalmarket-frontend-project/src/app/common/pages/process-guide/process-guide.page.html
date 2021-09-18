@@ -1,0 +1,31 @@
+<div class="faqs-page">
+  <div>
+    <div class="faqs-page__menu" *ngFor="let content of getPageContent()">
+      <h2 class="faqs-page__title text-color-black">{{content.question}}</h2>
+      <div
+        class="faqs-page__menu-title mat-caption-normal"
+        *ngFor="let item of content.children"
+        [ngClass]="{'active':item.id === getSelectedItem()}"
+        (click)="onClickMenu(item, content.children)"
+      >
+        {{ item.question }}
+      </div>
+    </div>
+  </div>
+  <div class="faqs-page__content" *ngIf="getAnswers()">
+    <mat-accordion>
+      <mat-expansion-panel
+        *ngFor="let item of getAnswers()"
+        [expanded]="item.id === getSelectedItem()"
+        (click)="onClickAnswer(item.id)"
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title class="subtitle-2"> {{ item.question }} </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-panel-description>
+          <span [innerHtml]="item.answer | feSanitizeHtml"></span>
+        </mat-panel-description>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+</div>

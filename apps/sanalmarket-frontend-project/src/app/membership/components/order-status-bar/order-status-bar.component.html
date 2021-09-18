@@ -1,0 +1,21 @@
+<div *ngIf="!isOrderCompleted(); else completed" class="status">
+  <ng-container *ngIf="!isStepperVisible(); else stepper">
+    <span class="mat-caption-normal text-color-success">{{ getStatusLabel() }}</span>
+  </ng-container>
+</div>
+
+<ng-template #completed>
+  <span *ngIf="isCancelled" class="mat-caption-normal text-color-error cancelled">İptal Edildi</span>
+  <span *ngIf="isDelivered()" class="mat-caption-normal text-color-success delivered">{{ getDeliveredLabel() }}</span>
+</ng-template>
+
+<ng-template #stepper>
+  <ng-container *ngFor="let step of getSteps()">
+    <div class="step" [ngClass]="{ active: isActive(step) }">
+      <fa-icon [icon]="getIcon(step)"></fa-icon>
+      <span>{{ step.label }}</span>
+    </div>
+
+    <div class="divider" *ngIf="!isLastStep(step)"></div>
+  </ng-container>
+</ng-template>

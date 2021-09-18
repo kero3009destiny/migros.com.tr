@@ -1,0 +1,28 @@
+<swiper
+  *ngIf="hasBanner()"
+  [loop]="hasMoreThanOneBanner()"
+  [navigation]="hasMoreThanOneBanner()"
+  [pagination]="hasMoreThanOneBanner() ? { clickable: true } : false"
+  [autoplay]="hasMoreThanOneBanner() ? { delay: 5000 } : false"
+  [lazy]="{ preloaderClass: 'swiper-placeholder' }"
+  (slideChange)="onChangeSlide($event)"
+  (afterInit)="onInitSlider()"
+  #swiperElRef
+>
+  <ng-template swiperSlide *ngFor="let banner of getBanners(); let i = index">
+    <a
+      (click)="onClickBanner(banner, $event, i)"
+      href="{{ getBannerUrl(banner) }}"
+      *ngIf="hasRedirect(banner); else noRedirect"
+    >
+      <img class="swiper-lazy" alt="" [attr.data-src]="banner.imageUrl" />
+    </a>
+    <div class="swiper-placeholder">
+      <div class="swiper-lazy-preloader"></div>
+      <img *ngIf="hasMoreThanOneBanner()" src="assets/images/banner_placeholder.jpg" alt="" />
+    </div>
+    <ng-template #noRedirect>
+      <img class="swiper-lazy" alt="" [attr.data-src]="banner.imageUrl" />
+    </ng-template>
+  </ng-template>
+</swiper>

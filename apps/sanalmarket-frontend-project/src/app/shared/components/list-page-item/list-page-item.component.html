@@ -1,0 +1,74 @@
+<mat-card>
+  <div class="favourite-container" *ngIf="isFavourite$() | async; then favourite; else notFavourite"></div>
+  <div class="cross-badge overline text-color-white" *ngIf="hasProductBadge()">
+    {{ getProductBadgeLabel() }}
+  </div>
+  <div class="special-badge text-color-white" *ngIf="hasSpecialBadge()">
+    <span>{{ getSpecialBadgeLabel() }}</span>
+  </div>
+  <div class="discount-badge" *ngIf="getDiscountPercent()">
+    <div>
+      <span class="discount-badge--percent">%</span>
+      <span class="discount-badge--unit">{{ getDiscountPercent() }}</span>
+    </div>
+    <div class="discount-badge--label">İNDİRİM</div>
+  </div>
+  <div>
+    <fe-product-image
+      class="image"
+      [image]="product.images[0]"
+      [prettyName]="product.prettyName"
+      [productName]="product.name"
+      [referrerEventId]="product.referrerEventId"
+      [imageType]="'PRODUCT_DETAIL'"
+      (gtmClick)="sendGtmClickEvent(product)"
+    >
+    </fe-product-image>
+    <a
+      class="mat-caption text-color-black product-name"
+      [routerLink]="['', product.prettyName]"
+      [state]="{ referrerEventId: product.referrerEventId }"
+      (click)="sendGtmClickEvent(product)"
+    >
+      {{ product.name }}
+    </a>
+  </div>
+  <div class="bottom-row">
+    <div class="crm-badge overline" *ngIf="hasCrmBadge()">
+      <img src="assets/icons/badges/crm-badge.svg" alt="crm-badge-icon" />{{ getCrmBadgeLabel() }}
+    </div>
+    <fe-product-price
+      class="price"
+      [showPromotionLabel]="true"
+      [regularPrice]="product.regularPrice"
+      [shownPrice]="product.shownPrice"
+    ></fe-product-price>
+    <sm-product-actions
+      class="actions"
+      [amount]="cartItem?.item?.amount"
+      [maxAmount]="product.maxAmount"
+      [unit]="getUnit()"
+      [status]="product.status"
+      (updated)="onUpdate($event)"
+      (maxAmountReached)="onMaxAmountReached($event)"
+      [noPointerEventOnDecreaseToZero]="true"
+      [incrementAmount]="getIncrementAmount()"
+      [initialIncrementAmount]="product.initialIncrementAmount"
+      [reminderVisibility]="false"
+    ></sm-product-actions>
+  </div>
+</mat-card>
+<ng-template #notFavourite>
+  <fa-icon
+    (click)="onAddFavouriteProduct(product.id)"
+    class="favourite favourite--empty"
+    [icon]="heartEmptyIcon"
+  ></fa-icon>
+</ng-template>
+<ng-template #favourite>
+  <fa-icon
+    (click)="onRemoveFavouriteProduct(product.id)"
+    class="favourite favourite--full"
+    [icon]="heartFullIcon"
+  ></fa-icon>
+</ng-template>

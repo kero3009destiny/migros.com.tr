@@ -1,0 +1,161 @@
+<div class="mobile-only-v2 mobile-header text-color-white">
+  <fa-icon (click)="onBackButtonClicked()" [icon]="backIcon"></fa-icon>
+  <div class="content">
+    <h3>{{getPageTitle()}}</h3>
+    <div class="mat-caption-normal">{{getTotalProductsCount()}} sonuç bulundu</div>
+  </div>
+</div>
+<ng-container *ngIf="isSearchNotFoundVisible()">
+  <fe-search-not-found [searchQueryParams]="{ q: getTextFilter() }"></fe-search-not-found>
+  <div class="under-not-found mdc-layout-grid__inner">
+    <div class="mdc-layout-grid__cell--span-3-desktop"></div>
+    <div
+      class="
+        mdc-layout-grid__cell--span-8-phone mdc-layout-grid__cell--span-12-tablet mdc-layout-grid__cell--span-6-desktop
+      "
+    >
+      <div class="banner-container">
+        <sm-swiper-banner
+          *ngIf="getBanners()"
+          class="banners"
+          [banners]="getBanners()"
+          [inViewport]="isBannerVisible()"
+          feDeferLoad
+          (insideViewPort)="onInsideViewPort()"
+          (outsideViewPort)="onOutsideViewPort()"
+        ></sm-swiper-banner>
+      </div>
+    </div>
+  </div>
+</ng-container>
+<div class="container" *ngIf="getStoreProductInfos().length>0">
+  <div class="mat-caption-normal mobile-only-v2 mobile-filter-sort-row">
+    <div (click)="openMobileFilterModal()">
+      <fa-icon [icon]="filterIcon"></fa-icon> Filtrele
+      <span class="text-color-error" *ngIf="getSelectedFilters().length > 0">({{getSelectedFilters().length}})</span>
+      <span class="oval" *ngIf="getSelectedFilters().length > 0"></span>
+    </div>
+    <div (click)="openMobileSortModal()"><fa-icon [icon]="sortIcon"></fa-icon> Sırala</div>
+  </div>
+  <div class="mobile-only-v2"><sm-legal-description [description]="getLegalDescription()"></sm-legal-description></div>
+  <div class="mobile-sub-header mobile-only-v2">
+    <fe-breadcrumb class="mobile-breadcrumb" [breadcrumbs]="getBreadcrumbs()"></fe-breadcrumb>
+    <a
+      class="mobile-sub-category mat-caption text-color-black"
+      [routerLink]="'/' + subCategory.prettyName"
+      *ngFor="let subCategory of getSubCategories()"
+      [queryParams]="getSubCategoryParam(subCategory)"
+      [queryParamsHandling]="'merge'"
+    >
+      {{subCategory.label}} <span class="overline text-color-grey">({{subCategory.count}})</span>
+    </a>
+  </div>
+  <fe-breadcrumb class="breadcrumb desktop-only-v2" [breadcrumbs]="getBreadcrumbs()"></fe-breadcrumb>
+  <div class="content mdc-layout-grid__inner">
+    <div class="mdc-layout-grid__cell--span-3 desktop-only-v2">
+      <sm-product-filters-desktop
+        [aggregationGroups]="getAggregationGroups()"
+        [selectedFilters]="getSelectedFilters()"
+        [title]="getPageTitle()"
+        [totalProductsCount]="getTotalProductsCount()"
+        (filtersChanged)="onFiltersChanged($event)"
+        [isCategoryPage]="isCategoryPage()"
+      ></sm-product-filters-desktop>
+    </div>
+    <div
+      class="
+        products
+        mdc-layout-grid__cell--span-10-phone mdc-layout-grid__cell--span-12-tablet mdc-layout-grid__cell--span-9-desktop
+      "
+    >
+      <div class="banner-container">
+        <sm-swiper-banner
+          *ngIf="getBanners()"
+          class="banners"
+          [banners]="getBanners()"
+          [inViewport]="isBannerVisible()"
+          feDeferLoad
+          (insideViewPort)="onInsideViewPort()"
+          (outsideViewPort)="onOutsideViewPort()"
+        ></sm-swiper-banner>
+        <img
+          *ngIf="isMigroskopPage()"
+          class="campaign-banner"
+          alt="migroskop-banner"
+          src="https://migros-dali-storage-prod.global.ssl.fastly.net/migroskop_kategori_banner-f9f98218.png"
+        />
+        <img
+          *ngIf="isGorInanPage()"
+          class="campaign-banner"
+          alt="gor-inan-banner"
+          src="https://migros-dali-storage-prod.global.ssl.fastly.net/sanalmarket/custom/2835x240_gorinan_75_tl_banner-1459ad96.jpg"
+        />
+        <fe-read-more class="desktop-only-v2" *ngIf="getDescription()" [maxHeight]="60" label="Daha detaylı göster">
+          <p class="mat-caption-normal text-color-grey">{{getDescription()}}</p>
+        </fe-read-more>
+        <div *ngIf="getDescription()" class="mobile-only-v2">
+          <span class="mat-caption-normal text-color-grey">{{getShortDescription()}}</span>
+          <span (click)="openMobileCampaignModal()" class="mat-caption text-color-orange campaign-modal-button">
+            Kampanya Detayı
+          </span>
+        </div>
+      </div>
+      <div class="chip-sort-row desktop-only-v2">
+        <div class="chip-list">
+          <mat-chip-list aria-label="Selected search filters">
+            <mat-chip
+              class="chip mat-caption-normal text-color-black"
+              selected
+              (removed)="onFilterRemoved(selectedFilter)"
+              *ngFor="let selectedFilter of getSelectedFilters()"
+            >
+              {{selectedFilter.label}}
+              <fa-icon class="orange" [icon]="faTimesCircle" matChipRemove></fa-icon>
+            </mat-chip>
+          </mat-chip-list>
+          <button
+            class="button"
+            mat-button
+            color="primary"
+            (click)="onAllFiltersRemoved()"
+            *ngIf="hasSelectedFilters()"
+          >
+            Filtreleri Temizle ({{getSelectedFilters().length}})
+          </button>
+        </div>
+        <fe-dropdown
+          class="sort-dropdown"
+          [icon]="sortIcon"
+          [value]="getSelectedSortCriteria()"
+          (changed)="onSortCriteriaChanged($event)"
+          [options]="getSortCriteriaOptions()"
+          [scrollable]="false"
+        ></fe-dropdown>
+      </div>
+      <div class="legal-row desktop-only-v2">
+        <sm-legal-description [description]="getLegalDescription()"></sm-legal-description>
+      </div>
+      <div class="mdc-layout-grid__inner product-cards list">
+        <sm-list-page-item
+          class="
+            mdc-layout-grid__cell--span-2-desktop
+            mdc-layout-grid__cell--span-4-tablet
+            mdc-layout-grid__cell--span-2-phone
+          "
+          *ngFor="let spi of getStoreProductInfos()"
+          [product]="spi"
+          [cartItem]="getCartItem(spi)"
+          feGtm
+          [gtm]="getGtmData(spi)"
+          [pageItemLocation]="getScreenName()"
+          (productClicked)="setCurrentScrollPosition()"
+        ></sm-list-page-item>
+      </div>
+      <sm-pagination
+        (pageChanged)="onPageChanged($event)"
+        [pageIndex]="getPageIndex()"
+        [totalPageCount]="getTotalPageCount()"
+      ></sm-pagination>
+    </div>
+  </div>
+</div>

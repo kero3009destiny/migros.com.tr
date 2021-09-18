@@ -1,0 +1,17 @@
+<div class="money-transfer-steps-tab-content">
+  <h1>{{ stepsTitle }}</h1>
+  <div class="steps">
+    <div class="step" *ngFor="let step of stepList; let i = index">
+      <div class="step-index">
+        {{ i + 1 }}
+      </div>
+      <p>
+        {{ step.description }}
+      </p>
+      <div class="icons">
+        <img *ngIf="!!step.image" src="/assets/icons/money-transfer/{{ step.image }}" alt="" />
+        <fa-icon *ngIf="!!step.icon" [icon]="step.icon"></fa-icon>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,21 @@
+<div *ngIf="!isPreview; else preview">
+  <div class="stars-wrapper">
+    <button type="button" *ngFor="let star of starsArray; index as i" (click)="onClickRating(i)">
+      <fa-icon [icon]="starIcon" [ngClass]="{ rated: isStarRated(i) }"></fa-icon>
+    </button>
+  </div>
+  <div class="rate-descriptions">
+    <span>Hiç Memnun Kalmadım</span>
+    <span>Çok Memnun Kaldım</span>
+  </div>
+</div>
+
+<ng-template #preview>
+  <div class="stars-wrapper preview">
+    <fa-icon
+      *ngFor="let star of starsArray; index as i"
+      [icon]="starIcon"
+      [ngClass]="{ rated: isStarRated(i) }"
+    ></fa-icon>
+  </div>
+</ng-template>

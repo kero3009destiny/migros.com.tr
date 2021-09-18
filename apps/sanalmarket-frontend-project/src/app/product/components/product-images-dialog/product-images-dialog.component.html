@@ -1,0 +1,11 @@
+<div matDialogTitle>
+  <fe-icon-button class="close-button" mat-dialog-close [icon]="closeIcon"> </fe-icon-button>
+</div>
+
+<sm-product-images
+  [allowTouchMove]="false"
+  [zoom]="false"
+  [bullets]="false"
+  [activeIndex]="dialogData.activeIndex"
+  [images]="dialogData.images"
+></sm-product-images>

@@ -1,0 +1,75 @@
+<ng-container *ngIf="isUserAuthenticated() | async">
+  <ng-container *ngIf="getUser$() | async as user">
+    <sm-mobile-breadcrumb [pageName]="'Üyelik Bilgilerim'"></sm-mobile-breadcrumb>
+
+    <div class="money-banner-wrapper">
+      <sm-money-register-banner [isCrmVerified]="isCrmVerified()"></sm-money-register-banner>
+    </div>
+
+    <!-- <div class="money-gold-banner-wrapper">
+      <sm-money-gold-banner></sm-money-gold-banner>
+    </div> -->
+
+    <div class="money-advantages-wrapper" *ngIf="!isCrmVerified()">
+      <img
+        *ngFor="let item of moneyAdvantageImgPaths,"
+        class="advantage"
+        src="/assets/images/money-advantages/{{ item }}"
+        alt=""
+      />
+    </div>
+
+    <div class="container">
+      <h2 class="information-title">Üyelik Bilgilerim</h2>
+      <sm-main-information-form
+        [user]="user"
+        [formGroup]="mainInformationFormGroup"
+        (informationUpdated)="updateUser()"
+        (verifyEmail)="verifyEmail()"
+      ></sm-main-information-form>
+      <ng-container *ngIf="isCrmVerified()">
+        <div class="divider inside-form"></div>
+        <sm-basic-information-form [user]="user" [formGroup]="basicInformationFormGroup"></sm-basic-information-form>
+        <div class="save" *ngIf="!isInformationSaved()">
+          <fe-button
+            (click)="onInformationSave()"
+            [isDisabled]="!isInformationChanged()"
+            [class.disabled]="!isInformationChanged()"
+            label="Değişiklikleri Kaydet"
+          ></fe-button>
+        </div>
+        <div class="saved" *ngIf="isInformationSaved()">
+          <fe-button
+            [icon]="checkIcon"
+            [iconPosition]="'right'"
+            [outlined]="true"
+            label="Değişiklikler Kaydedildi"
+            [class.disabled]="isInformationSaved()"
+          ></fe-button>
+        </div>
+      </ng-container>
+
+      <div class="divider"></div>
+      <sm-contact-preferences-form [isCrmVerified]="isCrmVerified()" [formGroup]="permitFormGroup">
+      </sm-contact-preferences-form>
+
+      <div class="save" *ngIf="!isPermitSaved()">
+        <fe-button
+          (click)="onPermitSave()"
+          [isDisabled]="!isPermitChanged()"
+          [class.disabled]="!isPermitChanged()"
+          label="Değişiklikleri Kaydet"
+        ></fe-button>
+      </div>
+      <div class="saved" *ngIf="isPermitSaved()">
+        <fe-button
+          [icon]="checkIcon"
+          [iconPosition]="'right'"
+          [outlined]="true"
+          label="Değişiklikler Kaydedildi"
+          [class.disabled]="isPermitSaved()"
+        ></fe-button>
+      </div>
+    </div>
+  </ng-container>
+</ng-container>

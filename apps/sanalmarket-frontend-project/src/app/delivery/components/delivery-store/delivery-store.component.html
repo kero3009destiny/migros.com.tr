@@ -1,0 +1,33 @@
+<h3 class="description text-color-black">Siparişini nereden almak istersin?</h3>
+<form class="delivery-store-form" [formGroup]="deliveryStoreFormGroup">
+  <fe-dropdown
+    id="delivery-options-modal_city"
+    formControlName="cityId"
+    placeholder="İl"
+    [options]="cities"
+    [required]="false"
+    [isSearchVisible]="true"
+  >
+  </fe-dropdown>
+  <fe-dropdown
+    id="delivery-store-modal_town"
+    formControlName="townId"
+    placeholder="İlçe"
+    [options]="towns"
+    [required]="false"
+    [isSearchVisible]="true"
+    [class.disabled]="isTownDisabled()"
+  >
+  </fe-dropdown>
+  <fe-dropdown
+    id="delivery-options-modal_store"
+    formControlName="serviceAreaObjectId"
+    placeholder="Mağaza"
+    [options]="pickPoints"
+    [required]="false"
+    [isSearchVisible]="true"
+    [class.disabled]="isDistrictDisabled()"
+    (ngModelChange)="submitDeliveryZone($event)"
+  >
+  </fe-dropdown>
+</form>

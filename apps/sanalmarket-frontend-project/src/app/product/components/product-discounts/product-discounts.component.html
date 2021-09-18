@@ -1,0 +1,26 @@
+<div class="product-discounts" *ngIf="product">
+  <div class="crm-badge overline" *ngIf="hasCrmBadge()">
+    <img src="assets/icons/badges/crm-badge.svg" alt="crm-badge-icon" />{{ getCrmBadgeLabel() }}
+  </div>
+
+  <div *ngIf="getDiscountPercent()" class="discount">
+    <div class="discount-badge">
+      <div>
+        <span class="discount-badge--percent">%</span>
+        <span class="discount-badge--unit">{{ getDiscountPercent() }}</span>
+      </div>
+      <div class="discount-badge--label">İNDİRİM</div>
+    </div>
+  </div>
+
+  <div *ngIf="hasProductBadge()" class="discount">
+    <div class="cross-badge overline text-color-white">
+      {{ getProductBadgeLabel() }}
+    </div>
+  </div>
+  <div *ngIf="hasSpecialBadge()" class="discount">
+    <div class="special-badge text-color-white">
+      <span>{{ getSpecialBadgeLabel() }}</span>
+    </div>
+  </div>
+</div>

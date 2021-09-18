@@ -1,0 +1,11 @@
+<mat-expansion-panel [expanded]="isExpanded()" (opened)="onOpened()" (closed)="onClosed()" hideToggle>
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <ng-content select="[title]"></ng-content>
+    </mat-panel-title>
+    <mat-panel-description>
+      <fa-icon class="toggle text-color-orange" [icon]="isExpanded() ? minusIcon : plusIcon"></fa-icon>
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+  <ng-content select="[content]"></ng-content>
+</mat-expansion-panel>

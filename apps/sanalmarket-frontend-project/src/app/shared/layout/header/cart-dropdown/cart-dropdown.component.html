@@ -1,0 +1,18 @@
+<div class="toggle-layer" #excludeMe (click)="openCartDropdown()"></div>
+<div class="dropdown-btn" feClickElsewhere [excludeIt]="excludeMe" (clickElsewhere)="closeCartDropdown()">
+  <div class="icon-cart-quantity-wrapper">
+    <div class="icon-cart"></div>
+    <div class="quantity">{{ getCartInfo().itemInfos.length }}</div>
+  </div>
+  <div>
+    <div class="subtitle-2 text-color-black">Sepetim</div>
+    <div class="mat-caption price">{{ getRevenue() | feFormatPrice }} TL</div>
+  </div>
+  <fa-icon class="text-color-black" [icon]="faChevronDown"></fa-icon>
+  <ng-container *ngIf="isOpened()">
+    <sm-cart-dropdown-list *ngIf="!isCartEmpty(); else cartEmpty" [@presenceAnimationFaster]></sm-cart-dropdown-list>
+    <ng-template #cartEmpty>
+      <span class="empty-cart mat-body-2" *ngIf="isCartEmpty()" [@presenceAnimationFaster]>Sepetiniz Henüz Boş</span>
+    </ng-template>
+  </ng-container>
+</div>

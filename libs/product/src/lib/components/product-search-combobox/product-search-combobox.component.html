@@ -1,0 +1,79 @@
+<div [ngClass]="getCompanyClass()">
+  <input
+    id="product-search-combobox--trigger"
+    type="text"
+    #triggerInput
+    (keydown.enter)="onEnterKeyDown()"
+    [matAutocomplete]="auto"
+    [formControl]="searchControl"
+    [matAutocompletePosition]="'below'"
+    [placeholder]="getSearchInputPlaceHolder()"
+    role="search"
+    class="subtitle-2"
+  />
+  <div *ngIf="isMigros()" class="migros-search-right-button subtitle-2" (click)="onEnterKeyDown()">Ara</div>
+  <mat-autocomplete
+    #auto="matAutocomplete"
+    id="product-search-combobox--panel"
+    [class]="getAutoCompleteClassList()"
+    (opened)="onPanelOpened()"
+    (closed)="onPanelClosed()"
+    showPanel="false"
+  >
+    <ng-container
+      *ngIf="productSearchResults.length === 0 && !!instantSearchTerm && !!searchTerm && !userTyping && !loading"
+    >
+      <fe-search-not-found [searchQueryParams]="{ q: searchTerm }"> </fe-search-not-found>
+      <!-- Below this is a workaround for not opening autocomplete panel without mat-option in it, weird -->
+      <mat-option class="close-option">
+        <a class="button-link--green" href="javascript:void(0)"> Kapat </a>
+      </mat-option>
+    </ng-container>
+    <ng-container *ngIf="productSearchResults.length !== 0">
+      <div class="product-results">
+        <mat-option *ngFor="let item of productSearchResults" (onSelect)="onProductSelect(item)">
+          <a [routerLink]="['/', item.prettyName]" [state]="{ referrerEventId: item.referrerEventId }">
+            <span [innerHTML]="item.name | feSearchBold: searchControl.value"></span>
+          </a>
+        </mat-option>
+      </div>
+
+      <div class="category-results">
+        <h5>İlgili Kategoriler</h5>
+
+        <ul>
+          <li *ngFor="let item of categorySearchResults">
+            <a
+              [routerLink]="['', 'arama']"
+              [queryParams]="generateCategoryQueryParams(item.requestParameter)"
+              (click)="closeAutocomplete()"
+            >
+              <span>{{ item.label }}</span
+              >&nbsp;<small>({{ item.count }})</small>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="search-result-items">
+        <h5>İlgili Ürünler</h5>
+        <fe-product-search-result-item
+          *ngFor="let result of productSearchResults.slice(0, 3)"
+          [result]="result"
+          (click)="onProductClick()"
+        ></fe-product-search-result-item>
+      </div>
+
+      <div class="panel-actions" *ngIf="searchTerm && searchTerm !== ''">
+        <a
+          class="button-link--green"
+          [routerLink]="['', 'arama']"
+          [queryParams]="searchQuery"
+          (click)="closeAutocomplete()"
+        >
+          “{{ searchTerm }}” için Tüm Sonuçları Görüntüle
+        </a>
+      </div>
+    </ng-container>
+  </mat-autocomplete>
+</div>

@@ -1,0 +1,28 @@
+<div matDialogTitle>
+  <fe-icon-button mat-dialog-close [icon]="getTimesIcon()" class="float-right"></fe-icon-button>
+  <h3 class="text-align-center">Benzer Ürün Tercihi</h3>
+</div>
+
+<div matDialogContent>
+  <div class="subtitle-2 text-color-black sub-header">Sepetinize eklediğiniz ürünlerden biri bitmişse ne yapalım?</div>
+  <mat-radio-group>
+    <mat-radio-button
+      *ngFor="let choice of getCartChoices()"
+      [value]="choice.value"
+      color="primary"
+      [checked]="isSelected(choice)"
+      [mat-dialog-close]="choice.value"
+      [ngClass]="{ selected: isSelected(choice) }"
+    >
+      <span class="subtitle-2 text-color-black">{{ choice.label }}</span>
+      <span class="mat-caption-normal text-color-grey description">{{ choice.description }}</span>
+    </mat-radio-button>
+  </mat-radio-group>
+
+  <p
+    class="text-align-center mat-caption-normal text-color-grey no-alternative"
+    [mat-dialog-close]="getNoAlternativeChoiceValue()"
+  >
+    Alternatif ürün istemiyorum
+  </p>
+</div>

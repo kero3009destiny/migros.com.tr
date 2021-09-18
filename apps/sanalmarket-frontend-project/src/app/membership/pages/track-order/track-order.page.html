@@ -1,0 +1,70 @@
+<div class="track-order" *ngIf="getSelectedOrder()!=null">
+  <mat-card>
+    <mat-card-content class="complete-membership">
+      <ng-container>
+        <div class="block opportunities">
+          <p class="mat-subheading-2 text-color-black text-align-left complete-membership__title">
+            Üye Ol fırsatlardan hemen faydalan!
+          </p>
+          <div class="complete-membership__row">
+            <img
+              srcset="
+              /assets/icons/percent/icon.png,
+              /assets/icons/percent/icon@2x.png 2x,
+              /assets/icons/percent/icon@3x.png 3x
+            "
+            />
+            <p class="mat-body-2 text-color-black text-align-left">Sana özel kampanya ve indirimler</p>
+          </div>
+          <div class="complete-membership__row">
+            <img
+              srcset="/assets/icons/cash/icon.png, /assets/icons/cash/icon@2x.png 2x, /assets/icons/cash/icon@3x.png 3x"
+            />
+            <p class="mat-body-2 text-color-black text-align-left">İster kapıda nakit öde</p>
+          </div>
+          <div class="complete-membership__row">
+            <img
+              srcset="
+              /assets/icons/credit-card/icon.png,
+              /assets/icons/credit-card/icon@2x.png 2x,
+              /assets/icons/credit-card/icon@3x.png 3x
+            "
+            />
+            <p class="mat-body-2 text-color-black text-align-left">İster kapıda kredi kartıyla öde</p>
+          </div>
+        </div>
+        <div class="register-button">
+          <fe-button label="Üye Ol" (click)="onClickRegister()"></fe-button>
+        </div>
+      </ng-container>
+    </mat-card-content>
+  </mat-card>
+<sm-order-detail
+  (openOrderFeedback)="onOpenOrderFeedback()"
+  (cancelOrder)="onCancelOrder($event, removeDialog)"
+  (openDeliveryForm)="onOpenDeliveryForm($event)"
+  (downloadInvoice)="onDownloadInvoice($event)"
+  (openOrderRate)="onOpenOrderRateDialog($event)"
+  [order]="getSelectedOrder()"
+  (closeDetailModeEvent)="onCloseDetail()"
+></sm-order-detail>
+<ng-template #removeDialog>
+  <div class="remove-modal">
+  <fe-icon-button class="close-button" mat-dialog-close [icon]="getTimesIcon()" cdk-focus-start></fe-icon-button>
+  <h3 class="text-color-black">Siparişi İptal Et</h3>
+  <p class="mat-caption-normal">Siparişi iptal etmek istediğine emin misin ?</p>
+  <fe-button [mat-dialog-close]="true" label="İptal Et"></fe-button>
+  </div>
+</ng-template>
+</div>
+<div *ngIf="getSelectedOrder()==null && getIsPageDataFetched()">
+  <h6>Hata kodu: 404</h6>
+
+  <div class="not-found-page">
+    <!-- TODO if we try to use this component in TD, the MC logo will show up -->
+    <!-- We can fix this by renaming both logos with the same name and using it here-->
+    <a routerLink="/"><img class="brand-logo" src="/assets/images/not-found-page-logo.svg" alt="Logo" /></a>
+    <h2>Aradığınız sayfayı bulamadık.</h2>
+    <a routerLink="/" class="redirect-home">Ana sayfaya git!</a>
+  </div>
+</div>

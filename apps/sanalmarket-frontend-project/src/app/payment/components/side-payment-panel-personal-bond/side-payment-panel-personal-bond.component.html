@@ -1,0 +1,30 @@
+<sm-side-payment-panel
+  *ngIf="isAvailable()"
+  [sidePayment]="SIDE_PAYMENT_TYPE"
+  [usedSidePayment]="usedSidePayment"
+  [step]="step"
+  (opened)="this.onOpened()"
+  (closed)="this.onClosed()"
+>
+  <ng-container title>
+    <fa-icon class="icon user-tag-icon text-color-info" [icon]="PERSONAL_BOND_ICON"></fa-icon>
+    <div class="subtitle-2">Personel Bonosu</div>
+    <div class="subtitle-1 text-color-orange amount">{{ balance.balanceInfo.value | feFormatPrice }} TL</div>
+  </ng-container>
+  <ng-container content>
+    <sm-side-payment-form
+      type="number"
+      (formSubmitted)="onFormSubmitted($event)"
+      [amountUsed]="getAmountUsed()"
+      suffix="TL"
+      [extraValidators]="extraValidators"
+    >
+      <ng-container description>
+        Minimum <span class="mat-caption text-color-black">{{ balance.minUsableAmount | feFormatPrice }} TL</span>,
+        maksimum
+        <span class="mat-caption text-color-black">{{ balance.maxUsableAmount | feFormatPrice }} TL</span> indirim
+        kullanabilirsiniz.
+      </ng-container>
+    </sm-side-payment-form>
+  </ng-container>
+</sm-side-payment-panel>

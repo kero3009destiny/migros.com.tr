@@ -1,0 +1,82 @@
+<div matDialogTitle>
+  <fe-icon-button class="close-button" mat-dialog-close [icon]="getCloseIcon()"> </fe-icon-button>
+  <p class="subtitle-1 text-align-center text-color-black">Teslimat Zamanı Güncelle</p>
+</div>
+
+<ng-template [ngIf]="!isDateMapEmpty()">
+  <div class="time-slot-selector-wrapper">
+    <div class="days-wrapper">
+      <ng-template ngFor let-day let-i="index" [ngForOf]="getDays()">
+        <button
+          id="day-wrapper-{{ day }}"
+          class="day-wrapper"
+          (click)="onClickDay(day)"
+          [class.selected]="isDaySelected(day)"
+        >
+          <div class="name mat-caption">{{ getDayName(day, i) }}</div>
+          <div class="date overline">{{ getDate(day).toUpperCase() }}</div>
+          <div class="availability overline" *ngIf="isSlotsFullForSpecificDay(day)">DOLU</div>
+        </button>
+      </ng-template>
+    </div>
+    <!-- TIME SLOTS -->
+    <div id="time-slot-selector_wrapper" class="time-slots-wrapper" [class.fade-animation]="getFadeAnimationState()">
+      <!-- CAPACITY FULL FOR ALL DAYS -->
+      <ng-template [ngIf]="isAllDaysAreFullVisible()">
+        <div class="time-slot disabled info">
+          <div class="info-icon">
+            <fa-icon [icon]="infoIcon"></fa-icon>
+          </div>
+          <div id="time-slot-wrapper-full" class="message mat-caption">
+            Önümüzdeki 6 gün için tüm kapasitemiz doludur.
+          </div>
+        </div>
+      </ng-template>
+      <!-- CAPACITY FULL FOR SPECIFIC DAY -->
+      <ng-template [ngIf]="isCapacityFullForSpecificDayVisible()">
+        <div class="time-slot disabled info">
+          <div class="info-icon">
+            <fa-icon [icon]="infoIcon"></fa-icon>
+          </div>
+          <div class="message mat-caption">
+            <span> {{ getDate(getSelectedDay()) }} {{ getDayName(getSelectedDay(), 0, false) }} </span>
+            için tüm kapasitemiz doludur.
+          </div>
+        </div>
+      </ng-template>
+      <!-- AVAILABLE TIMESLOTS -->
+      <mat-radio-group>
+        <ng-template [ngIf]="isAvailableTimeSlotsVisible()">
+          <ng-template ngFor let-timeSlot [ngForOf]="getDateTimeSlots()">
+            <div
+              id="time-slot-wrapper_slot-{{ timeSlot.id }}"
+              class="time-slot"
+              (click)="!isTimeSlotDisabled(timeSlot.id) && onClickTimeSlot(timeSlot)"
+              [class.selected]="isTimeSlotSelected(timeSlot.id)"
+              [class.disabled]="isTimeSlotDisabled(timeSlot.id)"
+              [class.invisible]="isStartHourPassed(timeSlot.id)"
+            >
+              <mat-radio-button
+                class="time-slot-button"
+                color="primary"
+                value="{{ timeSlot }}"
+                [checked]="isTimeSlotSelected(timeSlot.id)"
+              >
+                <div class="time-message-wrapper mat-caption">
+                  <div class="time">{{ getTimeSlotTime(timeSlot.id) }}</div>
+                  <div class="message">{{ getTimeSlotPrice(timeSlot.id) }}</div>
+                </div>
+              </mat-radio-button>
+            </div>
+          </ng-template>
+        </ng-template>
+      </mat-radio-group>
+    </div>
+  </div>
+</ng-template>
+
+<div matDialogActions>
+  <p *ngIf="isSuccessMessageVisible()" class="subtitle-2 text-color-success">
+    Teslimat Zamanı Güncellendi <fa-icon [icon]="getCheckIcon()"></fa-icon>
+  </p>
+</div>

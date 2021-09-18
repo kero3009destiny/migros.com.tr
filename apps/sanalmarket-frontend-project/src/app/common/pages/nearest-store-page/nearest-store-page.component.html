@@ -1,0 +1,84 @@
+<ng-container>
+  <div class="content">
+    <h2 class="subtitle">Mağazalarımız</h2>
+    <div class="header-content">
+      <p class="subtitle-1 text-color-black">En yakınınızdaki Migros mağazalarını bulmak için il/ilçe seçiniz</p>
+      <form class="store-location-form" [formGroup]="getStoreLocationFormGroup()">
+        <div class="form">
+          <ng-container>
+            <fe-dropdown
+              class="city-dropdown"
+              [options]="getCities()"
+              isSearchVisible="true"
+              placeholder="İl"
+              formControlName="city"
+            ></fe-dropdown>
+            <ng-container>
+              <fe-dropdown
+                class="town-dropdown"
+                [options]="getTowns()"
+                isSearchVisible="true"
+                placeholder="İlçe"
+                formControlName="town"
+                [class.disabled]="isTownDisabled()"
+              ></fe-dropdown>
+            </ng-container>
+          </ng-container>
+        </div>
+      </form>
+      <div *ngIf="getStores()" class="stores text-color-black subtitle-1">
+        {{ getStores().length }} Mağaza Listeleniyor
+      </div>
+    </div>
+    <div class="content-container-mobile">
+      <p *ngIf="isAvailableStore()">Bu ilçemizde mağazamız bulunmamaktadır.</p>
+      <mat-accordion>
+        <mat-expansion-panel
+          class="store-list--item"
+          [class.selected]="isSelectedStore(store)"
+          *ngFor="let store of getStores()"
+          (click)="onClickStore($event, store)"
+        >
+          <mat-expansion-panel-header [collapsedHeight]="'100%'" [expandedHeight]="'100%'">
+            <div class="store-list--content">
+              <p class="store-list--item-name subtitle-2">
+                {{ store.name }}
+              </p>
+              <p class="store-list--item-address mat-caption-normal">{{ store.addressDetail }}</p>
+            </div>
+          </mat-expansion-panel-header>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+    <div class="content-container">
+      <div class="stores-container">
+        <p *ngIf="isAvailableStore()">Bu ilçemizde mağazamız bulunmamaktadır.</p>
+        <div class="store-list" *ngIf="!isAvailableStore()">
+          <div
+            class="store-list--item"
+            [class.selected]="isSelectedStore(store)"
+            *ngFor="let store of getStores()"
+            (click)="onClickStore($event, store)"
+          >
+            <div class="store-list--content">
+              <p class="store-list--item-name subtitle-2">
+                {{ store.name }}
+                <i class="icon icon--smaller icon-right-chevron"></i>
+              </p>
+              <p class="store-list--item-address subtitle">{{ store.addressDetail }}</p>
+            </div>
+            <fe-icon-button class="right-button" *ngIf="arrowRightIcon" [icon]="arrowRightIcon"></fe-icon-button>
+          </div>
+        </div>
+      </div>
+      <div class="store-map-container" *ngIf="getSelectedStore()">
+        <fe-google-maps
+          [coordinates]="{ lat: +getSelectedStore().latitude, lng: +getSelectedStore().longitude }"
+          [infoWindowContent]="{ title: getSelectedStore().name, content: getSelectedStore().addressDetail }"
+          [markerIconPath]="'/assets/logos/sanalmarket/sanalmarket-pin.svg'"
+        >
+        </fe-google-maps>
+      </div>
+    </div>
+  </div>
+</ng-container>

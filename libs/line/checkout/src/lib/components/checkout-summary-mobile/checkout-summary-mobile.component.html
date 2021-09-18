@@ -1,0 +1,55 @@
+<div class="checkout-summary-mobile__container" [ngClass]="{ 'with-details': isCartPage }">
+  <ng-content select="[deliveryChoice]"></ng-content>
+  <ng-template *ngIf="!isCartPage; then withoutDetails; else details"></ng-template>
+</div>
+
+<ng-template #details>
+  <mat-expansion-panel [expanded]="false" togglePosition="before">
+    <mat-expansion-panel-header>
+      <ng-container *ngTemplateOutlet="withoutDetails"></ng-container>
+    </mat-expansion-panel-header>
+    <ng-container *ngTemplateOutlet="summaryContent"></ng-container>
+  </mat-expansion-panel>
+</ng-template>
+
+<ng-template #withoutDetails>
+  <div class="checkout-summary-mobile__content">
+    <div class="revenue-container">
+      <div class="mat-caption-normal">Ödenecek Tutar</div>
+      <h3 class="revenue">{{ getRevenue$() | async | feFormatPrice }} TL</h3>
+    </div>
+    <button
+      id="checkout-summary-mobile-confirm-button"
+      feAppClickThrottle
+      (throttleClick)="onMobileContinueClick()"
+      class="confirm-button {{ isContinueButtonDisabled ? 'disabled' : '' }}"
+      mat-flat-button
+      color="primary"
+    >
+      Devam Et
+    </button>
+  </div>
+</ng-template>
+<ng-template #summaryContent>
+  <div class="summary-content mat-body-2">
+    <p>Sipariş Tutarı</p>
+    <p>{{ checkoutInfo.productPrice | feFormatPrice }} TL</p>
+    <div class="discounts text-color-success">
+      <ng-container *ngIf="checkoutInfo.shownProductDiscount > 0">
+        <p>Migros İndirimi</p>
+        <p>-{{ checkoutInfo.shownProductDiscount | feFormatPrice }} TL</p>
+      </ng-container>
+
+      <ng-container *ngIf="checkoutInfo.shownLineDiscount > 0">
+        <p>Sepet İndirimi</p>
+        <p>-{{ checkoutInfo.shownLineDiscount | feFormatPrice }} TL</p>
+      </ng-container>
+
+      <ng-container *ngIf="checkoutInfo.lineSpecialDiscount > 0">
+        <p>Gördüğüne İnan</p>
+        <p>-{{ checkoutInfo.lineSpecialDiscount | feFormatPrice }} TL</p>
+      </ng-container>
+    </div>
+  </div>
+  <mat-divider></mat-divider>
+</ng-template>

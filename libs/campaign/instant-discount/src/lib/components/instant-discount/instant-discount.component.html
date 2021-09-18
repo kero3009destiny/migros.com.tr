@@ -1,0 +1,20 @@
+<div class="card-discount" *ngIf="isInstantDiscountsEmpty()">
+  <div class="wrapper" *ngIf="getInstantDiscounts('MASTERPASS') | async as discounts">
+    <span class="description">
+      <strong>Masterpass</strong> kampanyasında
+      <strong>{{ getDiscountAmount(cardNumber) | feFormatPrice }} Tl</strong> indiriminiz bulunmaktadır.
+    </span>
+    <button
+      *ngIf="!isInstantDiscountApplied()"
+      (click)="onApplyInstantDiscount(discounts[cardNumber])"
+      class="use-button"
+    >
+      İndirimi uygula
+    </button>
+    <button *ngIf="isInstantDiscountApplied()" (click)="onRemoveInstantDiscount()">İndirimi kaldır</button>
+  </div>
+  <div class="discount-info">
+    Masterpass puanları çek ve indirimler ile birlikte kullanılamamaktadır. Masterpass puanı kullanmanız halinde
+    seçtiğiniz diğer indirim ve çekler siparişten çıkarılacaktır.
+  </div>
+</div>

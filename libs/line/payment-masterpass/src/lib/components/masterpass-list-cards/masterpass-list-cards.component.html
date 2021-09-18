@@ -1,0 +1,102 @@
+<div *ngIf="getCards() | async as cards">
+  <div *ngIf="cards.length > 0; else guest">
+    <div class="info-container-text-group">
+      <img class="image" src="/assets/images/masterpass-logo.png" alt="masterpass-logo" />
+      <div class="info-container-text">
+        Masterpass'e kayıtlı kullanım süresi geçmiş veya geçersiz kartlar kullanılamamaktadır.
+      </div>
+    </div>
+    <mat-accordion>
+      <mat-radio-group class="payment-radio-group">
+        <mat-expansion-panel
+          *ngFor="let card of cards"
+          hideToggle
+          class="mat-elevation-z0"
+          [expanded]="selectedCard === card.Value1"
+          (click)="onCardSelected(card)"
+        >
+          <mat-expansion-panel-header expandedHeight="48px">
+            <mat-panel-title class="card-panel">
+              <mat-radio-button
+                [name]="card.Name"
+                color="primary"
+                [value]="card.Value1"
+                [checked]="selectedCard === card.Value1"
+                [id]="card.Name"
+                (change)="onCardSelected(card)"
+              >
+                <div class="card-radio-button">
+                  <div>{{ card.Name }}-{{ card.Value1 }}</div>
+                  <i class="icon icon-masterpass card-mp-icon"></i>
+                </div>
+              </mat-radio-button>
+              <i class="icon icon-rubbish icon-cursor" (click)="onRemoveCard(card.Name)"></i>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <fe-campaign-instant-discount
+            [paymentType]="'MASTERPASS'"
+            [cardNumber]="card.Value1"
+            [checkoutId]="checkoutId"
+          ></fe-campaign-instant-discount>
+        </mat-expansion-panel>
+        <mat-expansion-panel
+          hideToggle
+          class="mat-elevation-z0"
+          [expanded]="selectedCard === 'NONE'"
+          (click)="onCardSelected(null)"
+        >
+          <mat-expansion-panel-header expandedHeight="48px">
+            <mat-panel-title>
+              <mat-radio-button
+                name="online-card"
+                color="primary"
+                value="NONE"
+                [checked]="selectedCard === 'NONE'"
+                id="NONE"
+                (change)="onCardSelected(null)"
+              >
+                <div>Farklı kredi kartı ile ödemek istiyorum</div>
+              </mat-radio-button>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <ng-template [ngTemplateOutlet]="creditCardForm"></ng-template>
+        </mat-expansion-panel>
+      </mat-radio-group>
+    </mat-accordion>
+  </div>
+  <form #removeCardForm>
+    <input type="hidden" name="token" />
+    <input type="hidden" name="accountAliasName" />
+    <input type="hidden" name="msisdn" />
+    <input type="hidden" name="referenceNo" value="101252836185" />
+    <input type="hidden" name="sendSmsLanguage" value="tur" />
+    <input type="hidden" name="sendSms" value="N" />
+    <input type="hidden" name="setLanguage" value="tur" />
+  </form>
+  <form #updateUserForm>
+    <input type="hidden" name="token" />
+    <input type="hidden" name="oldValue" value="" />
+    <input type="hidden" name="theNewValue" />
+    <input type="hidden" name="valueType" value="USER_ID" />
+    <input type="hidden" name="msisdn" />
+    <input type="hidden" name="fP" />
+    <input type="hidden" name="referenceNo" value="101252836185" />
+    <input type="hidden" name="sendSmsLanguage" value="tur" />
+    <input type="hidden" name="sendSms" value="N" />
+    <input type="hidden" name="setLanguage" value="tur" />
+  </form>
+  <ng-template #guest [ngTemplateOutlet]="creditCardForm"></ng-template>
+</div>
+<ng-template #creditCardForm><ng-content></ng-content></ng-template>
+<div class="container" *ngIf="isUserUpdateNeeded$ | async as isUserUpdateNeeded">
+  <div class="info">
+    <span class="mat-caption-normal text-color-black">Masterpass'e kayıtlı hesabınız var.</span>
+    <p class="mat-caption-normal text-color-black">Hesabınızı güncellemek ister misiniz?</p>
+  </div>
+
+  <div class="action">
+    <button class="button-primary submit-button" (click)="onLinkAccepted()" label="Evet, Aktive Et">
+      Evet, Aktive Et
+    </button>
+  </div>
+</div>

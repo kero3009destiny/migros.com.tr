@@ -1,0 +1,84 @@
+<div class="past-order-list-item" *ngIf="!isOrderEmpty()" [ngClass]="{ additional: isAdditionalOrder() }">
+  <div class="status">
+    <div class="delivery-date">
+      <p class="mat-caption text-color-black">
+        <span class="order-no link-hover" (click)="onClickOrderDetail()">
+          {{ isAdditionalOrder() ? 'Ek ' : '' }}Sipariş No: {{ order.line.id }}
+        </span>
+        <span class="text-color-grey mat-caption-normal additional-order" *ngIf="isAdditionalOrder()">
+          <fa-icon class="additional-order-icon" [icon]="getCartPlusIcon()"></fa-icon>{{ getMainOrderId() }} No’lu
+          Siparişe Ek
+        </span>
+      </p>
+      <p class="mat-caption-normal text-color-grey">{{ getDeliveryDate() }}</p>
+    </div>
+
+    <div>
+      <sm-order-status-bar
+        [deliveryModel]="order.line.deliveryModel"
+        [isCancelled]="order.line.cancelled"
+        [status]="getStatus()"
+        [deliveryAddressObjectType]="order.line.deliveryAddressObjectType"
+      ></sm-order-status-bar>
+      <p
+        class="mat-caption-normal text-color-info instant-delivery"
+        *ngIf="isInstantDelivery() && isActiveOrder && !order.line.cancelled"
+      >
+        Hızlı Teslimat / {{ getInstantDeliveryTime() }}DK
+      </p>
+    </div>
+  </div>
+  <div class="products">
+    <p class="mat-caption-normal text-color-black">Sepetteki Ürünler ({{ order.line.itemCount }})</p>
+    <div class="past-order-list-item-products">
+      <div *ngFor="let item of getFirstItems(3)" class="past-order-list-item-product-images-wrapper">
+        <img [src]="item.product.images[0].urls.CART" />
+      </div>
+
+      <span
+        class="mat-caption-normal text-color-black link-hover"
+        *ngIf="isMoreProductInfoVisible()"
+        (click)="onClickOrderDetail()"
+      >
+        + {{ getMoreProductInfoAmount() }} Daha
+      </span>
+    </div>
+  </div>
+
+  <div class="revenue text-color-black">
+    <span class="mat-caption">Toplam Tutar: {{ order.line.revenue | feFormatPrice }} TL</span>
+    <div class="actions">
+      <div class="order-detail-btn" (click)="onClickOrderDetail()">
+        Sipariş Detayı
+        <fa-icon [icon]="getChevronRightIcon()"></fa-icon>
+      </div>
+    </div>
+  </div>
+
+  <div class="inner-bottom" *ngIf="!isOrderCancelled() && !isHemenPortfolio()">
+    <div class="separator"></div>
+    <button
+      color="primary"
+      mat-button
+      (click)="onClickOrderHelp()"
+      class="text-color-orange mat-caption-normal feedback-form"
+    >
+      <fa-icon [icon]="getQuestionIcon()" class="feedback-form-icon"></fa-icon>
+      <span class="mat-caption-normal">İletişim Formu</span>
+    </button>
+    <button
+      mat-button
+      color="primary"
+      class="additional-order-btn"
+      *ngIf="order.extra.addable"
+      (click)="startAdditionalOrderMode()"
+    >
+      <span class="mat-caption-normal">
+        <fa-icon [icon]="getCartPlusIcon()" class="additional-order-btn-icon"></fa-icon> Siparişe Ek Yap
+      </span>
+    </button>
+    <div class="mat-caption-normal invoice" *ngIf="!isActiveOrder" (click)="onClickDownloadInvoice()">
+      <fa-icon [icon]="getInvoiceIcon()"></fa-icon> E-Arşiv Fatura
+    </div>
+  </div>
+</div>

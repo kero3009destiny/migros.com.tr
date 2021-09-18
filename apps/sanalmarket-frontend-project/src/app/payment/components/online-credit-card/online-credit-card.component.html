@@ -1,0 +1,105 @@
+<sm-masterpass-wrapper
+  [checkoutId]="getCheckoutId()"
+  [disabled]="isMasterpassDisabled()"
+  (selectedPaymentChanged)="onSelectedPaymentChanged($event)"
+>
+  <form [formGroup]="onlinePaymentFormGroup" #onlinePaymentForm="ngForm" #formElement>
+    <div class="card-form-area">
+      <mat-form-field class="online-payment__card-name" color="accent" appearance="outline">
+        <mat-label class="subtitle-2">Kart üzerindeki isim</mat-label>
+        <input
+          type="text"
+          name="ccname"
+          matInput
+          formControlName="cardHolderName"
+          autocomplete="cc-name"
+          maxlength="26"
+        />
+        <mat-error *ngIf="getCardHolderName().invalid && onlinePaymentFormGroup.invalid"
+          >Lütfen kart üzerindeki ismi giriniz
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="online-payment__card-number" color="accent" appearance="outline">
+        <mat-label class="subtitle-2">Kredi kartı numarası</mat-label>
+        <input
+          type="text"
+          name="cardnumber"
+          matInput
+          feMdcMaskedInput
+          [maskOptions]="getMaskOptions()"
+          formControlName="cardNumber"
+          autocomplete="cc-number"
+          inputmode="numeric"
+        />
+        <mat-error *ngIf="getCardNumber().invalid && getCardNumber().errors.required"
+          >Lütfen kredi kartı numarasını giriniz
+        </mat-error>
+        <mat-error *ngIf="getCardNumber().invalid && getCardNumber().errors.pattern"
+          >Lütfen geçerli bir numara giriniz
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="card-form-area">
+      <div class="expire-info">
+        <mat-form-field class="online-payment__card-month" color="accent" appearance="outline">
+          <mat-label class="subtitle-2">Ay</mat-label>
+          <select name="ccmonth" matNativeControl formControlName="expireMonth" autocomplete="cc-exp-month">
+            <option label="Seçiniz"></option>
+            <option *ngFor="let month of getMonths()" [ngValue]="month">{{ month }}</option>
+          </select>
+          <mat-error *ngIf="getExpireMonth().invalid && onlinePaymentFormGroup.invalid">Lütfen ay giriniz</mat-error>
+        </mat-form-field>
+        <mat-form-field class="online-payment__card-year" color="accent" appearance="outline">
+          <mat-label class="subtitle-2">Yıl</mat-label>
+          <select name="ccyear" matNativeControl formControlName="expireYear" autocomplete="cc-exp-year">
+            <option label="Seçiniz"></option>
+            <option *ngFor="let year of getYears()" [ngValue]="year">{{ year }}</option>
+          </select>
+          <mat-error *ngIf="getExpireYear().invalid && onlinePaymentFormGroup.invalid">Lütfen yıl giriniz</mat-error>
+        </mat-form-field>
+        <mat-form-field class="online-payment__card-cvv" color="accent" appearance="outline">
+          <mat-label class="subtitle-2">CVV</mat-label>
+          <input name="cvc" type="tel" matInput formControlName="cvv2" autocomplete="cc-csc" maxlength="3" />
+          <fa-icon
+            matSuffix
+            [icon]="getTipIcon()"
+            matTooltip="Kartınızın arka yüzünde bulunan rakamların genellikle son üç hanesidir."
+          ></fa-icon>
+          <mat-error *ngIf="getCvv2().invalid && getCvv2().errors.required">Lütfen CVV giriniz</mat-error>
+          <mat-error *ngIf="getCvv2().invalid && getCvv2().errors.pattern">Lütfen geçerli bir numara giriniz</mat-error>
+        </mat-form-field>
+      </div>
+      <mat-checkbox class="card-secure-check" color="primary" formControlName="secure">
+        <span class="mat-caption-normal text-color-black">3D Secure ile ödemek istiyorum</span>
+      </mat-checkbox>
+    </div>
+    <div class="credit-card-reward" *ngIf="!isCardRewardsEmpty()">
+      <span class="subtitle-2 text-color-black">Banka Puanlarınız</span>
+      <p class="subtitle-2 text-color-black">
+        <mat-checkbox
+          color="primary"
+          (change)="onChangeBonusUsage($event, reward)"
+          *ngFor="let reward of getRewards()"
+          [(ngModel)]="isCreditCardBonusSelected"
+          [ngModelOptions]="{ standalone: true }"
+        >
+          <span class="mat-body-2"
+            ><span class="bank-name">{{ getRewardName(reward) }}</span> Bonus Kullan
+            <span class="text-color-orange bonus subtitle-2">{{ reward?.reward | feFormatPrice }} TL</span></span
+          >
+        </mat-checkbox>
+      </p>
+    </div>
+  </form>
+</sm-masterpass-wrapper>
+<div class="container" *ngIf="isUserUpdateNeeded$ | async as isUserUpdateNeeded">
+  <div class="info">
+    <span class="mat-caption-normal text-color-black">Masterpass'e kayıtlı hesabınız var.</span>
+    <p class="mat-caption-normal text-color-black">Hesabınızı Migros’ta kullanmak ister misiniz?</p>
+  </div>
+
+  <div class="action">
+    <fe-button (click)="onLinkAccepted()" label="Evet"></fe-button>
+  </div>
+</div>

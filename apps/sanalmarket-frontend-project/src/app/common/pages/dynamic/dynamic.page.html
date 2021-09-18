@@ -1,0 +1,5 @@
+<div class="container" *ngIf="getPageContent()">
+  <h1>{{ getPageName() }}</h1>
+  <img alt="header-img" class="header-img" *ngIf="getHeaderImageUrl()" [src]="getHeaderImageUrl()" />
+  <div class="dynamic-page-content" [innerHTML]="getPageContent() | feSanitizeHtml"></div>
+</div>

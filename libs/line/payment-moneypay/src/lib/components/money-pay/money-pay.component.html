@@ -1,0 +1,28 @@
+<div class="container" *ngIf="isCurrentContentRegisteredUnverified$() | async">
+  <div class="new-user">
+    <div class="icon icon-money-pay"></div>
+    <div>
+      <div class="subtitle-1">{{ userPhoneNumber }}</div>
+      <div class="description mat-caption-normal">
+        Cep telefonuna bağlı MoneyPay hesabınız var. MoneyPay ile ödemeye devam etmek için telefonunuzu doğrulayın.
+      </div>
+    </div>
+    <fe-button id="money-pay-verify-button" (click)="onClickVerifyPhoneNumber()" class="button" label="Doğrula">
+    </fe-button>
+  </div>
+</div>
+<div class="not-login" *ngIf="isCurrentContentUnregistered$() | async">
+  <div class="info mat-caption-normal">
+    <div class="row text-color-error">*MoneyPay’de tanımlı bir hesabınız bulunmuyor.</div>
+    <div class="row text-color-black">Fırsatlardan faydalanmak için hemen MoneyPay’e üye olabilirsiniz.</div>
+  </div>
+  <fe-button (click)="onRegisterMoneyPayButtonClicked()" id="money-pay-register-button" class="button" label="Üye Ol">
+  </fe-button>
+</div>
+<fe-money-pay-options
+  id="money-pay-options"
+  *ngIf="isPaymentOptionsVisible$() | async"
+  [walletStatus]="getWalletStatus()"
+  [closedPayments]="closedPayments"
+  (selectedPaymentMethod)="onSelectedPaymentMethod($event)"
+></fe-money-pay-options>

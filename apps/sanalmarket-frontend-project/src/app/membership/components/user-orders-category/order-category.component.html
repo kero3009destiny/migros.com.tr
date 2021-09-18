@@ -1,0 +1,53 @@
+<mat-form-field appearance="outline" color="accent">
+  <mat-select (selectionChange)="fetchChartData($event.value)" [value]="getTimeOptions()[0].value">
+    <mat-option class="mat-body-2 option" *ngFor="let option of getTimeOptions()" [value]="option.value">
+      {{ option.name }}</mat-option
+    >
+  </mat-select>
+</mat-form-field>
+
+<!-- MAIN CONTENT -->
+<ng-container *ngIf="isChartVisible()">
+  <!-- CHART -->
+  <div class="chart">
+    <div class="doughnut">
+      <sm-healthy-life-journey-chart
+        name="chart-reference"
+        [chartValues]="getChartValues()"
+        [customColors]="getColorList()"
+      >
+      </sm-healthy-life-journey-chart>
+    </div>
+    <div class="detail">
+      <ng-container *ngFor="let categoryName of getCategoryNames(); let i = index">
+        <span class="line">
+          <div class="info-text">
+            <div [id]="'info' + (i + 1)">
+              <span class="dot" [style.background-color]="getColor(i)"></span>
+              <span class="mat-caption-normal text-color-black info-text1">{{ categoryName }}</span>
+            </div>
+          </div>
+        </span>
+      </ng-container>
+    </div>
+  </div>
+
+  <!-- DETAILS -->
+  <div class="details">
+    <div class="title">Kategori Detay</div>
+    <div class="list" *ngFor="let category of getCategoryList()">
+      <sm-category [category]="category"></sm-category>
+    </div>
+  </div>
+</ng-container>
+
+<!-- ERROR MESSAGE -->
+<ng-container *ngIf="isErrorVisible()">
+  <div class="error">
+    <p class="error-msg">
+      {{ getTimeIntervalText() }}, kategorilere göre listelenecek alışverişiniz bulunmuyor. Şimdi sipariş vererek
+      alışverişe başlayabilirsin.
+    </p>
+    <button mat-flat-button color="primary" routerLink="/">Alışverişe Başla</button>
+  </div>
+</ng-container>

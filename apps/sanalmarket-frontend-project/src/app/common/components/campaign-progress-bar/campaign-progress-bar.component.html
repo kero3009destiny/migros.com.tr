@@ -1,0 +1,25 @@
+<div class="progressbar-wrapper" *ngIf="isProgressVisible()">
+  <div class="progressbar">
+    <ng-container *ngIf="isFrequencyType()">
+      <ng-container *ngIf="!isProgressInitial()">
+        <div class="completed" [ngStyle]="{ width: getCompletedPercentage(getCurrent(), getTarget()) }"></div>
+        <span class="target mat-caption-normal" [class.text-color-white]="isProgressCompleted()">
+          {{ getCurrent() }} / {{ getTarget() }}
+        </span>
+      </ng-container>
+      <div class="unstarted" *ngIf="isProgressInitial()">
+        <span class="mat-caption-normal">İLKİNİ AL</span>
+        <span class="mat-caption-normal">{{ getTarget() }} TANEYE TAMAMLA</span>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="isSumType()">
+      <div class="completed" [ngStyle]="{ width: getCompletedPercentage(getCurrent(), getTarget()) }"></div>
+      <span class="current mat-caption-normal" [class.text-color-white]="isProgressCompleted()">
+        {{ getCurrent() }} TL
+      </span>
+      <span class="target mat-caption-normal" [class.text-color-white]="isProgressCompleted()">
+        {{ getTarget() }} TL
+      </span>
+    </ng-container>
+  </div>
+</div>

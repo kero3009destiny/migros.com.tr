@@ -1,0 +1,163 @@
+<div class="delivery-address-modal">
+  <h2 class="text-align-center" mat-dialog-title>Yeni Teslimat Adresi Ekle</h2>
+  <div class="text-description text-color-black mat-caption-normal">
+    Lütfen teslimat adres bilgilerinizi belirtin. Sepetinizdeki ürünler bu adresinize gönderilecektir.
+  </div>
+  <form
+    *ngIf="addressFormGroup"
+    class="delivery-zone-form"
+    [formGroup]="addressFormGroup"
+    feAppSubmitThrottle
+    (throttleSubmit)="submitAddressForm()"
+    [throttleFormValid]="addressFormGroup?.valid"
+  >
+    <div class="row">
+      <mat-form-field class="row-items" appearance="outline">
+        <mat-label>Adres İsmi, Örn: Ofis, Yazlık, Ev</mat-label>
+        <input id="add-delivery-address-modal-name" matInput required type="text" formControlName="name" />
+        <mat-error>Lütfen adres ismi giriniz.</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <mat-form-field class="row-items" appearance="outline">
+        <mat-label>Ad</mat-label>
+        <input
+          id="add-delivery-address-modal-first-name"
+          matInput
+          required
+          type="text"
+          feOnlyLetters
+          label="Ad"
+          formControlName="firstName"
+        />
+        <mat-error>Lütfen geçerli bir ad giriniz.</mat-error>
+      </mat-form-field>
+      <mat-form-field class="row-items" appearance="outline">
+        <mat-label>Soyad</mat-label>
+        <input
+          id="add-delivery-address-modal-last-name"
+          matInput
+          required
+          type="text"
+          feOnlyLetters
+          placeholder="Soyad"
+          formControlName="lastName"
+        />
+        <mat-error>Lütfen geçerli bir soyad giriniz.</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <mat-form-field class="address-form--city row-items" color="accent" appearance="outline" floatLabel="always">
+        <mat-label>İl</mat-label>
+        <select
+          required
+          id="add-delivery-address-modal-city"
+          matNativeControl
+          formControlName="cityId"
+          autocomplete="shipping street-address"
+        >
+          <ng-container *ngIf="getCities() as cities">
+            <option label="-- Seçiniz --" [value]="null"></option>
+            <option *ngFor="let city of cities" value="{{ city.id }}">{{ city.name }}</option>
+          </ng-container>
+        </select>
+        <mat-error>Lütfen il seçiniz.</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <mat-form-field class="address-form--town row-items" color="accent" appearance="outline" floatLabel="always">
+        <mat-label>İlçe</mat-label>
+        <select
+          required
+          id="add-delivery-address-modal-town"
+          matNativeControl
+          formControlName="townId"
+          autocomplete="shipping street-address"
+        >
+          <ng-container *ngIf="getTowns() as towns">
+            <option label="-- Seçiniz --" [value]="null"></option>
+            <option *ngFor="let town of towns" value="{{ town.id }}">{{ town.name }}</option>
+          </ng-container>
+        </select>
+        <mat-error>Lütfen ilçe seçiniz.</mat-error>
+      </mat-form-field>
+      <mat-form-field class="address-form--district row-items" color="accent" appearance="outline" floatLabel="always">
+        <mat-label>Mahalle</mat-label>
+        <select
+          required
+          id="add-delivery-address-modal-district"
+          matNativeControl
+          formControlName="districtId"
+          autocomplete="shipping street-address"
+        >
+          <ng-container *ngIf="getDistricts() as districts">
+            <option label="-- Seçiniz --" [value]="null"></option>
+            <option *ngFor="let district of districts" value="{{ district.id }}">{{ district.name }}</option>
+          </ng-container>
+        </select>
+        <mat-error>Lütfen mahalle seçiniz.</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <mat-form-field class="address-form--street row-items" color="accent" appearance="outline" floatLabel="always">
+        <mat-label>Cadde - Sokak</mat-label>
+        <select
+          id="add-delivery-address-modal-street"
+          matNativeControl
+          formControlName="streetId"
+          autocomplete="shipping street-address"
+        >
+          <ng-container *ngIf="getStreets() as streets">
+            <option label="-- Seçiniz --" [value]="null"></option>
+            <option *ngFor="let street of streets" value="{{ street.id }}">{{ street.name }}</option>
+          </ng-container>
+        </select>
+      </mat-form-field>
+      <mat-form-field class="row-items" appearance="outline">
+        <mat-label>Bina ve Daire No</mat-label>
+        <input
+          id="add-delivery-address-modal-detail"
+          matInput
+          required
+          type="text"
+          label="Bina ve Daire No"
+          formControlName="detail"
+        />
+        <mat-error>Lütfen bina ve daire no giriniz.</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <mat-form-field class="row-items address-box" appearance="outline">
+        <mat-label>Adres Tarifi </mat-label>
+        <input
+          id="add-delivery-address-modal-direction"
+          matInput
+          type="text"
+          label="Adres Tarifi (Opsiyonel)"
+          formControlName="direction"
+        />
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <mat-checkbox
+        id="add-delivery-address-modal-save-as-invoice"
+        *ngIf="isSameAsDeliveryCheckboxVisible()"
+        class="fe-checkbox-label-caption mat-caption-normal text-color-black"
+        color="primary"
+        formControlName="saveAsInvoice"
+      >
+        <div id="add-delivery-address-modal-use-as-invoice" class="fe-checkbox-label-caption">
+          Fatura adresi olarak da kullan.
+        </div>
+      </mat-checkbox>
+      <fe-button
+        id="add-delivery-address-modal-save-button"
+        class="save-button"
+        label="Kaydet"
+        type="submit"
+      ></fe-button>
+    </div>
+  </form>
+  <fe-icon-button aria-label="Kapat" class="close-button" (click)="onClickCloseBtn()" [icon]="closeIcon">
+  </fe-icon-button>
+</div>

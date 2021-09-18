@@ -1,0 +1,21 @@
+<div class="search-result-item">
+  <fe-product-image
+    (gtmClick)="sendGtmClickEvent(result)"
+    [image]="result.images[0]"
+    [prettyName]="result.prettyName"
+    [productName]="result.name"
+    [referrerEventId]="result.referrerEventId"
+    [imageType]="'PRODUCT_LIST'"
+  ></fe-product-image>
+  <div class="search-result-item__content">
+    <fe-product-name
+      (gtmClick)="sendGtmClickEvent(result)"
+      [productName]="result.name"
+      [prettyName]="result.prettyName"
+      [productId]="result.id"
+      [referrerEventId]="result.referrerEventId"
+    ></fe-product-name>
+    <fe-product-brand [brand]="result.brand"></fe-product-brand>
+    <fe-product-price [shownPrice]="result.shownPrice"></fe-product-price>
+  </div>
+</div>

@@ -1,0 +1,21 @@
+<sm-side-payment-panel
+  [sidePayment]="SIDE_PAYMENT_TYPE"
+  [usedSidePayment]="usedSidePayment"
+  [step]="step"
+  (opened)="this.onOpened()"
+  (closed)="this.onClosed()"
+>
+  <ng-container title>
+    <fa-icon class="icon" [icon]="VOUCHER_ICON"></fa-icon>
+    <div class="subtitle-2">Dijital Alışveriş Kodu</div>
+  </ng-container>
+  <ng-container content>
+    <sm-side-payment-form
+      type="string"
+      (formSubmitted)="onFormSubmitted($event)"
+      [amountUsed]="getAmountUsed()"
+      defaultPlaceholder="Dijital alışveriş kodu girin"
+      [extraValidators]="EXTRA_VALIDATORS"
+    ></sm-side-payment-form>
+  </ng-container>
+</sm-side-payment-panel>

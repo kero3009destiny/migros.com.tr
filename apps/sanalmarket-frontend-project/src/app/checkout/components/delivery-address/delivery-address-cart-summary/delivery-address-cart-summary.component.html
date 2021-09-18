@@ -1,0 +1,56 @@
+<div class="form__container">
+  <div class="form__container__in">
+    <div class="cart-summary__row">
+      <span class="subtitle-1">Sepet Özeti</span>
+      <span class="mat-body-2 text-color-grey">{{ cartInfo.itemInfos.length + ' Ürün' }} </span>
+    </div>
+    <div class="cart-summary__row">
+      <span class="mat-body-2">Sipariş Tutarı</span>
+      <span class="mat-body-2"
+        >{{ cartInfo.productPrice | feFormatPrice }}
+        <span class="mat-body-2">TL</span>
+      </span>
+    </div>
+    <div class="cart-summary__row discount" *ngIf="cartInfo.shownProductDiscount > 0">
+      <span class="mat-body-2">Migros İndirimi</span>
+      <span class="mat-body-2"
+        >-{{ cartInfo.shownProductDiscount | feFormatPrice }}
+        <span class="mat-body-2">TL</span>
+      </span>
+    </div>
+    <div class="cart-summary__row discount" *ngIf="cartInfo.lineSpecialDiscount > 0">
+      <span class="mat-body-2">Gördüğüne İnan</span>
+      <span class="mat-body-2"
+        >-{{ cartInfo.lineSpecialDiscount | feFormatPrice }}
+        <span class="mat-body-2">TL</span>
+      </span>
+    </div>
+    <div class="cart-summary__row total">
+      <span class="subtitle-1">Genel Toplam</span>
+      <span class="subtitle-1"
+        >{{ cartInfo.revenue | feFormatPrice }}
+        <span class="subtitle-1">TL</span>
+      </span>
+    </div>
+  </div>
+  <mat-divider inset></mat-divider>
+  <div class="form__container__in">
+    <div class="cart-summary__row agreement">
+      <mat-checkbox feTurnDeepInputAutocompleteOff color="primary" [formControl]="kvkkApproval"></mat-checkbox>
+      <div class="agreement-description mat-caption-normal">
+        <a class="text-color-orange" (click)="onAgreementClick('PERSONAL_DATA_AGREEMENT')" href="javascript:void(0)"
+          >Kişisel Verilerin Korunması Hakkında Aydınlatma Yazısı</a
+        >'nı okudum.
+      </div>
+    </div>
+    <button
+      mat-flat-button
+      type="submit"
+      color="primary"
+      [disabled]="isContinueDisabled"
+      (click)="triggerContinue($event)"
+    >
+      Devam Et
+    </button>
+  </div>
+</div>

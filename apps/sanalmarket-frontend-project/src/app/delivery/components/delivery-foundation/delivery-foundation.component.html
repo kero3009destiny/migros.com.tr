@@ -1,0 +1,22 @@
+<h3 class="description text-color-black">Siparişini nereye bağışlayalım?</h3>
+<form
+  class="delivery-zone-form"
+  [formGroup]="deliveryFoundationFormGroup"
+  feAppSubmitThrottle
+  [throttleFormValid]="deliveryFoundationFormGroup.valid"
+  (throttleSubmit)="submitDeliveryZone()"
+>
+  <fe-dropdown
+    id="foundation"
+    formControlName="serviceAreaObjectId"
+    placeholder="Bağış Kurumu"
+    [options]="getFoundations()"
+    [required]="true"
+    [isSearchVisible]="true"
+  >
+  </fe-dropdown>
+  <mat-checkbox formControlName="agreement" required color="primary" class="agreement-check">
+    Siparişimin seçtiğim bağış kurumuna Migros Sanal Market tarafından ulaştırılmasını onaylıyorum. *
+  </mat-checkbox>
+  <fe-button [isDisabled]="deliveryFoundationFormGroup.invalid" label="Devam Et" type="submit"></fe-button>
+</form>

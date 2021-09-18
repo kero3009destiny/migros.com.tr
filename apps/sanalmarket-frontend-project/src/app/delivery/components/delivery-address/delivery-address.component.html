@@ -1,0 +1,11 @@
+<ng-container *ngIf="getAddressList()">
+  <ng-container *ngIf="getAddressList().length !== 0; else noAddress">
+    <sm-delivery-address-list
+      [addressList]="getAddressList()"
+      (deliveryZoneChanged)="submitDeliveryZone($event)"
+    ></sm-delivery-address-list>
+  </ng-container>
+</ng-container>
+<ng-template #noAddress>
+  <sm-delivery-address-dropdown (deliveryZoneChanged)="submitDeliveryZone($event)"></sm-delivery-address-dropdown>
+</ng-template>

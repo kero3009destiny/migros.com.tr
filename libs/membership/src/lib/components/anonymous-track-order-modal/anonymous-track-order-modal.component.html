@@ -1,0 +1,35 @@
+<div class="modal">
+  <h3 class="title  text-color-black">Sipariş Takibi</h3>
+  <fa-icon class="text-color-grey close-button" (click)="onClickClose()" [icon]="closeIcon"></fa-icon>
+  <div class="info-detail subtitle-2 text-color-black">Siparişini telefon ve sipariş numaran ile takip edebilirsin</div>
+  <form
+    [formGroup]="trackOrderFormGroup"
+    feAppSubmitThrottle
+    [throttleFormValid]="trackOrderFormGroup.valid"
+    class="track-form"
+  >
+    <mat-form-field class="row-items" appearance="outline" tabindex="-1">
+      <mat-label>Telefon Numarası</mat-label>
+      <input matInput required type="tel" label="Telefon Numarası" formControlName="phoneNumber" minLength="10" tabindex="-1" />
+      <mat-error id="register__email-error--empty"  tabindex="-1">
+        Lütfen yazdığınız numarayı kontrol ediniz.
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="row-items" appearance="outline" tabindex="-1">
+      <mat-label>Sipariş Kodu</mat-label>
+      <input matInput required type="number" label="Sipariş Kodu" formControlName="orderId" minLength="8" tabindex="-1" />
+      <mat-error id="order--empty"  tabindex="-1">
+        Lütfen yazdığınız numarayı kontrol ediniz.
+      </mat-error>
+    </mat-form-field>
+
+    <div class="button-wrapper">
+      <button
+        class=" submit-buttton subtitle-2 button-primary"
+        (click)="onClickTrack(this.getOrderId(),this.getPhoneNumber())"
+        [disabled]="getOrderId().value <1 || getPhoneNumber().value<1"
+        type="submit"
+      >Siparişini Göster</button>
+    </div>
+  </form>
+</div>

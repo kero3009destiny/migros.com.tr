@@ -1,0 +1,21 @@
+<div class="campaign-detail-modal-wrapper">
+  <div class="header-wrapper">
+    <div class="title-close-btn-wrapper">
+      <span class="mat-headline text-color-black">Kampanya Detayı</span>
+      <fa-icon class="text-color-grey" (click)="onClickClose()" [icon]="closeIcon"></fa-icon>
+    </div>
+  </div>
+  <div class="modal-inner">
+    <div class="image-wrapper">
+      <img [src]="getImageUrl()" />
+    </div>
+    <div class="details-wrapper">
+      <div class="title subtitle-2 text-color-black">
+        {{ getTitle() }}
+      </div>
+      <div class="detail text-color-grey mat-caption-normal">
+        {{ getDetail() }}
+      </div>
+    </div>
+  </div>
+</div>

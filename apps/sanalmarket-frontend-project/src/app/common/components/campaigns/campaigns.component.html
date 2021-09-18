@@ -1,0 +1,173 @@
+<div class="campaigns-page-wrapper">
+  <div class="location-indicator-wrapper">
+    <span class="text-color-grey mat-caption-normal" (click)="onClickHomepage()">Anasayfa</span>
+    <fa-icon class="text-color-grey" [icon]="faChevronRight"></fa-icon>
+    <span class="text-color-black mat-caption-normal">Kampanyalar</span>
+  </div>
+  <div class="personal-promotions-wrapper" *ngIf="isPersonalPromotionsVisible()">
+    <div class="tabs text-color-grey">
+      <div
+        class="tab"
+        [class.selected]="isTamBanaGoreTabSelected()"
+        *ngIf="isTamBanaGoreTabVisible()"
+        (click)="setSelectedTab(tamBanaGore)"
+      >
+        <fa-icon [icon]="clipboardList"></fa-icon>
+        <span class="mat-caption">Tam Bana Göre</span>
+      </div>
+      <div
+        class="tab"
+        [class.selected]="isMoneyTabSelected()"
+        *ngIf="isMoneyTabVisible()"
+        (click)="setSelectedTab(money)"
+      >
+        <div class="icon money"></div>
+        <span class="mat-caption">Money</span>
+      </div>
+      <div
+        class="tab"
+        [class.selected]="isSaglikliYasamTabSelected()"
+        *ngIf="isSaglikliYasamTabVisible()"
+        (click)="setSelectedTab(saglikliYasam)"
+      >
+        <fa-icon [icon]="heartBeat"></fa-icon>
+        <span class="mat-caption">Sağlıklı Yaşam</span>
+      </div>
+    </div>
+    <!-- TAM BANA GORE KAMPANYALARI -->
+    <div class="campaigns-wrapper" @onEnterAnimation *ngIf="isTamBanaGoreTabSelected()">
+      <fe-carousel [carouselItems]="getTamBanaGoreCampaigns()" type="any" [padding]="getPaddingForProgressBar()">
+        <ng-template #carouselCard let-campaign>
+          <div class="campaign-wrapper">
+            <img [src]="campaign.imageLink2" (click)="onClickCampaignDetail(campaign)" />
+            <div class="badge" *ngIf="isDiscountTypeVisible(campaign)">
+              <span class="overline text-color-white">
+                {{ campaign.discountType }}
+              </span>
+            </div>
+            <sm-campaign-progress-bar
+              *ngIf="isProgressBarVisible(campaign)"
+              [progress]="campaign.progress"
+              (setProgressBarAvailable)="setProgressBarAvailable()"
+            ></sm-campaign-progress-bar>
+            <div class="info">
+              <div class="headline subtitle-2" (click)="onClickCampaignDetail(campaign)">
+                {{ campaign.offerName }}
+              </div>
+              <div *ngIf="isProgressBarVisible(campaign)" class="target-date mat-caption-normal text-color-error">
+                {{ campaign.progress?.targetDate }}
+              </div>
+              <ng-template [ngIf]="isCampaignAddedToMoneyCard(campaign)">
+                <div class="campaign-action-button campaign-added mat-caption">
+                  <fa-icon [icon]="faCheckCircle"></fa-icon>
+                  {{ getCampaignAddedLabel(campaign) }}
+                </div>
+              </ng-template>
+              <ng-template [ngIf]="isCampaignKKY(campaign) && !isCampaignAddedToMoneyCard(campaign)">
+                <div class="campaign-action-button create-campaign mat-caption" (click)="onClickCreateCampaign()">
+                  <fa-icon [icon]="plus"></fa-icon>
+                  Kampanyanı Oluştur
+                </div>
+              </ng-template>
+              <ng-template [ngIf]="!isCampaignKKY(campaign) && !isCampaignAddedToMoneyCard(campaign)">
+                <div
+                  class="campaign-action-button create-campaign mat-caption"
+                  (click)="onClickAddCampaignToMoneyCard(campaign)"
+                >
+                  <fa-icon [icon]="plus"></fa-icon>
+                  Money Kartıma Ekle
+                </div>
+              </ng-template>
+              <div (click)="onClickCampaignDetail(campaign)" class="campaign-action-button campaign-detail mat-caption">
+                Kampanya Detayı
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </fe-carousel>
+    </div>
+    <!-- MONEY KAMPANYALARI -->
+    <div class="campaigns-wrapper" @onEnterAnimation *ngIf="isMoneyTabSelected()">
+      <fe-carousel [carouselItems]="getMoneyCampaigns()" type="any">
+        <ng-template #carouselCard let-campaign>
+          <div class="campaign-wrapper">
+            <img [src]="campaign.imageLink2" (click)="onClickCampaignDetail(campaign)" />
+            <div class="badge" *ngIf="isDiscountTypeVisible(campaign)">
+              <span class="mat-caption-normal text-color-white">
+                {{ campaign.discountType }}
+              </span>
+            </div>
+            <div class="info">
+              <div class="headline subtitle-2" (click)="onClickCampaignDetail(campaign)">
+                {{ campaign.offerName }}
+              </div>
+              <ng-template [ngIf]="isCampaignAddedToMoneyCard(campaign)">
+                <div class="campaign-action-button campaign-added mat-caption">
+                  <fa-icon [icon]="faCheckCircle"></fa-icon>
+                  {{ getCampaignAddedLabel(campaign) }}
+                </div>
+              </ng-template>
+              <ng-template [ngIf]="!isCampaignAddedToMoneyCard(campaign)">
+                <div
+                  class="campaign-action-button create-campaign mat-caption"
+                  (click)="onClickAddCampaignToMoneyCard(campaign)"
+                >
+                  <fa-icon [icon]="plus"></fa-icon>
+                  Money Kartıma Ekle
+                </div>
+              </ng-template>
+              <div (click)="onClickCampaignDetail(campaign)" class="campaign-action-button campaign-detail mat-caption">
+                Kampanya Detayı
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </fe-carousel>
+    </div>
+    <!-- SAĞLIKLI YAŞAM KAMPANYALARI -->
+    <div class="campaigns-wrapper" @onEnterAnimation *ngIf="isSaglikliYasamTabSelected()">
+      <fe-carousel [carouselItems]="getSaglikliYasamCampaigns()" type="any">
+        <ng-template #carouselCard let-campaign>
+          <div class="campaign-wrapper">
+            <img [src]="campaign.imageLink2" (click)="onClickCampaignDetail(campaign)" />
+            <div class="info">
+              <div class="headline subtitle-2" (click)="onClickCampaignDetail(campaign)">
+                {{ campaign.offerName }}
+              </div>
+              <ng-template [ngIf]="isCampaignAddedToMoneyCard(campaign)">
+                <div class="campaign-action-button campaign-added mat-caption">
+                  <fa-icon [icon]="faCheckCircle"></fa-icon>
+                  Money Kartınıza Eklendi
+                </div>
+              </ng-template>
+              <ng-template [ngIf]="!isCampaignAddedToMoneyCard(campaign)">
+                <div
+                  class="campaign-action-button create-campaign mat-caption"
+                  (click)="onClickAddCampaignToMoneyCard(campaign)"
+                >
+                  <fa-icon [icon]="plus"></fa-icon>
+                  Money Kartıma Ekle
+                </div>
+              </ng-template>
+              <div (click)="onClickCampaignDetail(campaign)" class="campaign-action-button campaign-detail mat-caption">
+                Kampanya Detayı
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </fe-carousel>
+    </div>
+  </div>
+  <!-- STATIC KAMPANYALAR -->
+  <div class="mat-headline text-color-black">Kampanyalar</div>
+  <div class="static-campaigns-wrapper">
+    <div
+      class="static-campaign-wrapper"
+      (click)="onClickCampaignDetail(staticCampaign)"
+      *ngFor="let staticCampaign of getStaticCampaigns()"
+    >
+      <img [src]="getStaticCampaignImageUrl(staticCampaign)" />
+      <div class="title subtitle-2 text-color-black">{{ staticCampaign.name }}</div>
+    </div>
+  </div>
+</div>

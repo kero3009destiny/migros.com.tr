@@ -1,0 +1,125 @@
+<mat-tab-group dynamicHeight="false" disableRipple="true" animationDuration="0ms" mat-align-tabs="start">
+  <mat-tab
+    *ngIf="hasImageProperty()"
+    label="Ürün Detayı"
+  >
+    <img class="product-detail-tabs__img"  [src]="getImageProperty()" />
+
+  </mat-tab>
+  <mat-tab
+    *ngIf="hasVideoProperty()"
+    label="Video"
+  >
+    <div>
+      <iframe [src]="getSafeVideoUrl()" allowfullscreen></iframe>
+    </div>
+  </mat-tab>
+  <mat-tab *ngIf="productDescription && migros" label="Ürün Açıklaması">
+    <fe-read-more *ngIf="migros" class="mobile-only">
+    <div class="product-description" [innerHtml]="productDescription | feSanitizeHtml"></div>
+      </fe-read-more >
+    <div class="product-description desktop-only" [innerHtml]="productDescription | feSanitizeHtml"></div>
+  </mat-tab>
+  <mat-tab *ngIf="productProperties?.NUTRITIONAL" label="Besin Değeri">
+    <!--Content with Read More-->
+    <fe-read-more *ngIf="!migros">
+      <ul>
+        <li *ngFor="let nutrition of productProperties.NUTRITIONAL | keyvalue">
+          {{ nutrition.key }}: {{ nutrition.value }}
+        </li>
+      </ul>
+    </fe-read-more>
+
+    <!--Content without Read More-->
+    <div class="nutrition" *ngIf="migros">
+      <fe-read-more class="mobile-only">
+      <table mat-table [dataSource]="productProperties.NUTRITIONAL | keyvalue">
+        <ng-container matColumnDef="key">
+          <th mat-header-cell *matHeaderCellDef>
+            <span class="text-color-black subtitle-1">Besin Değeri</span>
+          </th>
+          <td mat-cell *matCellDef="let element" class="mat-body-1">{{ element.key }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="value">
+          <th mat-header-cell *matHeaderCellDef><span class="text-color-black subtitle-1">100 g / ml</span></th>
+          <td mat-cell *matCellDef="let element" class="mat-body-1">{{ element.value }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columns"></tr>
+        <tr mat-row *matRowDef="let row; columns: columns"></tr>
+      </table>
+      <div class="explanation">
+        <p class="subtitle-1 text-color-black">Ürün Bilgilerini Kullanma Hakkında</p>
+        <p class="description text-color-black">
+          İnternet sitemizde ve online satış kanallarımızda yer alan ürün etiket bilgileri, ürünün tedarikçisi
+          tarafından Migros Ticaret A.Ş.’ye iletilen en güncel bilgilerdir. Ürün etiket bilgileri ile internet sitemiz
+          ve online satış kanallarımızda bulunan bilgiler arasında herhangi bir farklılık bulunması halinde sorumluluk
+          tamamen tedarikçi firmaya aittir.
+        </p>
+      </div>
+      </fe-read-more>
+      <div class="desktop-only">
+        <table mat-table [dataSource]="productProperties.NUTRITIONAL | keyvalue">
+          <ng-container matColumnDef="key">
+            <th mat-header-cell *matHeaderCellDef>
+              <span class="text-color-black subtitle-1">Besin Değeri</span>
+            </th>
+            <td mat-cell *matCellDef="let element" class="mat-body-1">{{ element.key }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="value">
+            <th mat-header-cell *matHeaderCellDef><span class="text-color-black subtitle-1">100 g / ml</span></th>
+            <td mat-cell *matCellDef="let element" class="mat-body-1">{{ element.value }}</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="columns"></tr>
+          <tr mat-row *matRowDef="let row; columns: columns"></tr>
+        </table>
+        <div class="explanation">
+          <p class="subtitle-1 text-color-black">Ürün Bilgilerini Kullanma Hakkında</p>
+          <p class="description text-color-black">
+            İnternet sitemizde ve online satış kanallarımızda yer alan ürün etiket bilgileri, ürünün tedarikçisi
+            tarafından Migros Ticaret A.Ş.’ye iletilen en güncel bilgilerdir. Ürün etiket bilgileri ile internet sitemiz
+            ve online satış kanallarımızda bulunan bilgiler arasında herhangi bir farklılık bulunması halinde sorumluluk
+            tamamen tedarikçi firmaya aittir.
+          </p>
+        </div>
+      </div>
+    </div>
+  </mat-tab>
+  <div *ngIf="!hasImageProperty() && !hasVideoProperty() ">
+  <mat-tab
+    *ngFor="let tab of productProperties?.MISC | keyvalue"
+    [label]=" tab.key"
+  >
+    <!--Other Properties-->
+    <ng-template [ngIf]="tab.key !== 'productDetailsImage' ">
+      <!--Content with Read More-->
+      <fe-read-more *ngIf="!migros">
+        <div [innerHtml]="tab.value | feSanitizeHtml"></div>
+      </fe-read-more>
+
+      <!--Content without Read More-->
+      <div class="desktop-only" *ngIf="migros" [innerHtml]="tab.value | feSanitizeHtml"></div>
+      <fe-read-more *ngIf="migros" class="mobile-only">
+        <div [innerHtml]="tab.value | feSanitizeHtml"></div>
+      </fe-read-more>
+    </ng-template>
+  </mat-tab>
+  </div>
+  <div *ngFor="let tab of productProperties?.MISC | keyvalue">
+  <mat-tab
+    *ngIf="tab.key !== 'productDetailsImage' && tab.key!='Video' && tab.key!='Yemek Tarifi' && migros"
+    [label]="tab.key"
+  >
+    <!--Other Properties-->
+    <ng-template>
+      <div class="desktop-only"  [innerHtml]="tab.value | feSanitizeHtml"></div>
+      <fe-read-more  class="mobile-only">
+        <div [innerHtml]="tab.value | feSanitizeHtml"></div>
+      </fe-read-more>
+    </ng-template>
+  </mat-tab>
+  </div>
+</mat-tab-group>

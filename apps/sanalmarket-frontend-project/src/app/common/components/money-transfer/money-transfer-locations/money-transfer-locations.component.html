@@ -1,0 +1,37 @@
+<div class="money-transfer-locations-tab-content">
+  <h1>En Yakın Para Noktası Ara</h1>
+  <p class="nearest-description">
+    Bulunduğunuz ildeki Migros Mağaza kasalarından para transferi yapabilirsiniz. İllere göre mağaza listesini aşağıdaki
+    menüden seçim yaparak görüntüleyebilirsiniz.
+  </p>
+  <form
+    [formGroup]="moneyTransferFormGroup"
+    feAppSubmitThrottle
+    [throttleFormValid]="moneyTransferFormGroup.valid"
+    (throttleSubmit)="onMoneyTransferSubmit()"
+  >
+    <fe-dropdown
+      formControlName="city"
+      placeholder="İl"
+      [required]="true"
+      [isSearchVisible]="true"
+      [options]="cities"
+    ></fe-dropdown>
+    <fe-dropdown
+      formControlName="town"
+      placeholder="İlçe"
+      [required]="true"
+      [isSearchVisible]="true"
+      [options]="towns"
+      [class.disabled]="isTownDisabled()"
+    ></fe-dropdown>
+    <fe-dropdown
+      formControlName="amount"
+      placeholder="İşlem Tutarı"
+      [required]="true"
+      [options]="amounts"
+    ></fe-dropdown>
+    <fe-dropdown formControlName="type" placeholder="İşlem Tipi" [required]="true" [options]="types"> </fe-dropdown>
+    <fe-button [isDisabled]="isButtonDisabled()" label="Ara" type="submit"></fe-button>
+  </form>
+</div>

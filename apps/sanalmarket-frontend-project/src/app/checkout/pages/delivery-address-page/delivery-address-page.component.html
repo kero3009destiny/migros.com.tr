@@ -1,0 +1,39 @@
+<div class="delivery-address-wrapper">
+  <div class="mdc-layout-grid__inner">
+    <div class="mdc-layout-grid__cell--span-8 mdc-layout-grid__cell--span-4-phone">
+      <h1 class="text-color-black form__headline">Siparişini nereye getirelim?</h1>
+      <div class="form__container">
+        <div class="form__container__content">
+          <div class="form__delivery-zone mat-caption text-color-grey text-align-left">
+            <ng-container *ngFor="let districtNamePart of districtNameParts$ | async; let last = last">
+              <span>{{ districtNamePart }}</span>
+              <fa-icon [icon]="faChevronRight" *ngIf="!last"></fa-icon>
+            </ng-container>
+          </div>
+          <div class="mat-caption-normal text-color-info text-align-left form__caption">
+            <fa-icon [icon]="faInfoCircle"></fa-icon>
+            Teslimat bölgeni anasayfadan değiştirebilirsin.
+          </div>
+          <div>
+            <sm-delivery-address-form
+              [streetsMap]="streetsMap$ | async"
+              [serviceAreaObjectType]="serviceAreaObjectType$ | async"
+              (formValueChange)="onFormValueChange($event)"
+              (formStatusChange)="onFormStatusChange($event)"
+            >
+            </sm-delivery-address-form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mdc-layout-grid__cell--span-4 mdc-layout-grid__cell--span-8-tablet cart-summary">
+      <sm-delivery-address-cart-summary
+        *ngIf="isCartInfoFetched() | async"
+        [cartInfo]="cartInfo$ | async"
+        [continueDisabled]="_formStatus !== 'VALID'"
+        (continueTriggered)="onContinue($event)"
+      >
+      </sm-delivery-address-cart-summary>
+    </div>
+  </div>
+</div>

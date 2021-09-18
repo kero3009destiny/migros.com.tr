@@ -1,0 +1,46 @@
+<ng-container>
+  <div class="product-actions">
+    <div *ngIf="status === 'STOCK_OUT' && !reminded" class="product-stock-out--not-reminded">
+      <span>Stokta yok</span>
+      <button
+        aria-label="Haber Ver"
+        *ngIf="reminderVisibility"
+        class="button-secondary button--small"
+        (click)="remindWhenInSaleProduct()"
+      >
+        Haber Ver
+      </button>
+    </div>
+    <div *ngIf="status === 'STOCK_OUT' && reminded" class="product-stock-out--reminded">
+      <span>Talebiniz alındı</span>
+    </div>
+    <div *ngIf="status === 'DELIST'" class="product-delist">
+      <span>Satışta Değil</span>
+    </div>
+    <button
+      id="add-to-cart"
+      aria-label="Ürünü sepete ekle"
+      *ngIf="!noCartOperations && !inCart"
+      [ngClass]="buttonClass"
+      (click)="add()"
+    >
+      Sepete Ekle
+    </button>
+    <div *ngIf="!noCartOperations && inCart" class="product-actions__changed">
+      <button
+        aria-label="Sepetteki ürün sayısını azalt"
+        [attr.no-pointer-event]="noPointerEventOnDecreaseToZero && localAmount === 1"
+        class="product-decrease"
+        (click)="decrease()"
+      >
+        <i class="icon icon-minus--product-actions"></i>
+      </button>
+      <div class="product-amount">
+        <span>{{ shownLocalAmount }}</span>
+      </div>
+      <button aria-label="Sepetteki ürün sayısını arttır" class="product-increase" (click)="increase()">
+        <i class="icon icon-plus--product-actions"></i>
+      </button>
+    </div>
+  </div>
+</ng-container>

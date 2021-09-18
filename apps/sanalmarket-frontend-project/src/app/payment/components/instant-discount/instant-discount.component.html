@@ -1,0 +1,34 @@
+<div class="instant-discount" *ngIf="isCardInstantDiscountEmpty(cardNumber)">
+  <div class="card-discount" [ngClass]="{ applied: isInstantDiscountApplied() }">
+    <img
+      srcset="
+        /assets/images/instant-discount-percent-badge/instant-discount-percent-badge.png,
+        /assets/images/instant-discount-percent-badge/instant-discount-percent-badge@2x.png 2x,
+        /assets/images/instant-discount-percent-badge/instant-discount-percent-badge@3x.png 3x
+      "
+    />
+    <span *ngIf="!isInstantDiscountApplied(); else applied" class="mat-caption text-color-success info">
+      <span *ngIf="getInstantDiscounts(paymentType) | async as discounts">
+        {{ getInstantDiscountByCardNumber(cardNumber)?.amount | feFormatPrice }} TL {{ getLabel() }} İndirimi
+        <span
+          *ngIf="isInstantDiscountUsable()"
+          (click)="onApplyInstantDiscount(getInstantDiscountByCardNumber(cardNumber))"
+          class="apply-button"
+        >
+          Uygula
+        </span>
+      </span>
+    </span>
+  </div>
+
+  <div class="mat-caption-normal text-color-grey discount-info" *ngIf="isInstantDiscountUsable()">
+    {{ getLabel() }} puanı kullanmanız halinde seçtiğiniz diğer indirim ve çekler siparişten çıkarılacaktır.
+  </div>
+
+  <ng-template #applied>
+    <span class="mat-caption text-color-success info">
+      {{ getLabel() }} İndirimi Uygulandı
+      <span class="text-color-orange apply-button" (click)="onRemoveInstantDiscount()"> Kaldır </span>
+    </span>
+  </ng-template>
+</div>

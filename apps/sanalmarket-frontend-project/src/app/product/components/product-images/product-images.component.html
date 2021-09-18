@@ -1,0 +1,32 @@
+<div class="product-images">
+  <div
+    #productImages
+    class="preview-image-wrapper"
+    (mousemove)="!isMobile() && onMouseMove($event, productImages)"
+    (mouseenter)="!isMobile() && onMouseEnter()"
+    (mouseleave)="!isMobile() && onMouseLeave()"
+  >
+    <swiper
+      [allowTouchMove]="allowTouchMove"
+      [index]="getActiveIndex()"
+      [pagination]="hasMoreThanOneImage() && bullets"
+      (activeIndexChange)="onChangeActiveIndex($event.activeIndex)"
+    >
+      <ng-template *ngFor="let image of images" swiperSlide>
+        <img (click)="onClickProductImage()" [src]="image.urls.PRODUCT_HD" />
+      </ng-template>
+    </swiper>
+  </div>
+  <div class="product-images-carousel-cells" *ngIf="!bullets && hasMoreThanOneImage()">
+    <div
+      *ngFor="let image of images; let i = index"
+      (click)="onClickImageCell(i)"
+      class="product-images-carousel-cell"
+      [ngClass]="{ 'product-images-carousel-cell--active': i === getActiveIndex() }"
+    >
+      <img [src]="image.urls.PRODUCT_LIST" [alt]="'Product Image'" />
+    </div>
+  </div>
+</div>
+
+<div #preview class="zoom-preview" [@presenceAnimation] *ngIf="!isMobile() && isPreviewVisible()"></div>

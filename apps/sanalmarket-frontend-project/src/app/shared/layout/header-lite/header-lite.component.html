@@ -1,0 +1,17 @@
+<div class="header-wrapper">
+  <div class="desktop-only-v2">
+    <ng-template [ngTemplateOutlet]="additionalOrderHeader"></ng-template>
+  </div>
+  <div class="logo-container" [ngClass]="getPortfolio()" (click)="onClickLogo()"></div>
+  <div class="mobile-only-v2">
+    <ng-template [ngTemplateOutlet]="additionalOrderHeader"></ng-template>
+  </div>
+</div>
+<ng-template #additionalOrderHeader>
+  <sm-additonal-order
+    *ngIf="isAdditionalOrderHeaderVisible()"
+    [additionalOrderStatus]="getAdditionalOrderStatus()"
+    (additionalOrderStarted)="startAdditionalOrder($event)"
+    (additionalOrderExited)="exitAdditionalOrder()"
+  ></sm-additonal-order>
+</ng-template>

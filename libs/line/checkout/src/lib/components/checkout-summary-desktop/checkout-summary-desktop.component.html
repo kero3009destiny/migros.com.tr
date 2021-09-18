@@ -1,0 +1,16 @@
+<fe-line-checkout-price-summary [checkoutInfo]="checkoutInfo" [isCartPage]="isCartPage">
+  <ng-content></ng-content>
+  <mat-divider></mat-divider>
+  <ng-content select="[priceLeft]"></ng-content>
+  <button
+    id="checkout-summary-desktop-confirm-button"
+    class="confirm-button"
+    mat-flat-button
+    color="primary"
+    feAppClickThrottle
+    [disabled]="isContinueButtonDisabled"
+    (throttleClick)="onDesktopClickContinue()"
+  >
+    Devam Et
+  </button>
+</fe-line-checkout-price-summary>

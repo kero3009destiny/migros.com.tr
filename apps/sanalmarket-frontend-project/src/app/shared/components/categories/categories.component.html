@@ -1,0 +1,6 @@
+<div class="categories-wrapper">
+  <a class="category-card" routerLink="/{{ category.data.prettyName }}" *ngFor="let category of getCategories()">
+    <img [src]="getCategoryImgSrc(category)" class="image" />
+    <div class="category-name mat-caption text-color-black">{{ category.data.name }}</div>
+  </a>
+</div>

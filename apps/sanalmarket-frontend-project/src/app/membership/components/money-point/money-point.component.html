@@ -1,0 +1,27 @@
+<h2 class="text-color-black points-title">Puanlarım</h2>
+<div class="points" *ngIf="getIsMoneyUser()">
+  <div class="user user-money">
+    <div class="text-color-white subtitle-1 text">
+      <img class="money-logo" src="assets/logos/money/m-logo.svg" />
+      <div class="user-title">Money Puanı</div>
+    </div>
+    <div class="amount subtitle-1 text-color-white">{{ getUserMoneyPoints() | feFormatPrice }} TL</div>
+  </div>
+  <div class="user user-bono" *ngIf="getCustomerBond() > 0">
+    <div class="text-color-white subtitle-1 text">
+      <fa-icon class="text-color-white bono-logo" [icon]="getUserTagIcon()"></fa-icon>
+      <div class="user-title">Müşteri Bonosu</div>
+    </div>
+    <div class="amount subtitle-1 text-color-white">{{ getCustomerBond() | feFormatPrice }} TL</div>
+  </div>
+  <div class="user user-bono" *ngIf="getPersonnelBond() > 0">
+    <div class="text-color-white subtitle-1 text">
+      <fa-icon class="text-color-white bono-logo" [icon]="getUserTagIcon()"></fa-icon>
+      <div class="user-title">Personel Bonosu</div>
+    </div>
+    <div class="amount subtitle-1 text-color-white">{{ getPersonnelBond() | feFormatPrice }} TL</div>
+  </div>
+</div>
+<div class="new-money" *ngIf="!getIsMoneyUser()">
+  <sm-money-register-banner [isCrmVerified]="getIsMoneyUser()"></sm-money-register-banner>
+</div>

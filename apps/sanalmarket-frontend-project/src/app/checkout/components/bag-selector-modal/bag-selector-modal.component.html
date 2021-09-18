@@ -1,0 +1,72 @@
+<div class="container">
+  <div class="title">
+    <h3 class="text-align-center" mat-dialog-title>Poşet Seçimi</h3>
+    <fe-icon-button class="close-button" (click)="onClickCloseBtn()" [icon]="closeIcon"> </fe-icon-button>
+  </div>
+  <mat-card class="mdc-card--outlined">
+    <mat-card-header>
+      <mat-radio-button
+        class="bag-choice-radio"
+        color="primary"
+        [checked]="isPlasticBagSelected()"
+        [value]="BagType.PLASTIC_BAG"
+        (change)="onBagSelectionChanged($event)"
+      >
+        <mat-card-title-group>
+          <mat-card-title><div class="subtitle-2">Poşetli teslimat istiyorum.</div></mat-card-title>
+          <mat-card-subtitle
+            ><div class="mat-caption-normal">
+              Adedi {{ getBagTypeUnitPrice(BagType.PLASTIC_BAG) | feFormatPrice }} TL
+            </div></mat-card-subtitle
+          >
+          <img
+            mat-card-sm-image
+            alt="poset"
+            src="assets/images/bag/poset.png"
+            srcset="assets/images/bag/poset@2x.png 2x, assets/images/bag/poset@3x.png 3x"
+          />
+        </mat-card-title-group>
+      </mat-radio-button>
+    </mat-card-header>
+  </mat-card>
+  <mat-card class="mdc-card--outlined">
+    <mat-card-header>
+      <mat-radio-button
+        class="bag-choice-radio"
+        color="primary"
+        [checked]="isClothBagSelected()"
+        [value]="BagType.CLOTH_BAG"
+        (change)="onBagSelectionChanged($event)"
+      >
+        <mat-card-title-group>
+          <mat-card-title><div class="subtitle-2">Alışveriş çantalı teslimat istiyorum.</div></mat-card-title>
+          <mat-card-subtitle
+            ><div class="mat-caption-normal">
+              Adedi {{ getBagTypeUnitPrice(BagType.CLOTH_BAG) | feFormatPrice }} TL
+            </div></mat-card-subtitle
+          >
+          <img
+            mat-card-sm-image
+            alt="bag"
+            src="assets/images/bag/bag.png"
+            srcset="assets/images/bag/bag@2x.png 2x, assets/images/bag/bag@3x.png 3x"
+          />
+        </mat-card-title-group>
+      </mat-radio-button>
+    </mat-card-header>
+  </mat-card>
+  <div class="description">
+    <div class="subtitle-1 header">Siparişim kaç adet poşet ile gelir?</div>
+    <div class="mat-caption-normal text-color-grey">
+      Sepete eklenen ürenlerin hacmine göre poşet ücreti hesaplanmaktadır.
+    </div>
+  </div>
+  <div class="description">
+    <div class="subtitle-1 header">Poşet Ücreti Hakkında</div>
+    <div class="mat-caption-normal text-color-grey">
+      1 Ocak 2019 tarihi itibariyle Çevre ve Şehircilik Bakanlığı’nın mevzuatı gereği plastik poşetler ücretli olacaktır
+      ve poşetlerin 25 kuruş ücret karşılığı verilmesi zorunlu hale gelmiştir. Yasa kapsamında Migros Sanal Market’te de
+      ücretli poşet uygulamasına geçilmiştir.
+    </div>
+  </div>
+</div>

@@ -1,0 +1,51 @@
+<div *ngIf="isMediumScreen" class="dialog__header">
+  <button (click)="dismissDialog()">
+    <i class="icon icon-dismiss--grey"></i>
+  </button>
+</div>
+<h3>{{ data.verifyPostData.title }}</h3>
+<mat-dialog-content class="dialog__container otp-verify" *ngIf="currentStep.name === 'verify'">
+  <p>
+    <strong>{{ phoneNumberValue }}</strong> numaralı cep telefonunuza tek kullanımlık şifre gönderilmiştir.<br />
+    <strong>{{ tryAgainEnableInSeconds / 60 }} dakika</strong> içerisinde şifre ulaşmaz ise tekrar gönder butonu ile
+    yeni şifre talep edebilirsiniz.
+  </p>
+  <fe-timer-bar
+    #timerBar
+    [tryAgainTimeout]="tryAgainEnableInSeconds"
+    (tictoc)="onCountdownTicToc($event)"
+    (retry)="onRetry()"
+  ></fe-timer-bar>
+  <form
+    class="phone-verify-form"
+    [formGroup]="verifyFormGroup"
+    feAppSubmitThrottle
+    (throttleSubmit)="verifyPhoneNumber(code.value)"
+    [throttleFormValid]="verifyFormGroup.valid"
+  >
+    <mat-form-field color="accent" appearance="outline">
+      <mat-label>SMS kodu</mat-label>
+      <input id="otp-dialog-code__input" type="text" maxlength="6" matInput formControlName="code" />
+      <mat-error *ngIf="code.invalid && code.errors.pattern"> Lütfen geçerli bir SMS kodunu giriniz. </mat-error>
+      <mat-error *ngIf="code.invalid && code.errors.required"> Lütfen SMS kodunu giriniz. </mat-error>
+    </mat-form-field>
+    <div class="phone-verify-form__actions">
+      <button id="otp-dialog-code__confirm-button" type="submit" class="button-primary">Onayla</button>
+    </div>
+  </form>
+</mat-dialog-content>
+<button
+  id="otp-dialog__cancel-button"
+  class="dismiss-button button-link"
+  *ngIf="!isMediumScreen"
+  type="button"
+  (click)="dismissDialog()"
+>
+  İptal
+</button>
+<form #validationForm>
+  <input type="hidden" name="validationCode" />
+  <input type="hidden" name="referenceNo" value="00000000" /> <input type="hidden" name="sendSms" value="N" />
+  <input type="hidden" name="sendSmsLanguage" value="tur" />
+  <input type="hidden" name="pinType" value="otp" />
+</form>

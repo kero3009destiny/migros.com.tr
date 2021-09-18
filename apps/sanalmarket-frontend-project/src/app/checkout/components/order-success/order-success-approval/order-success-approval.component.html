@@ -1,0 +1,17 @@
+<fa-icon [icon]="faCheckCircle" class="icon" size="4x" [styles]="{ color: 'var(--systemColorSuccess600)' }"></fa-icon>
+<div class="text">
+  <p class="mat-title text-align-left text-color-black">Siparişin Alındı</p>
+  <p>
+    <span class="mat-caption-normal text-color-grey text-align-left">Sipariş Numarası: </span>
+    <span class="subtitle-2 text-color-black text-align-left">{{ orderId }}</span>
+  </p>
+  <a
+    *ngIf="isUserOrdersLinkShown()"
+    (click)="onClickMyOrders($event)"
+    [href]="getUserOrdersLink()"
+    class="subtitle-2 text-color-info"
+  >
+    Siparişlerim
+    <fa-icon [icon]="faChevronRight"></fa-icon>
+  </a>
+</div>

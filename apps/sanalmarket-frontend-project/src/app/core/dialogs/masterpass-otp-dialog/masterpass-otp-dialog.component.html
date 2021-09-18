@@ -1,0 +1,44 @@
+<div mat-dialog-title matDialogTitle class="text-align-center">
+  <fe-icon-button mat-dialog-close [icon]="getTimesIcon()" class="float-right"></fe-icon-button>
+  <span class="mat-subheader">{{ data.verifyPostData.title }}</span>
+</div>
+
+<mat-dialog-content class="dialog__container otp-verify">
+  <p class="text-color-black">
+    <strong>{{ phoneNumberValue }}</strong> numaralı cep telefonunuza tek kullanımlık şifre gönderilmiştir.
+  </p>
+  <form
+    class="phone-verify-form"
+    [formGroup]="verifyFormGroup"
+    feAppSubmitThrottle
+    (throttleSubmit)="verifyPhoneNumber(code.value)"
+    [throttleFormValid]="verifyFormGroup.valid"
+  >
+    <mat-form-field color="accent" appearance="outline">
+      <mat-label class="subtitle-2">SMS Doğrulama Kodu</mat-label>
+
+      <input id="otp-dialog-code__input" type="text" maxlength="6" matInput formControlName="code" />
+      <button mat-button type="button" color="accent" matSuffix *ngIf="code.value" (click)="clearInputField('code')">
+        <fa-icon [icon]="getClearIcon()"></fa-icon>
+      </button>
+      <mat-error *ngIf="code.invalid && code.errors.pattern"> Lütfen geçerli bir SMS kodunu giriniz. </mat-error>
+      <mat-error *ngIf="code.invalid && code.errors.required"> Lütfen SMS kodunu giriniz. </mat-error>
+    </mat-form-field>
+
+    <sm-timer
+      #timerBar
+      [tryAgainTimeout]="tryAgainEnableInSeconds"
+      (tictoc)="onCountdownTicToc($event)"
+      (retry)="onRetry()"
+    ></sm-timer>
+
+    <fe-button [isDisabled]="!code.valid" type="submit" label="Onayla"></fe-button>
+  </form>
+</mat-dialog-content>
+
+<form #validationForm>
+  <input type="hidden" name="validationCode" />
+  <input type="hidden" name="referenceNo" value="00000000" /> <input type="hidden" name="sendSms" value="N" />
+  <input type="hidden" name="sendSmsLanguage" value="tur" />
+  <input type="hidden" name="pinType" value="otp" />
+</form>

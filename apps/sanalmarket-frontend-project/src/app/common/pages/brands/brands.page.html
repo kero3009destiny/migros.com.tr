@@ -1,0 +1,51 @@
+<div class="brands-page">
+  <div class="brands-page__breadcrumb">
+    <fe-breadcrumb [breadcrumbs]="breadcrumbs"></fe-breadcrumb>
+  </div>
+  <div class="brands-page__header">
+    <div class="brands-page__header-container">
+      <nav mat-tab-nav-bar>
+        <a
+          mat-tab-link
+          routerLinkActive
+          *ngFor="let key of computedBrandKeys"
+          (click)="activeLink = key; scrollTo(key)"
+          [active]="activeLink == key"
+          [routerLink]="['.']"
+        >
+          {{ key }}
+        </a>
+      </nav>
+    </div>
+  </div>
+  <div class="brands-page__content">
+    <div class="featured-brands" *ngIf="featuredBrands?.length > 0" id="brand-key-{{computedBrandKeys[0]}}">
+      <h2 class="featured-brands-title">Öne Çıkan Markalar</h2>
+      <div class="featured-brands-list row">
+        <ng-container *ngFor="let brand of featuredBrands">
+          <mat-card class="featured-brands-list-item" (click)="onBrandSelected(brand)">
+            <img class="card-image" [src]="brand.imageUrls[0].urls.BRAND" [alt]="brand.name + ' Logo'" />
+          </mat-card>
+        </ng-container>
+      </div>
+    </div>
+    <div class="brands-list">
+      <ng-container *ngFor="let key of sortedBrandKeys">
+        <mat-card id="brand-key-{{ key }}">
+          <mat-card-header>
+            <div class="letter">{{key}}</div>
+          </mat-card-header>
+          <mat-card-content>
+            <mat-list>
+              <ng-container *ngFor="let listItem of brands[key]">
+                <mat-list-item (click)="onBrandSelected(listItem)">
+                  <span mat-line [title]="listItem.name">{{listItem.name}}</span>
+                </mat-list-item>
+              </ng-container>
+            </mat-list>
+          </mat-card-content>
+        </mat-card>
+      </ng-container>
+    </div>
+  </div>
+</div>

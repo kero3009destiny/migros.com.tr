@@ -1,0 +1,36 @@
+<div class="additional-row mat-caption-normal" *ngIf="isVisible()">
+  <div class="info-row" *ngIf="!!checkout; else noCheckout">
+    <div class="icon-cart"></div>
+    <span class="bold">{{ checkout.derivedOrderId }}</span> No’lu siparişine ek olarak
+    <span class="bold">{{ checkout.deliveryDate | date: 'dd.MM.y' }}</span>
+    <span class="bold">{{ checkout.timeSlotDetails }}</span>
+    aralığında teslim edilecektir.
+  </div>
+</div>
+
+<ng-template #noCheckout>
+  <ng-container *ngIf="additionalOrderStatus.isActive">
+    <div class="info-row">
+      <div class="icon-cart"></div>
+      <span class="bold">{{ additionalOrderStatus.orderId }}</span> No’lu siparişine ek yapıyorsun.
+    </div>
+    <button class="mat-caption" mat-flat-button (click)="onClickCancelAdditionalOrderButton()">Vazgeç</button>
+  </ng-container>
+  <ng-container *ngIf="isAddableOrderExist()">
+    <div class="info-row">
+      <div class="icon-cart"></div>
+      <span class="bold">{{ additionalOrderStatus.lastAddableOrderId }}</span> No’lu siparişine
+      <span class="bold">{{
+        additionalOrderStatus.lastAddableOrderDeadlineForAddition | date: 'dd.MM.y HH:mm':'GMT+3'
+      }}</span>
+      tarihine kadar ek yapabilirsin.
+    </div>
+    <button
+      class="mat-caption"
+      mat-flat-button
+      (click)="onClickStartAdditionalOrderButton(additionalOrderStatus.lastAddableOrderId)"
+    >
+      Ek Sipariş Oluştur
+    </button>
+  </ng-container>
+</ng-template>

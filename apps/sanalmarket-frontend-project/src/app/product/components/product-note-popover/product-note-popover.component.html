@@ -1,0 +1,16 @@
+<div class="popover-wrapper">
+  <div class="note text-color-grey mat-caption-normal popover-trigger" (click)="togglePopover()">
+    <ng-content select="[popover-trigger]"></ng-content>
+  </div>
+  <div class="popover-content" *ngIf="isPopoverVisible()">
+    <form [formGroup]="productNoteFormGroup">
+      <textarea matInput rows="2" formControlName="productNote" placeholder="Ürün Notu Ekle"></textarea>
+    </form>
+    <div class="popover-actions">
+      <button color="accent" class="mat-caption-normal text-color-grey" mat-button (click)="togglePopover()">
+        İptal
+      </button>
+      <button color="primary" class="mat-caption-normal" (click)="onSubmit()" mat-button>Kaydet</button>
+    </div>
+  </div>
+</div>

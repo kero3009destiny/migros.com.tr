@@ -1,0 +1,7 @@
+<div class="discount {{ getClassName(badge) }}" *ngFor="let badge of badges">
+  <span>{{ getBadgeLabel(badge) }}</span>
+</div>
+
+<div class="discount tamim" *ngIf="isDiscountsExist()">
+  <span>{{ getDiscountLabel() }}</span>
+</div>

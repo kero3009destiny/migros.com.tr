@@ -1,0 +1,17 @@
+<nav class="container mobile-only-v2" *ngIf="isAvailable()">
+  <div
+    class="nav-item"
+    *ngFor="let navItem of NAV_ITEMS; index as i"
+    [id]="'mobile-navbar-item-' + i"
+    [routerLinkActiveOptions]="{ exact: true }"
+    routerLinkActive="active"
+    (click)="onClickNavItem(navItem)"
+    #linkActive="routerLinkActive"
+  >
+    <img [src]="linkActive.isActive ? navItem.activeIcon : navItem.passiveIcon" [alt]="navItem.name + 'Icon'" />
+    <div *ngIf="!isCartEmpty(navItem.name)" class="mat-caption-normal quantity">{{ getCartLength() }}</div>
+    <div class="text mat-caption-normal text-align-center" [class.text-color-orange]="!isCartEmpty(navItem.name)">
+      {{ isCartEmpty(navItem.name) ? navItem.name : (getCartRevenue() | feFormatPrice) + ' TL' }}
+    </div>
+  </div>
+</nav>

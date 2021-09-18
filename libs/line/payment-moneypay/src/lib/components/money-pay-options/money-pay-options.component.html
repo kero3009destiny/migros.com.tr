@@ -1,0 +1,73 @@
+<div class="options">
+  <mat-radio-group (change)="onSelectedRadioChange($event.value)">
+    <div class="list-item" *ngIf="isWalletAvailable()">
+      <mat-radio-button
+        [disabled]="isWalletDisabled()"
+        id="money-pay-options-wallet"
+        color="primary"
+        [value]="getWalletOptionName()"
+        [ngClass]="{
+          disabled: isWalletDisabled()
+        }"
+      >
+        <div class="option-container">
+          <span class="mat-caption text-color-black option-title"> Cüzdan Bakiyesi ile Öde </span>
+          <div class="option-amount">
+            <fa-icon class="amount-icon" [icon]="getWalletIcon()"></fa-icon>
+            <div class="wallet-info">
+              <div class="text-color-black card-info mat-caption">Cüzdan Bakiyesi</div>
+              <div class="text-color-orange card-number mat-caption-normal">
+                {{ getWalletBalance() | feFormatPrice }} TL
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-radio-button>
+      <div class="no-limit" *ngIf="isWalletDisabledInfoShown()">
+        <div class="left">
+          <div class="mat-caption-normal text-color-error">*{{ getWalletDisabledInfo() }}</div>
+          <div class="mat-caption-normal text-color-black" *ngIf="isWalletBalanceInsufficient()">
+            Cüzdanınıza para ekleyerek ödemeye devam edebilirsiniz.
+          </div>
+        </div>
+        <fe-button
+          *ngIf="isWalletBalanceInsufficient()"
+          (click)="onAddMoneyButtonClicked()"
+          class="button"
+          label="Para Ekle"
+        ></fe-button>
+      </div>
+    </div>
+    <ng-container *ngFor="let alternativeWalletOption of getAlternativeWalletOptions()">
+      <div class="list-item" *ngIf="!isAlternativePaymentOptionClosed(alternativeWalletOption)">
+        <mat-radio-button
+          [disabled]="isAlternativePaymentOptionDisabled(alternativeWalletOption)"
+          id="money-pay-options-{{ alternativeWalletOption.paymentType }}"
+          color="primary"
+          [value]="getPaymentOptionName(alternativeWalletOption)"
+          [ngClass]="{
+            disabled: isAlternativePaymentOptionDisabled(alternativeWalletOption)
+          }"
+        >
+          <div class="option-container">
+            <span class="mat-caption text-color-black option-title">Colendi Hazır Limit ile 30 Gün Sonra Öde</span>
+            <div class="option-amount">
+              <fa-icon class="amount-icon" [icon]="getWalletIcon()"></fa-icon>
+              <div class="wallet-info">
+                <div class="text-color-black card-info mat-caption">Hazır Limit Bakiyesi</div>
+                <div class="text-color-orange card-number mat-caption-normal">
+                  {{ alternativeWalletOption.balance | feFormatPrice }} TL
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-radio-button>
+        <div class="no-limit" *ngIf="isAlternativePaymentOptionDisabled(alternativeWalletOption)">
+          <div class="mat-caption-normal text-color-error">
+            *{{ getAlternativePaymentOptionDisabledInfo(alternativeWalletOption) }}
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </mat-radio-group>
+</div>

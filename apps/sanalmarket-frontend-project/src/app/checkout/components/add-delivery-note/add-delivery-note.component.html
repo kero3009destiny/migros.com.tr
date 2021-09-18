@@ -1,0 +1,12 @@
+<div class="delivery-note-wrapper" *ngIf="deliveryNoteAvailable() | async">
+  <div class="icon-text">
+    <fa-icon [icon]="editIcon"></fa-icon>
+    <span class="mat-caption">Sipariş Notu Ekle</span>
+  </div>
+  <textarea
+    (change)="onNoteChange(textarea)"
+    #textarea
+    placeholder="Siparişinle ilgili notunu buradan bize iletebilirsin."
+    class="delivery-note-textarea"
+  ></textarea>
+</div>

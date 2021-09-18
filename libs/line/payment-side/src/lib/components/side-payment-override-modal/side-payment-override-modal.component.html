@@ -1,0 +1,19 @@
+<article>
+  <aside class="text-align-center">
+    <fa-icon class="text-color-migroskop" [icon]="infoIcon"></fa-icon>
+  </aside>
+  <header class="text-align-center">
+    <h3 class="mat-h3">Aynı anda birden fazla puan/çek kullanamazsınız.</h3>
+  </header>
+  <p class="mat-caption-normal text-color-grey text-align-center mobile-only">
+    Yeni puanı/çeki kullanmaya devam etmek istiyor musunuz?
+  </p>
+  <p class="mat-body text-color-grey text-align-center desktop-only">
+    Yeni puanı/çeki kullanmaya devam etmek istiyor musunuz?
+  </p>
+  <footer>
+    <fe-button [outlined]="true" (click)="onClickDenied()" label="Hayır"></fe-button>
+    <span></span>
+    <fe-button (click)="onClickAccepted()" label="Evet, Kullan"></fe-button>
+  </footer>
+</article>

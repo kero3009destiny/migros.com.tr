@@ -1,0 +1,62 @@
+<div *ngIf="isPageDataFetched" class="page-wrapper">
+  <div class="container mdc-layout-grid__inner">
+    <sm-order-success-approval
+      class="success-approval mdc-layout-grid__cell--span-4-phone mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-6-desktop"
+      [orderId]="getOrderId()"
+      [showUserOrdersLink]="isUserOrdersLinkShownInSuccessApproval()"
+    >
+    </sm-order-success-approval>
+    <sm-complete-membership
+      *ngIf="isCompleteMembershipCardShown()"
+      class="complete-membership-card mdc-layout-grid__cell--span-4-phone mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-desktop"
+      (completeMembership)="onCompleteMembership($event)"
+      [membershipCompleted]="isMembershipCompleted()"
+    >
+    </sm-complete-membership>
+    <mat-card
+      class="pickpoint-location-card mdc-layout-grid__cell--span-4-phone mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-desktop"
+      *ngIf="isPickPointLocationCardShown()"
+    >
+      <mat-card-content>
+        <div class="pickpoint-location-card__row">
+          <p class="subtitle-1 text-color-black text-align-left">Siparişini Teslim Alacağın Mağaza</p>
+        </div>
+        <div class="pickpoint-location-card__row">
+          <img src="/assets/logos/migros/migros.svg" alt="migros-logo" class="logo" />
+          <p class="mat-caption text-color-black text-align-left">
+            {{ getEmbeddedDeliveryAddressName() }}
+          </p>
+        </div>
+        <div class="pickpoint-location-card__row">
+          <fa-icon [icon]="faMapMarkerAlt"></fa-icon>
+          <p class="mat-caption-normal text-color-grey text-align-left">
+            {{ getDeliveryAddressDetails() }}
+          </p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    <sm-order-summary
+      class="order-summary mdc-layout-grid__cell--span-4-phone mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-desktop"
+      [orderSummaryFields]="orderSummaryFields"
+    >
+    </sm-order-summary>
+    <div
+      *ngIf="!isAdditionalOrderButtonShown()"
+      class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3-desktop"
+    ></div>
+    <fe-button
+      label="Anasayfaya Dön"
+      class="home-page-button mdc-layout-grid__cell--align-middle mdc-layout-grid__cell--span-4-phone mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-3-desktop"
+      (click)="onClickReturnHomePage()"
+    ></fe-button>
+    <fe-button
+      label="Siparişe Ek Yap"
+      outlined="true"
+      *ngIf="isAdditionalOrderButtonShown()"
+      class="additional-order-button mdc-layout-grid__cell--align-middle mdc-layout-grid__cell--span-4-phone mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-3-desktop"
+      (click)="onClickAdditionalOrder()"
+    >
+      Siparişe Ek Yap
+    </fe-button>
+  </div>
+</div>

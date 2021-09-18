@@ -1,0 +1,65 @@
+<ng-container *ngIf="!isAllSidePaymentsClosed()">
+  <section *ngIf="getBalancesMap$() | async as balancesMap">
+    <header>
+      <h2 class="title desktop-only">Puanlarım / Çeklerim</h2>
+      <h2 class="subtitle-1 title mobile-only">Puanlarım / Çeklerim</h2>
+      <div class="mat-caption-normal">Kazanmış olduğunuz puanları veya hediye çeklerini kullanabilirsiniz.</div>
+    </header>
+    <mat-accordion class="accordion">
+      <sm-side-payment-panel-money
+        *ngIf="!isPaymentClosed('MONEY_POINT')"
+        [balance]="balancesMap.MONEY"
+        [usedSidePayment]="usedSidePayment"
+        [step]="step"
+        (opened)="setStep($event)"
+        (closed)="onClosed()"
+        (used)="onUsed($event)"
+        (cancelled)="onCancelled()"
+      >
+      </sm-side-payment-panel-money>
+      <sm-side-payment-panel-personal-bond
+        *ngIf="!isPaymentClosed('PERSONNEL_BOND')"
+        [balance]="balancesMap.PERSONELBONO"
+        [usedSidePayment]="usedSidePayment"
+        [step]="step"
+        (opened)="setStep($event)"
+        (closed)="setStep(null)"
+        (used)="onUsed($event)"
+        (cancelled)="onCancelled()"
+      >
+      </sm-side-payment-panel-personal-bond>
+      <sm-side-payment-panel-customer-bond
+        *ngIf="!isPaymentClosed('CUSTOMER_BOND')"
+        [balance]="balancesMap.MPRO"
+        [usedSidePayment]="usedSidePayment"
+        [step]="step"
+        (opened)="setStep($event)"
+        (closed)="setStep(null)"
+        (used)="onUsed($event)"
+        (cancelled)="onCancelled()"
+      >
+      </sm-side-payment-panel-customer-bond>
+      <sm-side-payment-panel-voucher
+        *ngIf="!isPaymentClosed('VOUCHER')"
+        [usedSidePayment]="usedSidePayment"
+        [step]="step"
+        (opened)="setStep($event)"
+        (closed)="setStep(null)"
+        (used)="onUsed($event)"
+        (cancelled)="onCancelled()"
+      >
+      </sm-side-payment-panel-voucher>
+      <sm-side-payment-panel-coupon
+        *ngIf="!isPaymentClosed('COUPON') && getCoupons$() | async as coupons"
+        [coupons]="coupons"
+        [usedSidePayment]="usedSidePayment"
+        [step]="step"
+        (opened)="setStep($event)"
+        (closed)="setStep(null)"
+        (used)="onUsed($event)"
+        (cancelled)="onCancelled()"
+      >
+      </sm-side-payment-panel-coupon>
+    </mat-accordion>
+  </section>
+</ng-container>

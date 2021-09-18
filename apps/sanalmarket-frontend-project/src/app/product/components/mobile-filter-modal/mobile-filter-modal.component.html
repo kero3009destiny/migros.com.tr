@@ -1,0 +1,58 @@
+<div matDialogTitle>
+  <fe-icon-button
+    (click)="onBackButtonSelected()"
+    *ngIf="isGroupSelected()"
+    [icon]="getBackIcon()"
+    class="back-button z-index"
+  ></fe-icon-button>
+  <fe-icon-button mat-dialog-close [icon]="getTimesIcon()" class="float-right z-index"></fe-icon-button>
+  <h3 class="text-align-center header">{{ getTitle() }}</h3>
+</div>
+
+<div matDialogContent class="content">
+  <mat-selection-list
+    color="primary"
+    *ngIf="isGroupSelected(); else noGroupSelected"
+    [multiple]="true"
+    (selectionChange)="onInfoChanged($event)"
+  >
+    <mat-list-option
+      class="mat-body-2 info-option"
+      [selected]="isCheckboxSelected(getSelectedGroup().type, info)"
+      *ngFor="let info of getSelectedGroup().aggregationInfos"
+      [value]="info"
+    >
+      {{ info.label }} <span class="text-color-grey">({{ info.count }})</span>
+    </mat-list-option>
+  </mat-selection-list>
+  <ng-template #noGroupSelected>
+    <mat-selection-list [multiple]="false" (selectionChange)="onGroupChanged($event)">
+      <mat-list-option class="subtitle-1 group-option" *ngFor="let group of getAggregationGroups()" [value]="group">
+        <fa-icon mat-list-icon [icon]="getChevronIcon()"></fa-icon>
+        <div mat-line>
+          {{ group.label }}
+          <span class="mat-caption-normal text-color-orange">{{ getSelectedOptionLabelsByGroup(group) }}</span>
+        </div>
+      </mat-list-option>
+    </mat-selection-list>
+  </ng-template>
+</div>
+
+<div class="actions">
+  <mat-divider></mat-divider>
+  <div class="button-container">
+    <button
+      *ngIf="isGroupSelected()"
+      [disabled]="isConfirmButtonDisabled()"
+      (click)="onClear()"
+      class="button"
+      mat-flat-button
+      color="accent"
+    >
+      Filtreyi Temizle
+    </button>
+    <button [disabled]="isConfirmButtonDisabled()" (click)="onConfirm()" class="button" mat-flat-button color="primary">
+      Ürünleri Görüntüle ({{ getProductCount() }})
+    </button>
+  </div>
+</div>

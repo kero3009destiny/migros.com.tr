@@ -1,0 +1,73 @@
+<div class="cart-page-item" [id]="cartItem.item.productId">
+  <fe-product-image
+    (gtmClick)="sendGtmClickEvent(cartItem)"
+    [image]="cartItem.product.images[0]"
+    [prettyName]="cartItem.product.prettyName"
+    [productName]="cartItem.product.name"
+    [referrerEventId]="cartItem.referrerEventId"
+    [imageType]="'PRODUCT_LIST'"
+  ></fe-product-image>
+  <div class="product-name">
+    <fe-product-name
+      customClass="subtitle-2 text-color-black"
+      (gtmClick)="sendGtmClickEvent(cartItem)"
+      [productName]="cartItem.product.name"
+      [prettyName]="cartItem.product.prettyName"
+      [productId]="cartItem.item.productId"
+    ></fe-product-name>
+    <fe-product-discount-label
+      [badges]="cartItem.product.badges"
+      [discounts]="cartItem.product.discounts"
+    ></fe-product-discount-label>
+    <div class="product-price mobile-only">
+      <ng-container *ngTemplateOutlet="productActions"></ng-container>
+      <ng-container *ngTemplateOutlet="productPrice"></ng-container>
+    </div>
+    <div class="actions">
+      <sm-product-note-popover
+        [productId]="cartItem.item.productId"
+        [productName]="cartItem.product.name"
+        [initialNote]="getNote(cartItem)"
+        (click)="$event.stopPropagation()"
+        (productNoteUpdated)="onUpdateProductNote()"
+      >
+        <ng-container popover-trigger>
+          <span [ngClass]="{ edit: !isProductNoteEmpty(cartItem) }"
+            ><fa-icon [icon]="getNoteIcon()"></fa-icon>
+            {{ !isProductNoteEmpty(cartItem) ? 'Notu Düzenle' : 'Ürün Notu Ekle' }}</span
+          >
+        </ng-container>
+      </sm-product-note-popover>
+
+      <div class="remove text-color-grey mat-caption-normal" (click)="$event.stopPropagation(); deleteItem()">
+        <fa-icon [icon]="getTrashIcon()"></fa-icon> Sil
+      </div>
+    </div>
+  </div>
+  <div class="product-price desktop-only">
+    <ng-container *ngTemplateOutlet="productPrice"></ng-container>
+    <ng-container *ngTemplateOutlet="productActions"></ng-container>
+  </div>
+</div>
+
+<ng-template #productActions>
+  <sm-product-actions
+    [amount]="cartItem.item.amount"
+    [maxAmount]="cartItem.product.maxAmount"
+    [unit]="cartItem.item.unit"
+    [status]="cartItem.product.status"
+    (updated)="onUpdate($event)"
+    (maxAmountReached)="onMaxAmountReached($event)"
+    [noPointerEventOnDecreaseToZero]="true"
+    [incrementAmount]="getIncrementAmount(cartItem)"
+    [initialIncrementAmount]="getInitialIncrementAmount(cartItem)"
+    [reminderVisibility]="false"
+  ></sm-product-actions>
+</ng-template>
+<ng-template #productPrice>
+  <fe-product-price
+    [showPromotionLabel]="true"
+    [regularPrice]="cartItem.totalRegularPrice"
+    [shownPrice]="cartItem.revenue"
+  ></fe-product-price>
+</ng-template>

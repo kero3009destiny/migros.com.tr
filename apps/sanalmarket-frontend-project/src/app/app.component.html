@@ -1,0 +1,20 @@
+<div class="grid {{ theme }}">
+  <ng-template [ngIf]="isHeaderVisible()">
+    <sm-header-landing-page *ngIf="isLandingPageRoute(); else headerLite"></sm-header-landing-page>
+    <ng-template #headerLite>
+      <sm-header-lite *ngIf="isHeaderLite(); else header"></sm-header-lite>
+    </ng-template>
+    <ng-template #header>
+      <sm-header></sm-header>
+    </ng-template>
+  </ng-template>
+  <main class="{{ theme }}">
+    <router-outlet></router-outlet>
+  </main>
+  <ng-container *ngIf="!isLandingPageRoute()">
+    <sm-mobile-app-popup></sm-mobile-app-popup>
+    <div class="divider"></div>
+    <sm-footer></sm-footer>
+    <fe-product-cookie-indicator></fe-product-cookie-indicator>
+  </ng-container>
+</div>

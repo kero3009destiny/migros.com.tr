@@ -1,0 +1,84 @@
+<div class="filter">
+  <div class="filter__header">
+    <h2>{{ title }}</h2>
+    <div class="mat-caption-normal text-color-grey">{{ totalProductsCount }} ürün</div>
+  </div>
+  <mat-divider></mat-divider>
+  <div class="filter__subcategories" *ngIf="getSubCategories()">
+    <div class="subtitle-1">Alt Kategoriler</div>
+    <div class="items">
+      <div class="item" *ngFor="let subCategory of getSubCategories().aggregationInfos">
+        <a
+          class="text-color-black mat-body-2"
+          *ngIf="isCategoryPage; else nonCategoryPage"
+          [routerLink]="'/' + subCategory.prettyName"
+        >
+          {{ subCategory.label }} <span class="text-color-grey">({{ subCategory.count }})</span>
+        </a>
+        <ng-template #nonCategoryPage>
+          <a
+            class="text-color-black mat-body-2"
+            [routerLink]="getUrl()"
+            [queryParams]="getSubCategoryParam(subCategory)"
+            [queryParamsHandling]="'merge'"
+          >
+            {{ subCategory.label }} <span class="text-color-grey">({{ subCategory.count }})</span>
+          </a>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+  <mat-divider></mat-divider>
+  <div class="filter__brands" *ngIf="getBrands()">
+    <div class="subtitle-1">{{ getBrands().label }}</div>
+    <mat-form-field class="form-field" color="accent" appearance="outline" [hideRequiredMarker]="true">
+      <input matInput placeholder="Marka Ara" (input)="onBrandSearchKeyChanged($event)" />
+    </mat-form-field>
+    <div class="items">
+      <div class="item" *ngFor="let brand of getBrandInfo()">
+        <mat-checkbox
+          color="primary"
+          [checked]="isChecked(brand.id, getBrands().type)"
+          (change)="onFilterChanged($event, brand, getBrands().type)"
+        >
+          <span class="mat-body-2">{{ brand.label }} </span>
+          <span class="mat-body-2 text-color-grey">({{ brand.count }})</span>
+        </mat-checkbox>
+      </div>
+    </div>
+  </div>
+  <mat-divider></mat-divider>
+  <div class="filter__discounts" *ngIf="getDiscounts()">
+    <div class="subtitle-1">{{ getDiscounts().label }}</div>
+    <div class="items">
+      <div class="item" *ngFor="let discount of getDiscounts().aggregationInfos">
+        <mat-checkbox
+          color="primary"
+          [checked]="isChecked(discount.id, getDiscounts().type)"
+          (change)="onFilterChanged($event, discount, getDiscounts().type)"
+        >
+          <span class="mat-body-2">{{ discount.label }} </span>
+          <span class="mat-body-2 text-color-grey">({{ discount.count }})</span>
+        </mat-checkbox>
+      </div>
+    </div>
+  </div>
+  <ng-container *ngFor="let attribute of getAttributes()">
+    <mat-divider></mat-divider>
+    <div>
+      <div class="subtitle-1">{{ attribute.label }}</div>
+      <div class="items">
+        <div class="item" *ngFor="let aggInfo of attribute.aggregationInfos">
+          <mat-checkbox
+            color="primary"
+            [checked]="isChecked(aggInfo.id, attribute.type)"
+            (change)="onFilterChanged($event, aggInfo, attribute.type)"
+          >
+            <span class="mat-body-2">{{ aggInfo.label }} </span>
+            <span class="mat-body-2 text-color-grey">({{ aggInfo.count }})</span>
+          </mat-checkbox>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

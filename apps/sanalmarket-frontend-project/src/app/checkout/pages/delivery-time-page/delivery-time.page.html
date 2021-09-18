@@ -1,0 +1,57 @@
+<div class="delivery-time-page" *ngIf="!isLoading()" [@presenceAnimation]>
+  <h1 class="text-color-black">{{getTitle()}}</h1>
+  <span *ngIf="!isPickPointDelivery()" class="mat-caption-normal text-color-info delivery-fee-campaign">
+    <fa-icon [icon]="getInfoIcon()"></fa-icon>
+    250 TL ve üzeri ücretsiz teslimat!
+  </span>
+
+  <div class="mdc-layout-grid__inner">
+    <div
+      class="
+        selector
+        mdc-layout-grid__cell--span-8 mdc-layout-grid__cell--span-5-tablet mdc-layout-grid__cell--span-4-phone
+      "
+    >
+      <fe-line-checkout-delivery-type
+        [selectedDeliveryTime]="getSelectedDeliveryTime()"
+        [scheduleInfo]="getScheduleInfo()"
+        [initialDeliveryType]="getInitialDeliveryType()"
+        (typeSelect)="onDeliveryTypeSelect($event)"
+        *ngIf="isInstantEnabled()"
+      ></fe-line-checkout-delivery-type>
+
+      <div *ngIf="showTimeSlot()">
+        <h1 *ngIf="isInstantEnabled()" class="text-color-black sub-header">Sana uygun gün ve saat aralığını seç</h1>
+        <sm-time-slot-selector
+          [currentTimeSlotId]="getTimeSlotId()"
+          (deliveryTimeSelected)="onDeliveryTimeSelected($event)"
+        ></sm-time-slot-selector>
+      </div>
+    </div>
+    <div class="mdc-layout-grid__cell--span-4 mdc-layout-grid__cell--span-3-tablet">
+      <fe-line-checkout-summary
+        id="delivery-time_checkout-summary"
+        (continueClicked)="onSubmit()"
+        [checkoutInfo]="getCheckoutInfo()"
+      >
+        <div deliveryChoice *ngIf="!isPickPointDelivery()">
+          <sm-delivery-choice
+            [ringOption]="isRingDoorbellSelected()"
+            [contactlessOption]="isContactlessSelected()"
+            (changeContactless)="onChangeContactless($event)"
+            (changeRing)="onChangeRing($event)"
+          ></sm-delivery-choice>
+        </div>
+      </fe-line-checkout-summary>
+
+      <sm-delivery-choice
+        *ngIf="!isPickPointDelivery()"
+        class="desktop-only"
+        [ringOption]="isRingDoorbellSelected()"
+        [contactlessOption]="isContactlessSelected()"
+        (changeContactless)="onChangeContactless($event)"
+        (changeRing)="onChangeRing($event)"
+      ></sm-delivery-choice>
+    </div>
+  </div>
+</div>

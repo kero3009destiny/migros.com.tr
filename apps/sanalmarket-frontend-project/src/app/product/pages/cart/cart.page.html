@@ -1,0 +1,169 @@
+<div class="cart-page" *ngIf="!isLoading()" [@presenceAnimation]>
+  <div class="mobile-only">
+    <ng-container *ngIf="!isMinimumRequiredRevenueAcquired() then priceLeftWarning"> </ng-container>
+  </div>
+  <sm-special-discount [cartItemInfos]="getItemInfos()"></sm-special-discount>
+
+  <div class="cart-container">
+    <div class="mdc-layout-grid__inner" *ngIf="!isCartEmpty() else empty">
+      <div
+        class="
+          selector
+          mdc-layout-grid__cell--span-8 mdc-layout-grid__cell--span-5-tablet mdc-layout-grid__cell--span-4-phone
+        "
+      >
+        <sm-swiper-banner
+          class="cart-banner-top"
+          *ngIf="getTopBanners()"
+          [banners]="getTopBanners()"
+          [inViewport]="isBannerVisible('top')"
+          feDeferLoad
+          (insideViewPort)="onInsideViewPort('top')"
+          (outsideViewPort)="onOutsideViewPort('top')"
+        ></sm-swiper-banner>
+        <div class="cart-container__header">
+          <h2 id="cart-header" class="text-color-black mat-headline">
+            Sepetim <span class="mat-body-2 text-color-grey">{{ getCartInfo().itemInfos.length }} Ürün</span>
+          </h2>
+
+          <span
+            id="update-cart"
+            *ngIf="!isCartEmpty()"
+            class="subtitle-2 update-cart text-color-orange"
+            (click)="updateCart()"
+          >
+            {{ getUpdateCartText() }}
+          </span>
+        </div>
+        <div class="product-list list" *ngIf="!isCartEditMode() else editMode">
+          <ng-container *ngIf="!isCartEmpty()">
+            <sm-cart-page-item *ngFor="let cartItem of getItemInfos()" [cartItem]="cartItem"> </sm-cart-page-item>
+          </ng-container>
+        </div>
+      </div>
+      <div class="mdc-layout-grid__cell--span-4 mdc-layout-grid__cell--span-3-tablet">
+        <fe-line-checkout-summary
+          [isCartPage]="true"
+          (continueClicked)="onSubmit()"
+          [checkoutInfo]="getCartInfo()"
+          [isContinueButtonDisabled]="!isMinimumRequiredRevenueAcquired()"
+        >
+          <ng-container deliveryChoice>
+            <sm-alternative-product-choice
+              *ngIf="isAlternativeProductChoiceVisible()"
+              class="mobile-only"
+              [title]="'Sepetine eklediğin ürünlerden biri bitmişse ne yapalım?'"
+              [initialValue]="getAlternativeProductChoice()"
+              (choiceChanged)="onChangeAlternativeProductChoice($event)"
+            ></sm-alternative-product-choice
+          ></ng-container>
+          <ng-container priceLeft>
+            <ng-container *ngIf="!isMinimumRequiredRevenueAcquired()  then priceLeftWarning"> </ng-container>
+          </ng-container>
+        </fe-line-checkout-summary>
+        <sm-alternative-product-choice
+          *ngIf="isAlternativeProductChoiceVisible()"
+          class="desktop-only"
+          [title]="'Sepetine eklediğin ürünlerden biri bitmişse ne yapalım?'"
+          [initialValue]="getAlternativeProductChoice()"
+          (choiceChanged)="onChangeAlternativeProductChoice($event)"
+        ></sm-alternative-product-choice>
+        <div *ngIf="!isBannersEmpty('side')">
+          <fe-campaign-banner-side-banner-card
+            *ngFor="let sideBanner of getSideBanners(); let i = index;"
+            title="Sepetine Özel Ürünler"
+            [banner]="sideBanner"
+          >
+            <sm-swiper-banner
+              *ngIf="sideBanner"
+              [banners]="[sideBanner]"
+              [inViewport]="isBannerVisible('side', i)"
+              feDeferLoad
+              (insideViewPort)="onInsideViewPort('side', i)"
+              (outsideViewPort)="onOutsideViewPort('side', i)"
+            ></sm-swiper-banner>
+          </fe-campaign-banner-side-banner-card>
+        </div>
+
+        <!-- SEGMENTIFY PRODUCT RECOMMENDATIONS -->
+        <div *ngIf="segmentifyProducts.length" class="segmentify-banner">
+          <div class="segmentify-title subtitle-1 text-color-black">Sepetine Özel Önerilerimiz</div>
+          <div class="segmentify-slide">
+            <sm-product-list-slider [itemInfos]="segmentifyProducts" listAlign="vertical"> </sm-product-list-slider>
+          </div>
+        </div>
+        <!-- SEGMENTIFY PRODUCT RECOMMENDATIONS ends-->
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #empty>
+  <div class="cart-empty">
+    <mat-card>
+      <img
+        [srcset]="'/assets/images/cart-empty/cart-empty.png, /assets/images/cart-empty/cart-empty@2x.png, /assets/images/cart-empty/cart-empty@3x.png'"
+      />
+      <div class="info">
+        <p class="subtitle-1 text-color-black">Henüz sepetine bir ürün eklemedin!</p>
+        <p class="mat-body-2 text-color-grey">Binlerce ürün seni bekliyor!</p>
+      </div>
+
+      <button color="primary" mat-flat-button (click)="onClickStartShopping()">Alışverişe Başla</button>
+    </mat-card>
+  </div>
+</ng-template>
+
+<ng-template #editMode>
+  <div class="edit-mode-actions">
+    <span id="select-all" class="subtitle-2 select-all text-color-orange" (click)="selectAll()"> Tümünü Seç </span>
+    <div class="delete-buttons">
+      <button
+        id="delete-selected-items-button"
+        color="accent"
+        mat-flat-button
+        *ngIf="isAnyItemSelected()"
+        (click)="deleteSelectedItems()"
+      >
+        Seçilenleri Sil ({{ getSelectedItems()?.length }})
+      </button>
+      <button
+        id="delete-all-button"
+        mat-flat-button
+        class="delete-all"
+        color="accent"
+        (click)="deleteSelectedItems(true)"
+      >
+        Tümünü Sil
+      </button>
+    </div>
+  </div>
+
+  <div class="product-list list">
+    <mat-selection-list multiple #cartList>
+      <mat-list-option
+        disableRipple
+        color="primary"
+        checkboxPosition="before"
+        *ngFor="let cartItem of getItemInfos()"
+        [value]="cartItem"
+      >
+        <sm-cart-page-item [cartItem]="cartItem">
+          <fe-product-price
+            [showPromotionLabel]="true"
+            [regularPrice]="cartItem.totalRegularPrice"
+            [shownPrice]="cartItem.revenue"
+          ></fe-product-price>
+        </sm-cart-page-item>
+      </mat-list-option>
+    </mat-selection-list>
+  </div>
+</ng-template>
+<ng-template #priceLeftWarning>
+  <div class="price-left text-color-error">
+    <fa-icon [icon]="getInfoIcon()"> </fa-icon>
+    <span class="mat-caption-normal">
+      Siparişi verebilmen için sepetine {{ getPriceLeftForCheckout() | feFormatPrice }} TL’lik daha ürün eklemen
+      yeterlidir.
+    </span>
+  </div>
+</ng-template>

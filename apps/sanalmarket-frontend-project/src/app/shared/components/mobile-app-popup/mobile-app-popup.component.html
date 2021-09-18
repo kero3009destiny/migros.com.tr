@@ -1,0 +1,6 @@
+<div class="container mobile-only-v2" *ngIf="isPopupVisible()" feDeferLoad (insideViewPort)="onInsideViewPort()">
+  <fa-icon class="text-color-white" [icon]="closeIcon" (click)="onClickPopupClose()"></fa-icon>
+  <img src="assets/logos/sanalmarket/sanalmarket-logo-app.png" alt="sanalmarket-logo" />
+  <div class="overline text-color-white">Daha iyi bir deneyim için</div>
+  <div class="download-app overline text-color-orange" (click)="onClickOpenApp()">Uygulamada Aç</div>
+</div>

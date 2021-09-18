@@ -1,0 +1,14 @@
+<ng-container *ngIf="apiLoaded | async">
+  <google-map class="map" [zoom]="getZoom()" [center]="getCenter()" (tilesloaded)="onLoad()">
+    <map-marker
+      #marker="mapMarker"
+      [position]="getMarkerPosition()"
+      [options]="getMarkerOptions()"
+      (mapClick)="openInfoWindow(marker)"
+    ></map-marker>
+    <map-info-window class="info-window">
+      <p class="info-window__title">{{ this.infoWindowContent.title }}</p>
+      <p class="info-window__content">{{ this.infoWindowContent.content }}</p></map-info-window
+    >
+  </google-map>
+</ng-container>

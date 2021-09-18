@@ -1,0 +1,40 @@
+<mat-tab-group (selectedTabChange)="onTabSelected()">
+  <mat-tab id="delivery-address-list_address">
+    <ng-template mat-tab-label>
+      <span>{{ ADDRESS_TAB.label }}</span>
+    </ng-template>
+    <ng-template matTabContent>
+      <div
+        #container
+        class="tab-body scroll-gradient"
+        (scroll)="onScroll($event)"
+        [ngClass]="{ 'scroll-gradient--active': isScrollVisible && !isScrolledToBottom }"
+      >
+        <mat-card
+          class="mdc-card--outlined"
+          *ngFor="let address of addressList; index as addressIndex; trackBy: trackAddress"
+          (click)="onAddressSelected(address)"
+        >
+          <mat-card-content>
+            <mat-radio-button color="primary" id="delivery-address-list_item-{{ this.addressIndex }}">
+              <div class="address-title subtitle-2 text-color-black text-align-left">
+                {{ address.name }}
+              </div>
+              <div class="mat-caption-normal text-color-grey text-align-left">{{ address.fullAddress }}</div>
+            </mat-radio-button>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </ng-template>
+  </mat-tab>
+  <mat-tab id="delivery-address-list_district">
+    <ng-template mat-tab-label>
+      <span>{{ DISTRICT_TAB.label }}</span>
+    </ng-template>
+    <ng-template matTabContent>
+      <sm-delivery-address-dropdown
+        (deliveryZoneChanged)="onDeliveryZoneChanged($event)"
+      ></sm-delivery-address-dropdown>
+    </ng-template>
+  </mat-tab>
+</mat-tab-group>

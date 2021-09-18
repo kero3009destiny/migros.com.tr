@@ -1,0 +1,93 @@
+<button class="delivery-options-search-bucket-wrapper" *ngIf="isAddressDeliveryTimeBtnVisible()">
+  <div class="delivery-options-wrapper" (click)="onClickDeliveryChoice()">
+    <div class="delivery-options-inner" *ngIf="!isDeliveryTypeSelected()">
+      <fa-icon [icon]="faMapMarkerAlt"></fa-icon>
+      <div class="delivery-options-inner-text mat-caption">Teslimat Yöntemi Seç</div>
+      <fa-icon [icon]="faChevronDown"></fa-icon>
+      <div class="popover" [@presenceAnimationFaster] *ngIf="isChooseDeliveryOptionsPopOverVisible()">
+        <div class="title-close-btn-wrapper">
+          <span class="subtitle-2">Teslimat Bölgesi Seçin!</span>
+          <fa-icon [icon]="closeIcon" (click)="onClickCloseChooseDeliveryOptionsPopOver($event)"></fa-icon>
+        </div>
+        <span class="mat-caption-normal"
+          >Ürün çeşitliliği ve ürün fiyatları teslimat bölgenize göre değişiklik gösterebilmektedir.</span
+        >
+      </div>
+    </div>
+    <ng-template [ngIf]="isDeliveryTypeSelected()">
+      <div class="delivery-options-inner" *ngIf="isDeliveryFoundation()">
+        <fa-icon class="fa-heart" [icon]="faHeart"></fa-icon>
+        <div class="foundation-text-wrapper">
+          <div class="delivery-options-inner-text mat-caption-normal">Bağış Kurumu</div>
+          <div class="delivery-options-inner-text mat-caption">
+            {{ getAddressText() }}
+          </div>
+        </div>
+        <fa-icon [icon]="faChevronDown"></fa-icon>
+      </div>
+      <div class="delivery-options-inner" *ngIf="isDeliveryPickPoint()">
+        <div class="two-column-wrapper">
+          <div>
+            <img class="tikla-gel-al-logo" src="/assets/icons/address-selector/tikla-gel-al.svg" alt="" />
+            <div class="delivery-options-inner-text mat-caption">
+              {{ getAddressText() }}
+            </div>
+            <fa-icon [icon]="faChevronDown"></fa-icon>
+          </div>
+          <ng-container *ngTemplateOutlet="closestDeliveryTimeTemplate"></ng-container>
+        </div>
+      </div>
+      <div class="delivery-options-inner" *ngIf="isDeliveryLastMile()">
+        <div class="two-column-wrapper">
+          <div>
+            <img class="tikla-gel-al-logo" src="/assets/icons/home-active.svg" alt="" />
+            <div class="delivery-options-inner-text mat-caption">
+              {{ getAddressText() }}
+            </div>
+            <fa-icon [icon]="faChevronDown"></fa-icon>
+          </div>
+          <ng-container *ngTemplateOutlet="closestDeliveryTimeTemplate"></ng-container>
+        </div>
+      </div>
+      <div class="delivery-options-inner" *ngIf="isDeliveryShipment()">
+        <div class="two-column-wrapper">
+          <div>
+            <img class="tikla-gel-al-logo" src="/assets/icons/home-active.svg" alt="" />
+            <div class="delivery-options-inner-text mat-caption">
+              {{ getAddressText() }}
+            </div>
+            <fa-icon [icon]="faChevronDown"></fa-icon>
+          </div>
+          <div class="shipment">
+            <img
+              srcset="
+                /assets/images/cargo/cargo.png,
+                /assets/images/cargo/cargo@2x.png 2x,
+                /assets/images/cargo/cargo@3x.png 3x
+              "
+            />
+            <div class="delivery-options-inner-text mat-caption">Kargo ile Adrese Teslim</div>
+          </div>
+        </div>
+      </div>
+      <img
+        class="delivery-schedule-column-separator"
+        *ngIf="!isDeliveryFoundation()"
+        src="/assets/icons/header-delivery-schedule-separator.svg"
+        alt=""
+      />
+    </ng-template>
+  </div>
+</button>
+<!-- NG-TEMPLATES -->
+<ng-template #closestDeliveryTimeTemplate>
+  <div (click)="onClickClosestDeliveryTime($event)">
+    <div>
+      <div class="delivery-options-inner-text mat-caption-normal">En Yakın Teslimat</div>
+      <div class="delivery-options-inner-text mat-caption">
+        {{ getDayName(getFirstAvailableDate()?.toString()) }} {{ getFirstAvailableTimeslot()?.timeSlot }}
+      </div>
+    </div>
+    <fa-icon [icon]="faChevronDown"></fa-icon>
+  </div>
+</ng-template>

@@ -1,0 +1,7 @@
+<ng-container *ngIf="inCartCountDefault !== 0">
+  <span class="fall-count">{{ fallCount }} Adet Çıkarıldı</span>
+  <span class="in-cart-count">{{ inCartCount }} Adet Sepette</span>
+</ng-container>
+<ng-container *ngIf="inCartCountDefault === 0">
+  <span class="fall-count">Tümü Çıkarıldı</span>
+</ng-container>

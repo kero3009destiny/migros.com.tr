@@ -1,0 +1,35 @@
+<sm-side-payment-panel
+  [sidePayment]="SIDE_PAYMENT_TYPE"
+  [usedSidePayment]="usedSidePayment"
+  [step]="step"
+  (opened)="this.onOpened()"
+  (closed)="this.onClosed()"
+>
+  <ng-container title>
+    <fa-icon class="icon" [icon]="COUPON_ICON"></fa-icon>
+    <div class="subtitle-2">Hediye Çeki</div>
+  </ng-container>
+  <ng-container content>
+    <sm-side-payment-form
+      type="string"
+      (formSubmitted)="onFormSubmitted($event)"
+      defaultPlaceholder="Kupon Kodu Ekle"
+      [extraValidators]="EXTRA_VALIDATORS"
+    >
+      <ng-container description>
+        Hesabınıza tanımlı hediye çekleri arasından seçim yapabilir, dilerseniz yeni hediye çeki ekleyebilirsiniz.
+      </ng-container>
+    </sm-side-payment-form>
+    <div class="coupon__header subtitle-2" *ngIf="hasAvailableCoupons() || isUsed()">Kullanılabilir Kuponlarım</div>
+    <div class="coupon coupon--used" *ngIf="isUsed()">
+      <div class="mat-caption">{{ usedSidePayment.value }}</div>
+      <div class="subtitle-1 text-color-orange">{{ usedSidePayment.discount | feFormatPrice }}TL</div>
+      <button mat-button (click)="onClickCancelled()">İptal</button>
+    </div>
+    <div class="coupon" *ngFor="let coupon of getUsableCoupons()">
+      <div class="mat-caption">{{ coupon.identifier }}</div>
+      <div class="subtitle-1 text-color-orange">{{ coupon.discountValue | feFormatPrice }}TL</div>
+      <button mat-button color="primary" (click)="onClickUsed(coupon.identifier)">Kullan</button>
+    </div>
+  </ng-container>
+</sm-side-payment-panel>

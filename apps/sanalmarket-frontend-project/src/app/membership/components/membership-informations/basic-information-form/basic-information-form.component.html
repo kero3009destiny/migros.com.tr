@@ -1,0 +1,42 @@
+<form
+  *ngIf="formGroup"
+  [formGroup]="formGroup"
+  feAppSubmitThrottle
+  [throttleFormValid]="formGroup.valid"
+  [class.money-register]="isNewRegister"
+>
+  <mat-form-field id="membership-firstName" color="accent" appearance="outline">
+    <mat-label class="subtitle-2 text-color-black">İSİM</mat-label>
+    <input type="text" matInput formControlName="firstName" />
+    <mat-error>Lütfen isminizi giriniz.</mat-error>
+  </mat-form-field>
+  <mat-form-field id="membership-lastName" color="accent" appearance="outline">
+    <mat-label class="subtitle-2 text-color-black">SOYİSİM</mat-label>
+    <input type="text" matInput formControlName="lastName" />
+    <mat-error>Lütfen soyisminizi giriniz.</mat-error>
+  </mat-form-field>
+  <mat-form-field id="membership-birthdate" color="accent" appearance="outline">
+    <mat-label class="subtitle-2 text-color-black">Doğum Tarihi</mat-label>
+    <input
+      matInput
+      [matDatepicker]="birthdayPicker"
+      formControlName="birthdate"
+      placeholder="Doğum Tarihi"
+      (focus)="birthdayPicker.open()"
+      [max]="getMaxBirthDate()"
+      [min]="getMinBirthDate()"
+    />
+    <mat-hint class="mat-caption-normal text-color-grey"
+      >Doğum tarihinizi yılda sadece 1 kez değiştirebilirsiniz!</mat-hint
+    >
+    <mat-datepicker-toggle matSuffix [for]="birthdayPicker"></mat-datepicker-toggle>
+    <mat-datepicker #birthdayPicker [startView]="'multi-year'"></mat-datepicker>
+  </mat-form-field>
+  <div class="gender-field">
+    <mat-label class="subtitle-2 text-color-black">Cinsiyet</mat-label>
+    <mat-radio-group formControlName="gender" color="primary">
+      <mat-radio-button [checked]="isGenderChecked('F')" value="F">Kadın</mat-radio-button>
+      <mat-radio-button [checked]="isGenderChecked('M')" value="M">Erkek</mat-radio-button>
+    </mat-radio-group>
+  </div>
+</form>

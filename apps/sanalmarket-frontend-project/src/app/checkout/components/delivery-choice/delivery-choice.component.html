@@ -1,0 +1,39 @@
+<div class="delivery-choices" *ngIf="isDeliveryChoicesAvailable()">
+  <div class="delivery-choice">
+    <mat-checkbox
+      color="primary"
+      id="delivery-choice_ring"
+      [checked]="!ringOption"
+      (change)="onChangeRingChoice($event)"
+      aria-label="Zili Çalmayın"
+    >
+      <div class="text">
+        <div class="text-title desktop-only subtitle-2">Zili Çalmayın</div>
+        <div class="text-title mobile-only subtitle-2">Zili Çalma</div>
+        <div class="text-description desktop-only mat-caption-normal">
+          Adresine geldiğimizde seni telefonla arayacağız
+        </div>
+      </div>
+    </mat-checkbox>
+
+    <i class="icon icon-ring-doorbell desktop-only"></i>
+  </div>
+  <div class="delivery-choice">
+    <mat-checkbox
+      color="primary"
+      id="delivery-choice_contactless"
+      [checked]="contactlessOption"
+      (change)="onChangeContactless($event)"
+      aria-label="Temassız Teslimat"
+    >
+      <div class="text">
+        <div class="text-title subtitle-2">Temassız Teslimat</div>
+        <div class="text-description desktop-only mat-caption-normal">
+          Siparişimin kapıma asılmasını ya da bırakılmasını istiyorum
+        </div>
+      </div>
+    </mat-checkbox>
+
+    <i class="icon icon-contactless-delivery desktop-only"></i>
+  </div>
+</div>

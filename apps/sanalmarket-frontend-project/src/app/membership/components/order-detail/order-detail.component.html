@@ -1,0 +1,223 @@
+<fe-icon-button class="return-icon" [icon]="getReturnIcon()" (click)="onReturnButtonClicked()"> </fe-icon-button>
+
+<div class="order-detail" *ngIf="!isOrderEmpty()">
+  <div class="order-details">
+    <div class="order-status">
+      <div class="order-number">
+        <p class="mat-caption text-color-black">
+          {{ isAdditionalOrder() ? 'Ek ' : '' }}Sipariş No: {{ order.line.id }}
+        </p>
+        <p class="mat-caption-normal text-color-grey">{{ getCreationDate() }}</p>
+      </div>
+
+      <sm-order-status-bar
+        [isCancelled]="isCancelled()"
+        [status]="getStatus()"
+        [deliveryModel]="order.line.deliveryModel"
+        [deliveryAddressObjectType]="order.line.deliveryAddressObjectType"
+      >
+      </sm-order-status-bar>
+    </div>
+
+    <div class="top-action-bar" *ngIf="!isCancelled()">
+      <span
+        class="text-color-orange mat-caption-normal"
+        *ngIf="isOrderRateButtonVisible()"
+        (click)="onOpenOrderRateDialog()"
+      >
+        <fa-icon [icon]="getStarIcon()"></fa-icon> Değerlendir
+      </span>
+
+      <div *ngIf="showRateResults()">
+        <div *ngIf="isOrderRated()" class="rated-info">
+          <div class="rated-order">
+            <span class="mat-caption-normal text-color-orange">Sipariş</span>
+            <fe-membership-rating-stars [isPreview]="true" [ratingValue]="getOrderRatingValue()">
+            </fe-membership-rating-stars>
+          </div>
+          <div class="rated-deliverer">
+            <span class="mat-caption-normal text-color-orange"> Teslimat Danışmanı</span>
+            <fe-membership-rating-stars [isPreview]="true" [ratingValue]="getDelivererRatingValue()">
+            </fe-membership-rating-stars>
+          </div>
+        </div>
+      </div>
+
+      <button
+        mat-button
+        color="primary"
+        *ngIf="isOrderAddable() && !isHemenPortfolio()"
+        (click)="startAdditionalOrderMode(order.line.id)"
+      >
+        <fa-icon [icon]="getCartPlusIcon()"></fa-icon> <span class="mat-caption-normal"> Siparişe Ek Yap</span>
+      </button>
+      <button
+        *ngIf="!isHemenPortfolio()"
+        color="primary"
+        mat-button
+        (click)="onClickOrderHelp()"
+        class="text-color-orange mat-caption-normal feedback-form"
+      >
+        <fa-icon [icon]="getQuestionIcon()"></fa-icon> <span class="mat-caption-normal">İletişim Formu</span>
+      </button>
+    </div>
+  </div>
+  <div class="delivery-details" *ngIf="!isFoundation(); else foundation">
+    <div class="delivery-detail">
+      <div class="details">
+        <p class="mat-caption text-color-black">Teslimat Adresi:</p>
+        <p class="mat-caption-normal text-color-grey">{{ order.line.deliveryAddressDetails }}</p>
+      </div>
+    </div>
+    <div class="delivery-detail" [ngClass]="{ change: order.extra.invoiceAddressUpdatable }">
+      <div class="details">
+        <p class="mat-caption text-color-black">Fatura Adresi:</p>
+        <p class="mat-caption-normal text-color-grey">{{ order.line.invoiceAddressDetails }}</p>
+      </div>
+      <button *ngIf="order.extra.invoiceAddressUpdatable" mat-button color="primary" (click)="openAddressModal(false)">
+        Değiştir
+      </button>
+    </div>
+    <div class="delivery-detail" [ngClass]="{ change: order.extra.reschedulable }">
+      <div class="details" *ngIf="!isShipment(); else shipment">
+        <p class="mat-caption text-color-black">Teslimat Zamanı:</p>
+        <p class="mat-caption-normal text-color-grey">{{ getDeliveryTime() }}</p>
+        <span class="mat-caption-normal text-color-info instant-delivery" *ngIf="isInstantDelivery()">
+          Hızlı Teslimat / {{ getInstantDeliveryTime() }}DK
+        </span>
+      </div>
+
+      <button *ngIf="order.extra.reschedulable" mat-button color="primary" (click)="openDeliveryTimeModal()">
+        Değiştir
+      </button>
+    </div>
+  </div>
+
+  <div class="product-summary-details">
+    <div class="product-details">
+      <span class="text-color-black subtitle-2">Miktar</span>
+      <span class="text-color-black subtitle-2">Sepetteki Ürünler </span>
+
+      <ng-container *ngFor="let item of getItemInfos()">
+        <span class="mat-caption-normal text-color-black flex-auto align-self-center">
+          {{ item.shownAmount }} {{ getUnitLabel(item.item.unit) }}
+        </span>
+
+        <div class="product-details-cart-item">
+          <sm-item-detail [itemInfo]="item"></sm-item-detail>
+        </div>
+      </ng-container>
+    </div>
+    <div class="summary-details mat-body-2">
+      <span class="text-color-black subtitle-2"> Sipariş Özeti</span>
+      <span class="text-color-grey price"> {{ getItemCount() }} ürün</span>
+      <span class="text-color-black">Sipariş Tutarı</span>
+      <span class="text-color-black price">
+        {{ order.productPrice | feFormatPrice }}
+        <span class="currency">TL</span>
+      </span>
+      <span class="text-color-black">Teslimat Ücreti</span>
+      <span class="text-color-black price">
+        {{ order.shownDeliveryFee | feFormatPrice }}
+        <span class="currency">TL</span>
+      </span>
+      <ng-template [ngIf]="order.shownProductDiscount">
+        <span class="text-color-success">Migros İndirimi</span>
+        <span class="text-color-success price">
+          - {{ order.shownProductDiscount | feFormatPrice }}
+          <span class="currency">TL</span>
+        </span>
+      </ng-template>
+
+      <ng-template [ngIf]="order?.shownLineDiscount">
+        <span class="text-color-success">Sepet İndirimi</span>
+        <span class="text-color-success price">
+          - {{ order.shownLineDiscount | feFormatPrice }}
+          <span class="currency">TL</span>
+        </span>
+      </ng-template>
+      <ng-template [ngIf]="order?.lineSpecialDiscount">
+        <span class="text-color-success">Gördüğünüze İnanın</span>
+        <span class="text-color-success price">
+          - {{ order.lineSpecialDiscount | feFormatPrice }}
+          <span class="currency">TL</span>
+        </span>
+      </ng-template>
+      <div>
+        <span class="text-color-black subtitle-2">Toplam Tutar:</span>
+        <span class="text-color-black subtitle-2">
+          {{ order.revenue | feFormatPrice }}
+          <span class="currency">TL</span>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="payment-details" *ngIf="!isCancelled()">
+    <div>
+      <p class="subtitle-2 text-color-black">Ödeme Şekli</p>
+      <p *ngFor="let payment of getPaymentTypes()" class="mat-body-2 text-color-black">
+        {{ getPaymentLabel(payment) }}
+      </p>
+    </div>
+    <div class="actions">
+      <button
+        (click)="onClickDeliveryForm()"
+        mat-button
+        [disableRipple]="true"
+        class="mat-caption-normal text-color-black"
+        *ngIf="order.extra.deliveryFormReady"
+      >
+        <fa-icon [icon]="getDeliveryFromIcon()"></fa-icon> Teslimat Formu
+      </button>
+      <button
+        (click)="onClickDownloadInvoice()"
+        mat-button
+        [disableRipple]="true"
+        class="mat-caption-normal text-color-black"
+        *ngIf="!isCancelled() && !isActive() && !isHemenPortfolio()"
+      >
+        <fa-icon [icon]="getInvoiceIcon()"></fa-icon> E-arşiv Fatura
+      </button>
+      <button
+        class="cancel-button"
+        (click)="onCancelOrder()"
+        *ngIf="order.extra.cancellable"
+        mat-button
+        color="primary"
+      >
+        <fa-icon [icon]="getTimesCircleIcon()"></fa-icon> Siparişi İptal Et
+      </button>
+    </div>
+  </div>
+</div>
+
+<ng-template #foundation>
+  <div class="foundation-details">
+    <span class="text-color-black mat-body-1">
+      Siparişini
+      <span class="text-color-error text-color-error">{{ order.line.serviceAreaName }}</span> adına ihtiyaç sahiplerine
+      ulaştıracağız.
+    </span>
+  </div>
+</ng-template>
+<ng-template #shipment>
+  <div class="shipment">
+    <p class="mat-caption text-color-black">Kargo Takip Numarası:</p>
+    <a
+      href="{{ getTrackingUrl() }}"
+      target="_blank"
+      rel="noopener"
+      class="mat-caption-normal text-color-orange tracking-id"
+      *ngIf="isTrackIdExist()"
+    >
+      {{ getTrackId() }}
+      <fa-icon class="shipment-detail-icon text-color-orange" [icon]="getChevronRightIcon()"></fa-icon>
+    </a>
+    <p class="mat-caption-normal text-color-grey" *ngIf="!isTrackIdExist()">
+      Siparişin kargoya verildikten sonra bu alandan kargo takip numarasına erişebilirsin.
+    </p>
+    <p class="mat-caption-normal text-color-info">
+      <img class="shipment-icon" src="/assets/icons/kargo/kargo.png" />Yurtiçi Kargo
+    </p>
+  </div>
+</ng-template>

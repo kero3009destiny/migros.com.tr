@@ -1,0 +1,167 @@
+<div mat-dialog-title matDialogTitle *ngIf="currentStep.name !== 'verify-email'">
+  <fe-icon-button mat-dialog-close [icon]="faTimes" class="float-right"></fe-icon-button>
+  <h3 class="text-align-center">{{ currentStep?.title }}</h3>
+</div>
+<div matDialogContent class="dialog__container otp-send" *ngIf="currentStep.name === 'send'">
+  <span class="subtitle-2 text-color-black">
+    Üyelik işlemini onaylamak için telefon numaranızı girerek doğrulama işlemi yapın.
+  </span>
+  <form
+    class="phone-send-form"
+    [formGroup]="sendFormGroup"
+    feAppSubmitThrottle
+    (throttleSubmit)="sendPhoneNumber()"
+    [throttleFormValid]="sendFormGroup.valid"
+  >
+    <mat-form-field color="accent" appearance="outline">
+      <mat-label class="subtitle-2">Cep telefonu</mat-label>
+      <input
+        id="otp-dialog-phone__input"
+        type="tel"
+        feOnlyNumbers
+        maxlength="10"
+        autocomplete="tel"
+        matInput
+        formControlName="phoneNumber"
+      />
+      <mat-hint align="start"> Telefon numaranızı başında 0 olmadan giriniz</mat-hint>
+      <mat-error id="otp-dialog-phone__empty-error" *ngIf="phoneNumber.invalid && phoneNumber.errors.required">
+        Lütfen telefon numaranızı giriniz.
+      </mat-error>
+      <mat-error id="otp-dialog-phone__unValid-error" *ngIf="phoneNumber.invalid && phoneNumber.errors.pattern">
+        Telefon numaranızı 5XXXXXXXXX şeklinde giriniz.
+      </mat-error>
+    </mat-form-field>
+    <fe-button
+      [isDisabled]="phoneNumber.invalid"
+      id="otp-dialog-phone__send-button"
+      type="submit"
+      label="Şifre Gönder"
+    ></fe-button>
+  </form>
+</div>
+<div matDialogContent class="dialog__container otp-verify" *ngIf="currentStep.name === 'verify'">
+  <span class="subtitle-2 text-color-black">
+    Telefonuna gelen SMS kodunu girerek doğrulama işlemini tamamla<br />
+  </span>
+  <form
+    class="phone-verify-form"
+    [formGroup]="verifyFormGroup"
+    feAppSubmitThrottle
+    (throttleSubmit)="verifyPhoneNumber(code.value)"
+    [throttleFormValid]="verifyFormGroup.valid"
+  >
+    <mat-form-field id="otp-dialog_login-sms-code" color="accent" appearance="outline">
+      <mat-label class="subtitle-2 text-color-black">SMS kodu</mat-label>
+      <input
+        id="otp-dialog-code__input"
+        feOnlyNumbers
+        type="tel"
+        maxlength="6"
+        matInput
+        cdkFocusInitial
+        formControlName="code"
+      />
+      <button
+        type="button"
+        color="accent"
+        matSuffix
+        mat-icon-button
+        aria-label="Clear"
+        *ngIf="code.value"
+        (click)="clear('code')"
+      >
+        <fa-icon [icon]="clearIcon"></fa-icon>
+      </button>
+      <mat-error *ngIf="code.invalid && code.errors.pattern"> Lütfen geçerli bir SMS kodunu giriniz.</mat-error>
+      <mat-error *ngIf="code.invalid && code.errors.required"> Lütfen SMS kodunu giriniz.</mat-error>
+    </mat-form-field>
+    <sm-timer
+      #timerBar
+      [tryAgainTimeout]="tryAgainEnableInSeconds"
+      (tictoc)="onCountdownTicToc($event)"
+      (retry)="onRetry()"
+      id="otp-dialog_login-timer"
+    ></sm-timer>
+    <div class="phone-verify-form__actions">
+      <fe-button [isDisabled]="code.invalid" id="otp-dialog-code__confirm-button" type="submit" label="Doğrula">
+      </fe-button>
+    </div>
+  </form>
+</div>
+<div matDialogContent class="dialog__container otp-verify" *ngIf="currentStep.name === 'verify-membership-email'">
+  <span class="subtitle-2 text-color-black">
+    E-posta adresine gelen kodu girerek doğrulama işlemini tamamla. <br />
+  </span>
+  <form
+    class="phone-verify-form"
+    [formGroup]="verifyFormGroup"
+    feAppSubmitThrottle
+    (throttleSubmit)="claimVerificationMail(code.value)"
+    [throttleFormValid]="verifyFormGroup.valid"
+  >
+    <mat-form-field id="otp-verify-email-code" color="accent" appearance="outline">
+      <mat-label class="subtitle-2 text-color-black">E-posta Doğrulama Kodu</mat-label>
+      <input
+        id="otp-dialog-email-code__input"
+        feOnlyNumbers
+        type="tel"
+        maxlength="6"
+        matInput
+        cdkFocusInitial
+        formControlName="code"
+      />
+      <button
+        type="button"
+        color="accent"
+        matSuffix
+        mat-icon-button
+        aria-label="Clear"
+        *ngIf="code.value"
+        (click)="clear('code')"
+      >
+        <fa-icon [icon]="clearIcon"></fa-icon>
+      </button>
+      <mat-error *ngIf="code.invalid && code.errors.pattern">
+        Lütfen geçerli bir E-posta Doğrulama kodu giriniz.</mat-error
+      >
+      <mat-error *ngIf="code.invalid && code.errors.required"> Lütfen E-posta Doğrulama kodunu giriniz.</mat-error>
+    </mat-form-field>
+    <sm-timer
+      #timerBar
+      [tryAgainTimeout]="tryAgainEnableInSeconds"
+      (tictoc)="onCountdownTicToc($event)"
+      (retry)="onRetry()"
+      id="otp-dialog_email-verify-timer"
+    ></sm-timer>
+    <div class="phone-verify-form__actions">
+      <fe-button [isDisabled]="code.invalid" id="otp-dialog-code__confirm-button" type="submit" label="Doğrula">
+      </fe-button>
+    </div>
+  </form>
+</div>
+<div matDialogContent class="dialog__container otp-verify otp-verify-email" *ngIf="currentStep.name === 'verify-email'">
+  <p class="mat-caption-normal text-color-black">
+    Mail adresine gönderilen bağlantıya tıklayarak bilgi güncelleme işlemine devam edebilirsin
+  </p>
+  <fe-button label="Tamam" (click)="dismissDialog()"></fe-button>
+</div>
+<div matDialogContent class="dialog__container otp-account-not-found" *ngIf="currentStep.name === 'accountNotFound'">
+  <span class="subtitle-2 text-color-black">
+    Girdiğiniz telefon numarası ile eşleşen bir hesap bilgisi bulunamadı.
+  </span>
+  <div class="otp-account-not-found__bottom">
+    <fe-button
+      id="otp-dialog__redirect-to-recovery"
+      routerLink="/sifremi-unuttum"
+      (click)="dismissDialog()"
+      label="Hesabımı Kurtar"
+    ></fe-button>
+    <span class="mat-caption-normal">
+      Henüz Hesabın Yoksa
+      <a id="otp-dialog__redirect-to-register" class="text-color-orange" routerLink="/kayit" (click)="dismissDialog()">
+        Üye Ol
+      </a>
+    </span>
+  </div>
+</div>

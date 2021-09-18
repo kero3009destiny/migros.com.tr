@@ -1,0 +1,31 @@
+<div class="faqs-page" *ngIf="isPageContentLoaded()">
+  <ng-container>
+    <div class="faqs-page__menu">
+      <h2 class="faqs-page__title">Kişisel Verilerin Korunması</h2>
+      <div
+        class="faqs-page__menu-title mat-caption-normal"
+        *ngFor="let item of getPageContentAnswer()"
+        [ngClass]="{'active':item.id === getSelectedItem()}"
+        (click)="onClickMenu(item.id)"
+      >
+        {{ item.question }}
+      </div>
+    </div>
+    <div class="faqs-page__content" *ngIf="getPageContentAnswer()">
+      <mat-accordion>
+        <mat-expansion-panel
+          *ngFor="let item of getPageContentAnswer()"
+          [expanded]="item.id === getSelectedItem()"
+          (click)="onClickMenu(item.id)"
+        >
+          <mat-expansion-panel-header>
+            <mat-panel-title class="subtitle-2"> {{ item.question }} </mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-panel-description>
+            <span [innerHtml]="item.answer | feSanitizeHtml"></span>
+          </mat-panel-description>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </ng-container>
+</div>

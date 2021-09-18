@@ -1,0 +1,56 @@
+<div class="wrapper" [class.macro-online]="isMacroonline()">
+  <h3 class="title">Çerez Ayarları</h3>
+  <fa-icon class="text-color-grey close-icon" (click)="onClickClose()" [icon]="closeIcon"></fa-icon>
+  <span class="mat-body-2 text-color-black"
+    >Çerezlerin kullanımına izin vermeniz durumunda verileriniz yurtiçi ve yurtdışında işleniyor olacaktır. Çerezler
+    hakkında kapsamlı bilgi için:
+    <a [href]="getCookieUrl()" class="link" (click)="onClickCookieUrl($event)">
+      <span class="mat-caption-normal cursor-pointer">Çerez aydınlatma metni</span>
+    </a>
+  </span>
+  <div class="form-wrapper">
+    <div class="section">
+      <div class="section-inner subtitle-1">
+        Zorunlu Çerezler
+        <mat-slide-toggle disabled color="primary"></mat-slide-toggle>
+      </div>
+      <span class="mat-caption-normal"
+        >Zorunlu çerezler, Platform’u görüntülemeniz esnasında cihazınıza yerleştirilen ve sunulan online servislerin
+        düzgün şekilde çalışabilmesi için gerekli olan çerezlerdir.</span
+      >
+    </div>
+    <div class="divider"></div>
+    <div class="section">
+      <div class="section-inner subtitle-1">
+        Performans ve Analitik Çerezleri
+        <mat-slide-toggle color="primary" [(ngModel)]="analyseCookies"></mat-slide-toggle>
+      </div>
+      <span class="mat-caption-normal"
+        >Performans çerezleri, Platform’u görüntüleyen kişi sayısı ile Platform trafiğini takip ve analiz etmemizi
+        sağlar. Bu çerezler sayesinde Platform üzerindeki alanlardan hangilerinin en sık ya da seyrek ziyaret edildiği
+        gibi bilgileri edinebilir ve Platform’un trafiğini optimize edebiliriz.</span
+      >
+    </div>
+    <div class="divider"></div>
+    <div class="section">
+      <div class="section-inner subtitle-1">
+        Pazarlama ve Reklam Çerezleri
+        <mat-slide-toggle color="primary" [(ngModel)]="marketingCookies"> </mat-slide-toggle>
+      </div>
+      <span class="mat-caption-normal"
+        >Pazarlama ve reklam çerezleri, sizlere Platform’da veya Platform haricindeki mecralarda görüntüleme geçmişinize
+        ve ziyaretçi profilinize uygun olarak kişiselleştirilmiş ürün ve hizmet tanıtımı yapmak için kullanılır.</span
+      >
+    </div>
+  </div>
+  <div class="btn-wrapper">
+    <button
+      mat-flat-button
+      color="primary"
+      class="mat-caption save-button button-primary"
+      (click)="onSaveCookieSettings()"
+    >
+      Çerez Ayarlarını Kaydet
+    </button>
+  </div>
+</div>

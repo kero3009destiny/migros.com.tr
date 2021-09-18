@@ -1,0 +1,77 @@
+<sm-mobile-breadcrumb [pageName]="'Adreslerim'"></sm-mobile-breadcrumb>
+<h1 class="title desktop-only">Adreslerim</h1>
+<div class="wrapper" *ngIf="!isLoading()">
+  <div class="address-selector-wrapper">
+    <!-- DELIVERY ADDRESSES -->
+    <div class="delivery-addresses-wrapper">
+      <div class="instruction second-row subtitle-1">Teslimat Adreslerim</div>
+      <div class="add-button" (click)="onClickAddNewDeliveryAddress()">
+        <a>
+          <fa-icon class="text-color-orange add-plus-icon" [icon]="plusIcon"></fa-icon>
+          Yeni Teslimat Adresi Ekle
+        </a>
+      </div>
+      <div class="delivery-addresses-inner-wrapper">
+        <ng-container *ngFor="let address of getDeliveryAddressList(); let i = index">
+          <div class="address" *ngIf="isDeliveryAddressVisible(i)">
+            <div class="title-delete-edit-address-detailed-wrapper">
+              <div class="title-delete-edit-wrapper">
+                <div class="title subtitle-2">
+                  {{ address.name }}
+                </div>
+                <div class="edit-icon" (click)="onClickEditButton(address, false, $event)"></div>
+                <div class="delete-icon" (click)="onClickDeleteButton(address, false, $event)"></div>
+              </div>
+              <div class="address-detailed mat-caption-normal text-color-grey">
+                {{ address.fullAddress }}
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <div
+          class="load-more-checkbox-wrapper mat-caption text-color-orange"
+          *ngIf="isLoadMoreDeliveryAddressBtnVisible()"
+        >
+          <div class="icon-load-more" (click)="onClickLoadMoreDeliveryAddress()">
+            <fa-icon [icon]="doubleDownIcon"></fa-icon>
+            Diger Teslimat Adreslerim
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INVOICE ADDRESSES -->
+    <div class="invoice-addresses-wrapper">
+      <div class="instruction second-row subtitle-1">Fatura Adreslerim</div>
+      <div class="add-button" (click)="onClickAddNewInvoiceAddress()">
+        <a>
+          <fa-icon class="text-color-orange add-plus-icon" [icon]="plusIcon"></fa-icon>
+          Yeni Fatura Adresi Ekle
+        </a>
+      </div>
+      <ng-container *ngFor="let invoiceAddress of getInvoiceAddressList(); let i = index">
+        <div class="address" *ngIf="isInvoiceAddressVisible(i)">
+          <div class="title-delete-edit-address-detailed-wrapper">
+            <div class="title-delete-edit-wrapper">
+              <div class="title subtitle-2">
+                {{ invoiceAddress.name }}
+              </div>
+              <div class="edit-icon" (click)="onClickEditButton(invoiceAddress, true, $event)"></div>
+              <div class="delete-icon" (click)="onClickDeleteButton(invoiceAddress, true, $event)"></div>
+            </div>
+            <div class="address-detailed mat-caption-normal text-color-grey">
+              {{ invoiceAddress.fullAddress }}
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <div
+        class="load-more mat-caption text-color-orange"
+        *ngIf="isLoadMoreInvoiceAddressBtnVisible()"
+        (click)="onClickLoadMoreInvoiceAddress()"
+      >
+        <fa-icon [icon]="doubleDownIcon"></fa-icon>Diger Fatura Adreslerim
+      </div>
+    </div>
+  </div>
+</div>

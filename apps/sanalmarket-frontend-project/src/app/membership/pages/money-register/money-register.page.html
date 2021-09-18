@@ -1,0 +1,65 @@
+<sm-mobile-breadcrumb [pageName]="'Money Üyeliği Oluştur'"></sm-mobile-breadcrumb>
+<div class="container" *ngIf="getUser$() | async as user">
+  <h1 class="text-color-black">Money’e Üye Ol Fırsatları Yakala!</h1>
+  <div class="wrapper">
+    <div class="information-wrapper">
+      <span class="subtitle-1 information-title">Üyelik Bilgilerim</span>
+      <sm-main-information-form
+        [user]="user"
+        [formGroup]="informationFormGroup"
+        [isNewRegister]="true"
+      ></sm-main-information-form>
+      <sm-basic-information-form
+        [user]="user"
+        [formGroup]="informationFormGroup"
+        [isNewRegister]="true"
+      ></sm-basic-information-form>
+    </div>
+    <div
+      class="agreements-wrapper"
+      [formGroup]="agreementsFormGroup"
+      feAppSubmitThrottle
+      [throttleFormValid]="agreementsFormGroup.valid"
+    >
+      <div class="agreements">
+        <span class="subtitle-1 register-title">Money Üyesi Ol</span>
+        <mat-checkbox color="primary" formControlName="permitCrmContact">
+          <span class="mat-caption-normal text-color-black"
+            >Money indirim ve kampanyalarından anında haberdar olmak için
+            <a
+              (click)="onAgreementClick('MCC_CONTACT_MEMBERSHIP_AGREEMENT')"
+              class="text-color-orange"
+              href="javascript:void(0)"
+              >Money Ticari İletişim İzni Metni</a
+            >
+            kapsamında iletişim izni veriyorum.
+          </span>
+        </mat-checkbox>
+        <mat-checkbox color="primary" formControlName="permitKvkk">
+          <span class="mat-caption-normal text-color-black">
+            <a
+              (click)="onAgreementClick('MCC_KVK_MEMBERSHIP_AGREEMENT')"
+              class="text-color-orange"
+              href="javascript:void(0)"
+              >Money Kişisel Verilerin Korunması Hakkında Aydınlatma Metni</a
+            >'ni okudum ve onaylıyorum.
+          </span>
+        </mat-checkbox>
+        <mat-checkbox color="primary" formControlName="permitMembership">
+          <span class="mat-caption-normal text-color-black">
+            <a
+              (click)="onAgreementClick('MCC_MEMBERSHIP_AGREEMENT')"
+              class="text-color-orange"
+              href="javascript:void(0)"
+              >Money Üyelik ve Rıza Beyanı</a
+            >'nı okudum ve kabul ediyorum.
+          </span>
+        </mat-checkbox>
+      </div>
+      <div class="divider"></div>
+      <div class="button-wrapper">
+        <fe-button (click)="onSubmit()" [isDisabled]="isButtonDisabled()" label="Money Üyesi Ol"></fe-button>
+      </div>
+    </div>
+  </div>
+</div>

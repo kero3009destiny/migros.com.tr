@@ -1,0 +1,7 @@
+<div feNgxCountdown [attr.ngxCountdownTimeout]="countdown?.ngxCountdownTimeout" (cdTicToc)="cdTicToc($event)"></div>
+<span #timer class="text-color-orange mat-caption">
+  <div *ngIf="_completeTimer === 0; else count">
+    <span class="resend" (click)="onRetryClick()"> Kodu Tekrar Gönder </span>
+  </div>
+  <ng-template #count>{{ stepTime }}</ng-template>
+</span>

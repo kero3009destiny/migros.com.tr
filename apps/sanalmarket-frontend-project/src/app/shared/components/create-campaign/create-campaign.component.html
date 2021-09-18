@@ -1,0 +1,81 @@
+<div class="create-campaign-wrapper">
+  <div class="header-wrapper">
+    <div class="title-close-btn-wrapper">
+      <fa-icon
+        class="text-color-grey back-button"
+        (click)="onClickGoBack()"
+        *ngIf="isBackButtonVisible()"
+        [icon]="arrowLeft"
+      ></fa-icon>
+      <span class="mat-headline text-color-black">{{ getTitleText() }}</span>
+      <fa-icon class="text-color-grey" (click)="onClickClose()" [icon]="closeIcon"></fa-icon>
+    </div>
+  </div>
+  <div class="inner">
+    <ng-template [ngIf]="isStepChooseCategory()">
+      <mat-radio-group>
+        <ng-template ngFor let-category [ngForOf]="getCategories()" let-i="index">
+          <div class="category" (click)="onClickCategory(category)" [class.selected]="isCategorySelected(category)">
+            <mat-radio-button
+              class="category-button"
+              color="primary"
+              value="{{ category }}"
+              [checked]="isCategorySelected(category)"
+            >
+              <span class="mat-caption text-capitalize text-color-black">{{ category.externalCategoryName }}</span>
+            </mat-radio-button>
+          </div>
+        </ng-template>
+      </mat-radio-group>
+    </ng-template>
+    <ng-template [ngIf]="isStepChooseQuota()">
+      <div class="header">
+        <span class="subtitle-2 text-color-black">{{ getSelectedCategory().externalCategoryName }}</span>
+        <span class="mat-caption-normal text-color-grey">kategorisinde harcama hedef tutarını seçin. </span>
+      </div>
+      <div class="choose-quota-wrapper">
+        <ng-template ngFor let-kykOption [ngForOf]="getSelectedCategory().kkyOptions" let-i="index">
+          <div
+            class="option subtitle-1 text-color-black"
+            (click)="onClickOption(kykOption)"
+            [class.selected]="isOptionSelected(kykOption)"
+          >
+            {{ kykOption.quota }}TL
+          </div>
+        </ng-template>
+      </div>
+      <div class="money-points mat-headline text-color-money">
+        <span *ngIf="getSelectedOption()"> {{ getSelectedOption().prize }} MONEY HEDİYE </span>
+      </div>
+    </ng-template>
+    <ng-template [ngIf]="isStepReadyToShop()">
+      <div class="ready-to-shop-wrapper">
+        <fa-icon [icon]="faCheckCircle" class="success-icon"></fa-icon>
+        <div class="mat-headline text-color-black">Kampanyan Oluşturuldu!</div>
+        <div>
+          <div class="subtitle-2 text-color-black text-capitalize">
+            "{{ getSelectedCategory().externalCategoryName }}"
+          </div>
+          <div class="mat-caption-normal text-color-grey">
+            kategorisinde tek seferde {{ getSelectedOption().quota }} tutarında ürün alımına
+          </div>
+        </div>
+      </div>
+      <div class="money-points mat-headline text-color-money">
+        <span *ngIf="getSelectedOption()"> {{ getSelectedOption().prize }} MONEY HEDİYE </span>
+      </div>
+    </ng-template>
+  </div>
+  <div class="bottom">
+    <button
+      class="continue-button"
+      mat-flat-button
+      color="primary"
+      feAppClickThrottle
+      [disabled]="isContinueButtonDisabled()"
+      (throttleClick)="onClickContinue()"
+    >
+      {{ getCTAButtonLabel() }}
+    </button>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+<div class="toaster">
+  <div class="toaster__icon" *ngIf="data.icon">
+    <i [ngClass]="iconClass"></i>
+  </div>
+  <div class="toaster__message">
+    <h3 *ngIf="data.title">{{ data.title }}</h3>
+    <ng-container *ngIf="data.message">
+      <p>{{ data.message }}</p>
+    </ng-container>
+    <ng-container *ngIf="data.violations">
+      <p>{{ violationMessages }}</p>
+    </ng-container>
+  </div>
+</div>

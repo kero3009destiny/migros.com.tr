@@ -1,0 +1,12 @@
+<div class="side-nav-link">
+  <fa-icon class="icon" [icon]="linkIcon" routerLinkActive="text-color-orange"></fa-icon>
+  <div class="text">
+    <div class="title subtitle-2 text-color-black" routerLinkActive="text-color-orange">
+      {{ getLinkTitle() }}
+    </div>
+    <div class="detail mat-caption-normal text-color-grey" *ngIf="getLinkDetail()">
+      {{ getLinkDetail() }}
+    </div>
+  </div>
+  <fa-icon class="chevron" [icon]="chevronRightIcon" routerLinkActive="text-color-orange"></fa-icon>
+</div>

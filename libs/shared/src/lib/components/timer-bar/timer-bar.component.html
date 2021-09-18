@@ -1,0 +1,7 @@
+<div feNgxCountdown [attr.ngxCountdownTimeout]="countdown?.ngxCountdownTimeout" (cdTicToc)="cdTicToc($event)">
+  <span #loader class="loader" [ngStyle]="{ width: loaderWidth }"></span>
+</div>
+<span #timer class="timer">{{ stepTime }}</span>
+<button class="button-link--green reset-button" (click)="onRetryClick()" [disabled]="disabled ? 'disabled' : null">
+  Tekrar Gönder
+</button>

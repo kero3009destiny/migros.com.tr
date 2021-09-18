@@ -1,0 +1,21 @@
+<ul class="breadcrumbs">
+  <li class="breadcrumbs__item"><a class="breadcrumbs__link" title="Anasayfa" routerLink="/">Anasayfa</a></li>
+
+  <ng-container *ngIf="!breadcrumbs?.length">
+    <li *ngFor="let item of skeletonItems" class="breadcrumbs--skeleton breadcrumbs__item"><span></span></li>
+  </ng-container>
+
+  <ng-container *ngIf="breadcrumbs?.length">
+    <li *ngFor="let breadcrumb of breadcrumbs; trackBy: trackByFn" class="breadcrumbs__item">
+      <a
+        [routerLink]="['', breadcrumb.url]"
+        [queryParams]="breadcrumb.queryParams"
+        [title]="breadcrumb.label"
+        [state]="{ referrerEventId: breadcrumb.referrerEventId }"
+        class="breadcrumbs__link"
+      >
+        {{ breadcrumb.label }}
+      </a>
+    </li>
+  </ng-container>
+</ul>

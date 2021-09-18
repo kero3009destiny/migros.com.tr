@@ -1,0 +1,74 @@
+<div class="dialog__header">
+  <button (click)="dismissDialog()">
+    <i class="icon icon-dismiss--grey"></i>
+  </button>
+</div>
+
+<h3>Siparişi Değerlendir</h3>
+
+<mat-dialog-content>
+  <div class="content">
+    <form
+      [formGroup]="ratingFormGroup"
+      feAppSubmitThrottle
+      (throttleSubmit)="onRatingSubmit()"
+      [throttleFormValid]="ratingFormGroup.valid"
+    >
+      <ng-container *ngIf="showDelivererRating()">
+        <h4>Teslimat Danışmanını Değerlendir</h4>
+        <span>Teslimat danışmanından memnun kaldınız mı?</span>
+        <fe-membership-rating-stars
+          [ratingValue]="getDelivererRatingValue()"
+          (clickRating)="onClickDelivererRating($event)"
+        ></fe-membership-rating-stars>
+        <mat-radio-group
+          *ngIf="getDelivererRatingValue() < 3 && getDeliveryScoreReasons() | async as orderScoreReasons"
+          formControlName="delivererReason"
+        >
+          <mat-radio-button *ngFor="let reason of orderScoreReasons" color="primary" [value]="reason.name">{{
+            reason.message
+          }}</mat-radio-button>
+        </mat-radio-group>
+        <mat-form-field color="accent" appearance="outline">
+          <textarea
+            matInput
+            formControlName="delivererReview"
+            placeholder="Teslimat danışmanınız ile ilgili yorumunuzu buraya yazabilirsiniz."
+          ></textarea>
+        </mat-form-field>
+      </ng-container>
+
+      <h4>Siparişi Değerlendir</h4>
+      <span>Siparişinizden memnun kaldınız mı?</span>
+      <fe-membership-rating-stars
+        [ratingValue]="getOrderRatingValue()"
+        (clickRating)="onClickOrderRating($event)"
+      ></fe-membership-rating-stars>
+      <mat-radio-group
+        *ngIf="getOrderRatingValue() < 3 && getOrderScoreReasons() | async as deliveryScoreReasons"
+        formControlName="orderReason"
+      >
+        <mat-radio-button *ngFor="let reason of deliveryScoreReasons" color="primary" [value]="reason.name">{{
+          reason.message
+        }}</mat-radio-button>
+      </mat-radio-group>
+      <mat-form-field color="accent" appearance="outline">
+        <textarea
+          matInput
+          formControlName="orderReview"
+          placeholder="Siparişiniz ile ilgili yorumunuzu buraya yazabilirsiniz."
+        ></textarea>
+      </mat-form-field>
+      <div class="button-wrapper">
+        <button
+          type="submit"
+          class="button-primary submit-button"
+          [ngClass]="{ 'button-primary-disabled': isButtonDisable() }"
+          [disabled]="isButtonDisable()"
+        >
+          Gönder
+        </button>
+      </div>
+    </form>
+  </div>
+</mat-dialog-content>

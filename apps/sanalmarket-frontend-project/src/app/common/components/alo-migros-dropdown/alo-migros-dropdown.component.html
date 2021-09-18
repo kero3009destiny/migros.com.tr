@@ -1,0 +1,42 @@
+<div content class="alo-migros-dropdown">
+  <h3 class="description text-color-black">Sipariş Ver</h3>
+  <div class="text mat-body-2">Sipariş vermek istediğin mağazayı seçerek telefon numarasına ulaşabilirsin.</div>
+  <form
+    class="delivery-zone-form"
+    [formGroup]="deliveryFormGroup"
+    feAppSubmitThrottle
+    [throttleFormValid]="deliveryFormGroup.valid"
+    (throttleSubmit)="submitDeliveryZone()"
+  >
+    <fe-dropdown
+      formControlName="cityId"
+      placeholder="İl"
+      (ngModelChange)="changeCity($event)"
+      [options]="cities"
+      [required]="true"
+      [isSearchVisible]="true"
+    >
+    </fe-dropdown>
+    <fe-dropdown
+      formControlName="townId"
+      placeholder="İlçe"
+      (ngModelChange)="changeTown($event)"
+      [options]="towns"
+      [disabled]="isTownDisabled"
+      [required]="true"
+      [isSearchVisible]="true"
+    >
+    </fe-dropdown>
+    <fe-dropdown
+      formControlName="storeId"
+      placeholder="Mağaza"
+      (ngModelChange)="changeStore($event)"
+      [options]="stores"
+      [disabled]="isStoreDisabled"
+      [required]="true"
+      [isSearchVisible]="true"
+    >
+    </fe-dropdown>
+    <fe-button label="Telefon Numarasını Göster" type="submit"></fe-button>
+  </form>
+</div>

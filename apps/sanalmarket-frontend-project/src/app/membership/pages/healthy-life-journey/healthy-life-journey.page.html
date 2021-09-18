@@ -1,0 +1,111 @@
+<sm-mobile-breadcrumb [pageName]="'Sağlıklı Yaşam Yolculuğum'"></sm-mobile-breadcrumb>
+<div class="page-wrapper" *ngIf="!getIsLoading()">
+  <h2 class="text-color-black desktop-only">Sağlıklı Yaşam Yolculuğum</h2>
+  <div class="content-wrapper">
+    <div class="mat-body-2 text-color-black info-description">
+      Gıda alışverişlerinin dağılımını hazırladık ve
+      <span class="info-text-bold">önerilen dağılım</span>
+      ile karşılaştırdık. Eksik kalan besin grubunda senin için oluşturduğumuz
+      <span class="info-text-bold">sağlıklı yaşam önerilerin</span>
+      ile tamamlayıp daha dengeli beslenebilirsin.
+    </div>
+    <div class="subtitle-1 text-color-black title-mobile mobile-only">Sağlıklı Yaşam Grafiği</div>
+    <div class="card">
+      <div class="header">
+        <div class="subtitle-1 text-color-black title-desktop desktop-only">Sağlıklı Yaşam Grafiği</div>
+        <mat-radio-group class="dietChoice" [(ngModel)]="selected" (change)="setDiet($event)">
+          <mat-radio-button class="fe-checkbox-label-caption" checked color="primary" value="common">
+            <span class="mat-caption-normal text-color-black"> Genel </span>
+          </mat-radio-button>
+          <mat-radio-button class="fe-checkbox-label-caption" color="primary" value="vegan">
+            <span class="mat-caption-normal text-color-black"> Vegan Dağılımı </span>
+          </mat-radio-button>
+          <mat-radio-button class="fe-checkbox-label-caption" color="primary" value="vegetarian">
+            <span class="mat-caption-normal text-color-black"> Vejetaryen Dağılımı</span>
+          </mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <div class="cards common" *ngIf="selected==='common'">
+        <div class="doughnut">
+          <div class="text-color-black subtitle-2 reference-pie">Önerilen</div>
+          <sm-healthy-life-journey-chart name="chart-reference" [chartValues]="getCommonReference()">
+          </sm-healthy-life-journey-chart>
+        </div>
+        <div class="doughnut">
+          <div class="text-color-black subtitle-2 user-pie">Alışverişlerin</div>
+          <sm-healthy-life-journey-chart name="chart-user" *ngIf="getHasCommonShopping()"
+            [chartValues]="getCommonUser()"></sm-healthy-life-journey-chart>
+          <div class="mat-body-2 text-color-black shopping-warning" *ngIf="!getHasCommonShopping()">
+            Son 90 günde ilgili kategorilerden alım yapmadığınız görülmektedir.
+          </div>
+        </div>
+      </div>
+      <div class="cards common" *ngIf="selected==='vegan'">
+        <div class="doughnut">
+          <div class="text-color-black subtitle-2 reference-pie">Önerilen</div>
+          <sm-healthy-life-journey-chart name="chart-reference" [chartValues]="getVeganReference()">
+          </sm-healthy-life-journey-chart>
+        </div>
+        <div class="doughnut">
+          <div class="text-color-black subtitle-2 user-pie">Alışverişlerin</div>
+          <sm-healthy-life-journey-chart name="chart-user" *ngIf="getHasVeganShopping()" [chartValues]="getVeganUser()">
+          </sm-healthy-life-journey-chart>
+          <div class="mat-body-2 text-color-black shopping-warning" *ngIf="!getHasVeganShopping()">
+            Son 90 günde ilgili kategorilerden alım yapmadığınız görülmektedir.
+          </div>
+        </div>
+      </div>
+      <div class="cards common" *ngIf="selected==='vegetarian'">
+        <div class="doughnut">
+          <div class="text-color-black subtitle-2 reference-pie">Önerilen</div>
+          <sm-healthy-life-journey-chart name="chart-reference" [chartValues]="getVegetarianReference()">
+          </sm-healthy-life-journey-chart>
+        </div>
+        <div class="doughnut">
+          <div class="text-color-black subtitle-2 user-pie">Alışverişlerin</div>
+          <sm-healthy-life-journey-chart name="chart-user" *ngIf="getHasVegetarianShopping()"
+            [chartValues]="getVegetarianUser()"></sm-healthy-life-journey-chart>
+          <div class="mat-body-2 text-color-black shopping-warning" *ngIf="!getHasVegetarianShopping()">
+            Son 90 günde ilgili kategorilerden alım yapmadığınız görülmektedir.
+          </div>
+        </div>
+      </div>
+      <div class="detail">
+        <span class="line">
+          <div class="info-text">
+            <div id="info1">
+              <span class="dot dot1"></span>
+              <span class="mat-caption-normal text-color-black info-text1">Ekmek ve tahıllar</span>
+            </div>
+          </div>
+          <div class="info-text">
+            <div id="info2">
+              <span class="dot dot2"></span>
+              <span class="mat-caption-normal text-color-black info-text1">Et, tavuk, balık, yumurta</span>
+            </div>
+          </div>
+        </span>
+        <span class="line">
+          <div class="info-text">
+            <div id="info3">
+              <span class="dot dot3"></span>
+              <span class="mat-caption-normal text-color-black info-text1">Meyve ve sebze</span>
+            </div>
+          </div>
+          <div class="info-text">
+            <div id="info4">
+              <span class="dot dot4"></span>
+              <span class="mat-caption-normal text-color-black info-text1">Süt, yoğurt, peynir</span>
+            </div>
+          </div>
+        </span>
+        <div class="info-text">
+          <div id="info5">
+            <span class="dot dot5"></span>
+            <span class="mat-caption-normal text-color-black info-text1">Kurubaklagiller, sert kabuklu yemişler</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

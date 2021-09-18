@@ -1,0 +1,33 @@
+<mat-card>
+  <fe-product-image
+    [image]="product.images[0]"
+    [prettyName]="product.prettyName"
+    [productName]="product.name"
+    [imageType]="'PRODUCT_LIST'"
+    [referrerEventId]="product.referrerEventId"
+    (gtmClick)="sendGtmClickEvent(product)"
+  >
+  </fe-product-image>
+  <div class="info">
+    <p [routerLink]="['', product.prettyName]" class="mat-caption">
+      {{ product.name }}
+    </p>
+    <fe-product-price
+      [showPromotionLabel]="true"
+      [regularPrice]="product.regularPrice"
+      [shownPrice]="product.shownPrice"
+    ></fe-product-price>
+  </div>
+  <sm-product-actions
+    [amount]="cartItem?.item?.amount"
+    [maxAmount]="product.maxAmount"
+    [unit]="getUnit()"
+    [status]="product.status"
+    (updated)="onUpdate($event)"
+    (maxAmountReached)="onMaxAmountReached($event)"
+    [noPointerEventOnDecreaseToZero]="true"
+    [incrementAmount]="getIncrementAmount()"
+    [initialIncrementAmount]="product.initialIncrementAmount"
+    [reminderVisibility]="false"
+  ></sm-product-actions>
+</mat-card>

@@ -1,0 +1,26 @@
+<div class="cart-choice-box desktop-only">
+  <div class="header">
+    <span class="subtitle-1 text-color-black title">
+      {{ getTitle() }}
+    </span>
+  </div>
+
+  <mat-radio-group>
+    <mat-radio-button
+      *ngFor="let choice of getCartChoices()"
+      [value]="choice.value"
+      color="primary"
+      (change)="onChangeCartChoice($event.value)"
+      [checked]="isSelected(choice)"
+    >
+      <span class="subtitle-2 text-color-black">{{ choice.label }}</span>
+      <span class="mat-caption-normal text-color-grey description">{{ choice.description }}</span>
+    </mat-radio-button>
+  </mat-radio-group>
+</div>
+
+<sm-alternative-product-choice-mobile
+  class="mobile-only"
+  [choice]="initialValue"
+  (alternativeProductChoice)="onChangeCartChoice($event)"
+></sm-alternative-product-choice-mobile>

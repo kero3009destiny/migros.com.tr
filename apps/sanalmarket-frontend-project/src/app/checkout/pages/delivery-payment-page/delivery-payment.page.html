@@ -1,0 +1,77 @@
+<div class="page-container" *ngIf="!isLoading()">
+  <div class="page-container__header">
+    <h2>Ödeme Yöntemini Seç</h2>
+    <div class="mat-caption-normal text-color-grey">
+      MoneyPay / Kredi kartı / Kapıda / Garanti Pay / BKM Express ile güvenli ödeyin
+    </div>
+  </div>
+  <div class="mdc-layout-grid__inner">
+    <div
+      class="
+        payment-container
+        mdc-layout-grid__cell--span-8 mdc-layout-grid__cell--span-5-tablet mdc-layout-grid__cell--span-4-phone
+      "
+    >
+      <sm-main-payment
+        [checkoutInfo]="getCheckoutInfo()"
+        defaultPaymentMethod="CREDIT_CARD"
+        (paymentMethodChanged)="onPaymentMethodChanged($event)"
+      ></sm-main-payment>
+      <fe-commerce-card-installment-form
+        *ngIf="shouldDisplayInstallmentForm()"
+        [revenue]="getCheckoutInfo().revenue"
+        (installmentChanged)="onInstallmentChanged($event)"
+      ></fe-commerce-card-installment-form>
+      <sm-side-payment></sm-side-payment>
+      <fe-line-checkout-price-summary [checkoutInfo]="getCheckoutInfo()" class="mobile-only">
+        <ng-template [ngTemplateOutlet]="checkoutSummary"></ng-template>
+      </fe-line-checkout-price-summary>
+    </div>
+    <div
+      class="side-container mdc-layout-grid__cell--span-4 mdc-layout-grid__cell--span-3-tablet"
+      *ngIf="getCheckoutInfo()"
+    >
+      <fe-line-checkout-summary (continueClicked)="onSubmit()" [checkoutInfo]="getCheckoutInfo()">
+        <ng-template [ngTemplateOutlet]="checkoutSummary"></ng-template>
+      </fe-line-checkout-summary>
+      <fe-card-provision-info *ngIf="isCardProvisionShown()"></fe-card-provision-info>
+    </div>
+  </div>
+</div>
+<ng-template #checkoutSummary>
+  <ng-container *ngIf="isBagChoiceContainerShown()">
+    <div class="bag-container">
+      <div class="mat-body-2">Poşet Ücreti <span class="text-color-grey">({{getBagQuantity()}} Adet)</span></div>
+      <div class="mat-body-2">{{ getTotalBagPrice() | feFormatPrice }} TL</div>
+      <button mat-button color="primary" class="subtitle-2" (click)="openBagSelectorModal()">Değiştir</button>
+    </div>
+  </ng-container>
+  <mat-divider></mat-divider>
+  <form [formGroup]="agreementFormGroup" class="agreement-form">
+    <mat-checkbox color="primary" formControlName="distantSalesModal" required>
+      <span class="mat-caption-normal">
+        <a
+          class="text-color-orange"
+          (click)="onAgreementClick('DISTANT_SALES_AGREEMENT_MODAL')"
+          href="javascript:void(0)"
+        >
+          Ön Bilgilendirme Koşulları</a
+        >'nı okudum, onaylıyorum.
+        <mat-error *ngIf="isDistantSalesModalInvalid()"> Lütfen onaylayın. </mat-error>
+      </span>
+    </mat-checkbox>
+    <mat-checkbox color="primary" formControlName="distantSales">
+      <span class="mat-caption-normal">
+        <a class="text-color-orange" (click)="onAgreementClick('DISTANT_SALES_AGREEMENT')" href="javascript:void(0)">
+          Mesafeli Satış Sözleşmesi</a
+        >'ni okudum, onaylıyorum.
+        <mat-error *ngIf="isDistantSalesInvalid()"> Lütfen onaylayın. </mat-error>
+      </span>
+    </mat-checkbox>
+  </form>
+</ng-template>
+<iframe
+  class="desktop-only-v2"
+  style="height: 400px; width: 310px; border: none; position: fixed; right: 0; bottom: 0"
+  [src]="getCallCenterIframeSrc()"
+></iframe>

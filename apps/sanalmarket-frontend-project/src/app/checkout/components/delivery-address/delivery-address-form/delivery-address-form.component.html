@@ -1,0 +1,60 @@
+<form class="delivery-form" [formGroup]="anonymousCheckoutFormGroup">
+  <mat-form-field appearance="outline">
+    <mat-label>Ad</mat-label>
+    <input matInput required type="text" label="Ad" formControlName="name" />
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Soyad</mat-label>
+    <input matInput required type="text" placeholder="Soyad" formControlName="surname" />
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>E-Posta</mat-label>
+    <input matInput required type="email" label="E-Posta" formControlName="email" />
+  </mat-form-field>
+  <mat-form-field color="accent" appearance="outline">
+    <mat-label>Telefon Numarası</mat-label>
+    <input
+      type="tel"
+      matInput
+      feOnlyNumbers
+      autocomplete="tel"
+      required
+      formControlName="phoneNumber"
+      placeholder="5XXXXXXXXX"
+      maxlength="10"
+    />
+    <button
+      type="button"
+      color="accent"
+      matSuffix
+      mat-icon-button
+      aria-label="Clear"
+      *ngIf="phoneNumber.value"
+      (click)="clear('phoneNumber')"
+    >
+      <fa-icon [icon]="clearIcon"></fa-icon>
+    </button>
+    <mat-error id="login__phone-number-error--empty" *ngIf="phoneNumber.invalid && phoneNumber.errors.required">
+      Lütfen telefon numaranızı giriniz.
+    </mat-error>
+    <mat-error id="login__phone-number-error--unValid" *ngIf="phoneNumber.invalid && phoneNumber.errors.pattern">
+      Telefon numaranızı 5XXXXXXXXX şeklinde giriniz.
+    </mat-error>
+  </mat-form-field>
+  <ng-container *ngIf="addDistrictAddressDetailFields">
+    <fe-dropdown
+      [options]="streetsMap"
+      isSearchVisible="true"
+      placeholder="Cadde - Sokak (Opsiyonel)"
+      formControlName="street"
+    ></fe-dropdown>
+    <mat-form-field appearance="outline">
+      <mat-label>Bina ve Daire No</mat-label>
+      <input matInput required type="text" label="Bina ve Daire No" formControlName="doorNumber" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Adres Tarifi (Opsiyonel)</mat-label>
+      <input matInput type="text" label="Adres Tarifi (Opsiyonel)" formControlName="fullAddress" />
+    </mat-form-field>
+  </ng-container>
+</form>

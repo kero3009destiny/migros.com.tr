@@ -1,0 +1,65 @@
+<form class="delivery-zone-form" [formGroup]="deliveryZoneFormGroup" #deliveryZoneForm="ngForm">
+  <div class="row">
+    <div class="label">İl</div>
+    <mat-form-field class="delivery-zone-form--city" color="accent" appearance="outline">
+      <mat-label>İl</mat-label>
+      <select matNativeControl formControlName="cityId" autocomplete="shipping locality">
+        <ng-container *ngIf="cities$ | async as cities">
+          <option label="-- Seçiniz --"></option>
+          <option *ngFor="let city of cities" value="{{ city.id }}">{{ city.name }}</option>
+        </ng-container>
+      </select>
+      <mat-error *ngIf="cityId.invalid && deliveryZoneFormGroup.invalid" id="error-city">
+        Lütfen il seçiniz.
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="row">
+    <div class="label">İlçe</div>
+    <mat-form-field class="delivery-zone-form--town" color="accent" appearance="outline">
+      <mat-label>İlçe</mat-label>
+      <select matNativeControl formControlName="townId" autocomplete="shipping town">
+        <ng-container *ngIf="towns$ | async as towns">
+          <option label="-- Seçiniz --"></option>
+          <option *ngFor="let town of towns" value="{{ town.id }}">{{ town.name }}</option>
+        </ng-container>
+      </select>
+      <mat-error *ngIf="townId.invalid && deliveryZoneFormGroup.invalid" id="error-town">
+        Lütfen ilçe seçiniz.
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="row" *ngIf="isServiceAreaTypeDistrict()">
+    <div class="label">Mahalle</div>
+    <mat-form-field class="delivery-zone-form--district" color="accent" appearance="outline">
+      <mat-label>Mahalle</mat-label>
+      <select matNativeControl formControlName="serviceAreaObjectId" autocomplete="shipping region">
+        <ng-container *ngIf="districts$ | async as districts">
+          <option label="-- Seçiniz --"></option>
+          <option *ngFor="let district of districts" value="{{ district.id }}">{{ district.name }}</option>
+        </ng-container>
+      </select>
+      <mat-error *ngIf="serviceAreaObjectId.invalid && deliveryZoneFormGroup.invalid" id="error-district">
+        Lütfen mahalle seçiniz.
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="row" *ngIf="isServiceAreaTypePickPoint()">
+    <div class="label">Mağaza</div>
+    <mat-form-field class="delivery-zone-form--pickpoint" color="accent" appearance="outline">
+      <mat-label>Mağaza</mat-label>
+      <select matNativeControl formControlName="serviceAreaObjectId" autocomplete="pickpoint">
+        <ng-container *ngIf="pickPoints$ | async as pickPoints">
+          <option label="-- Seçiniz --"></option>
+          <option *ngFor="let pickPoint of pickPoints" value="{{ pickPoint.id }}">{{ pickPoint.name }}</option>
+        </ng-container>
+      </select>
+      <mat-error *ngIf="serviceAreaObjectId.invalid && deliveryZoneFormGroup.invalid" id="error-pickpoint">
+        Lütfen mağaza seçiniz.
+      </mat-error>
+    </mat-form-field>
+  </div>
+</form>

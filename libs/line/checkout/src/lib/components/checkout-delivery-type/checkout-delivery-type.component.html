@@ -1,0 +1,69 @@
+<mat-radio-group class="checkout-delivery-types mdc-layout-grid__inner" color="primary">
+  <mat-radio-button
+    [value]="INSTANT"
+    class="
+      mdc-layout-grid__cell--span-6-desktop mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-2-phone
+    "
+    [checked]="isDeliveryTypeInstant()"
+    (click)="onClickDeliveryType(INSTANT)"
+  >
+    <div class="header">
+      <img
+        srcset="/assets/icons/motor/motor.png, /assets/icons/motor/motor@2x.png 2x, /assets/icons/motor/motor@3x.png 3x"
+      />
+      <span class="subtitle-2 text-color-black"> Hızlı Teslimat</span>
+    </div>
+
+    <div class="content">
+      <span class="text-color-success mat-caption delivery-time">
+        Bugün <span> {{ getEta() }} Dakikada Teslim </span>
+      </span>
+
+      <p class="mat-caption-normal text-color-grey">
+        Teslimat Ücreti
+        <span class="text-color-orange mat-caption delivery-price">
+          {{ getDeliveryPrice(INSTANT) | feFormatPrice }} TL</span
+        >
+      </p>
+    </div>
+  </mat-radio-button>
+
+  <mat-radio-button
+    [value]="TIMESLOT"
+    class="
+      mdc-layout-grid__cell--span-6-desktop mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-2-phone
+    "
+    [checked]="isDeliveryTypeTimeSlot()"
+    (click)="onClickDeliveryType(TIMESLOT)"
+  >
+    <div class="header">
+      <img
+        srcset="
+          /assets/icons/calendar/calendar.png,
+          /assets/icons/calendar/calendar@2x.png 2x,
+          /assets/icons/calendar/calendar@3x.png 3x
+        "
+      />
+      <span class="subtitle-2 text-color-black">Randevulu Teslimat </span>
+    </div>
+    <div class="content" *ngIf="isCapacityFull(); else capacityFull">
+      <span class="text-color-success mat-caption delivery-time"
+        >{{ getDay() | dayName }}
+        <span>
+          {{ getTimeSlot() }}
+        </span>
+      </span>
+      <p class="mat-caption-normal text-color-grey">
+        Teslimat Ücreti
+        <span class="text-color-orange mat-caption delivery-price">
+          {{ getDeliveryPrice(TIMESLOT) | feFormatPrice }} TL</span
+        >
+      </p>
+    </div>
+    <ng-template #capacityFull>
+      <div class="content capacity-full">
+        <p class="text-color-error mat-caption">Seçtiğin adres için kapasitemiz doludur.</p>
+      </div>
+    </ng-template>
+  </mat-radio-button>
+</mat-radio-group>

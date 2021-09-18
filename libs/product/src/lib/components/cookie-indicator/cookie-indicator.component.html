@@ -1,0 +1,14 @@
+<div class="wrapper" *ngIf="isVisible()" @presenceAnimation>
+  <span class="mat-caption-normal">
+    Alışveriş deneyimizi iyileştirmek için yasal düzenlemelere uygun çerezler kullanıyoruz. Detaylı bilgi için
+    <a [href]="getCookieUrl()" (click)="onClickCookieUrl($event)"
+      ><span class="mat-caption-normal link text-color-white cursor-pointer"
+        >Çerez (Cookie) Aydınlatma Metnimizi</span
+      ></a
+    >
+    inceleyebilir, çerez izinlerinizi
+    <span class="mat-caption-normal link cursor-pointer" (click)="onClickCookieSettings()">Çerez Ayarları</span>
+    üzerinden güncelleyebilirsiniz.
+  </span>
+  <button class="mat-caption-normal ok-btn" (click)="onClickOkButton()">Tamam</button>
+</div>

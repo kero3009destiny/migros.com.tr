@@ -1,0 +1,129 @@
+<div class="register">
+  <mat-card class="register__content">
+    <mat-card-header class="justify-content-center">
+      <h1 class="text-color-orange text-align-center">Üye Ol</h1>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="register-page__form">
+        <p class="subtitle-2 text-align-center text-color-black">İndirimlerden faydalanmak için hemen üye ol</p>
+        <form
+          [formGroup]="registerFormGroup"
+          feAppSubmitThrottle
+          (throttleSubmit)="onRegister()"
+          [throttleFormValid]="registerFormGroup.valid"
+        >
+          <mat-form-field id="register_phone" color="accent" appearance="outline" [hideRequiredMarker]="true">
+            <mat-label class="subtitle-2 text-color-black">Telefon Numarası</mat-label>
+            <input
+              type="tel"
+              matInput
+              autocomplete="tel"
+              required
+              feOnlyNumbers
+              feMdcMaskedInput
+              [maskOptions]="maskOptions"
+              formControlName="phoneNumber"
+            />
+            <button
+              type="button"
+              color="accent"
+              matSuffix
+              mat-icon-button
+              aria-label="Clear"
+              *ngIf="getPhoneNumber().value"
+              (click)="clear('phoneNumber')"
+            >
+              <fa-icon [icon]="clearIcon"></fa-icon>
+            </button>
+            <mat-error
+              id="login__phone-number-error--empty"
+              *ngIf="getPhoneNumber().invalid && getPhoneNumber().errors.required"
+            >
+              Lütfen telefon numaranızı giriniz.
+            </mat-error>
+            <mat-error
+              id="login__phone-number-error--unValid"
+              *ngIf="getPhoneNumber().invalid && getPhoneNumber().errors.pattern"
+            >
+              Telefon numaranızı 05XXXXXXXXX şeklinde giriniz.
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field id="register_email" color="accent" appearance="outline" [hideRequiredMarker]="true">
+            <mat-label class="subtitle-2 text-color-black">E-Posta</mat-label>
+            <input matInput required type="email" label="E-Posta" formControlName="email" />
+            <button
+              type="button"
+              color="accent"
+              matSuffix
+              mat-icon-button
+              aria-label="Clear"
+              *ngIf="getEmail().value"
+              (click)="clear('email')"
+            >
+              <fa-icon [icon]="clearIcon"></fa-icon>
+            </button>
+            <mat-error *ngIf="getEmail().errors?.pattern"> Bu alanı kontrol edin. </mat-error>
+            <mat-error *ngIf="getEmail().invalid && getEmail().touched"> Bu alan zorunludur. </mat-error>
+          </mat-form-field>
+          <div class="register__content--agreements">
+            <span class="mat-caption-normal">
+              <a
+                class="text-color-orange"
+                (click)="onAgreementClick('PERSONAL_DATA_AGREEMENT')"
+                href="javascript:void(0)"
+                >Kişisel Verilerin Korunması Hakkında Aydınlatma Metni
+              </a>
+              için tıklayın.
+            </span>
+          </div>
+          <div class="register__content--agreements">
+            <mat-checkbox class="fe-checkbox-label-caption" color="primary" formControlName="permitMembership" required>
+              <span class="mat-caption-normal">
+                <a
+                  class="text-color-orange"
+                  (click)="onAgreementClick('MEMBERSHIP_AGREEMENT')"
+                  href="javascript:void(0)"
+                  >Üyelik Sözleşmesi</a
+                >
+                'ni onaylıyorum ve
+                <a class="text-color-orange" (click)="onAgreementClick('EXPLICIT_CONSENT')" href="javascript:void(0)"
+                  >Açık Rıza Metni</a
+                >
+                kapsamında kişisel verilerimin işlenmesine ve paylaşılmasına onay veriyorum. *
+                <mat-error *ngIf="getPermitMembership().invalid && getPermitMembership().touched">
+                  Lütfen onaylayın.
+                </mat-error>
+              </span>
+            </mat-checkbox>
+          </div>
+          <div class="register__content--agreements">
+            <mat-checkbox class="fe-checkbox-label-caption" color="primary" formControlName="permitContact">
+              <span class="mat-caption-normal">
+                Migros Sanalmarket indirim ve kampanyalarından anında haberdar olmak için
+                <a
+                  class="text-color-orange"
+                  (click)="onAgreementClick('KVK_MEMBERSHIP_AGREEMENT')"
+                  href="javascript:void(0)"
+                  >Migros Ticaret A.Ş. Migros Sanalmarket Ticari İletişim İzni Metni</a
+                >
+                kapsamında iletişim izni veriyorum.
+              </span>
+            </mat-checkbox>
+          </div>
+          <fe-button
+            [isDisabled]="registerFormGroup.invalid"
+            (click)="touchAllFields()"
+            type="submit"
+            label="Üye Ol"
+          ></fe-button>
+        </form>
+      </div>
+    </mat-card-content>
+    <mat-card-actions class="bg-basic-50">
+      <span class="mat-body-2 text-color-grey">
+        Zaten üyeysen
+        <a id="register_login-link" class="text-color-orange subtitle-2" routerLink="/giris">Giriş Yap</a>
+      </span>
+    </mat-card-actions>
+  </mat-card>
+</div>

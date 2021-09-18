@@ -1,0 +1,58 @@
+<div class="contact-preferences">
+  <span class="subtitle-1">İletişim Tercihleri</span>
+  <form *ngIf="formGroup" [formGroup]="formGroup" feAppSubmitThrottle>
+    <mat-tab-group *ngIf="isCrmVerified">
+      <mat-tab label="Migros">
+        <mat-checkbox color="primary" formControlName="permitSms">
+          <span>Migros Ticaret A.Ş'den kampanya ve bilgilendirme amaçlı <u>SMS almak istiyorum.</u></span>
+        </mat-checkbox>
+        <mat-checkbox color="primary" formControlName="permitCall">
+          <span>Migros Ticaret A.Ş'den kampanya ve bilgilendirme amaçlı <u>telefon çağrısı almak istiyorum.</u></span>
+        </mat-checkbox>
+        <mat-checkbox color="primary" formControlName="permitEmail">
+          <span>Migros Ticaret A.Ş'den kampanya ve bilgilendirme amaçlı <u>E-Posta almak istiyorum.</u></span>
+        </mat-checkbox>
+      </mat-tab>
+      <mat-tab label="Money">
+        <span class="subtitle-1 money-contact-title">Money İletişim Tercihleri</span>
+        <mat-checkbox (click)="$event.preventDefault()" [checked]="true" color="primary" [disableRipple]="true">
+          <span
+            >Money indirim ve kampanyalarından anında haberdar olmak için Money Ticari İletişim İzni Metni kapsamında
+            iletişim izni veriyorum.</span
+          >
+        </mat-checkbox>
+        <mat-checkbox (click)="$event.preventDefault()" [checked]="true" [disableRipple]="true" color="primary">
+          <span>
+            <a
+              (click)="onAgreementClick('MCC_KVK_MEMBERSHIP_AGREEMENT')"
+              class="text-color-orange"
+              href="javascript:void(0)"
+              >Money Kişisel Verilerin Korunması Hakkında Aydınlatma Metni</a
+            >'ni okudum ve onaylıyorum.
+          </span>
+        </mat-checkbox>
+        <mat-checkbox (click)="$event.preventDefault()" [checked]="true" [disableRipple]="true" color="primary">
+          <span>
+            <a
+              (click)="onAgreementClick('MCC_MEMBERSHIP_AGREEMENT')"
+              class="text-color-orange"
+              href="javascript:void(0)"
+              >Money Üyelik ve Rıza Beyanı</a
+            >'nı okudum ve kabul ediyorum.
+          </span>
+        </mat-checkbox>
+      </mat-tab>
+    </mat-tab-group>
+    <ng-container *ngIf="!isCrmVerified">
+      <mat-checkbox color="primary" formControlName="permitSms">
+        <span>Migros Ticaret A.Ş'den kampanya ve bilgilendirme amaçlı <u>SMS almak istiyorum.</u></span>
+      </mat-checkbox>
+      <mat-checkbox color="primary" formControlName="permitCall">
+        <span>Migros Ticaret A.Ş'den kampanya ve bilgilendirme amaçlı <u>telefon çağrısı almak istiyorum.</u></span>
+      </mat-checkbox>
+      <mat-checkbox color="primary" formControlName="permitEmail">
+        <span>Migros Ticaret A.Ş'den kampanya ve bilgilendirme amaçlı <u>E-Posta almak istiyorum.</u></span>
+      </mat-checkbox>
+    </ng-container>
+  </form>
+</div>

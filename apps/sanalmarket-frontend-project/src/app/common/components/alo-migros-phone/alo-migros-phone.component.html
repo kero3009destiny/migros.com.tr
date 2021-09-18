@@ -1,0 +1,16 @@
+<fe-icon-button class="close-button" (click)="closeModal()" [icon]="closeIcon"> </fe-icon-button>
+<div class="alo-migros-phone">
+  <h3 class="title">Alo Migros</h3>
+  <div class="description mat-caption">Siparişinizi aşağıdaki numarayı arayarak verebilirsiniz.</div>
+  <div class="phone">
+    <fa-icon class="icon text-color-orange" [icon]="phoneIcon"></fa-icon>
+    <p class="phone-number text-color-orange">
+      <a href="tel:{{ data?.storePhoneNumber }}">{{ data?.storePhoneNumber }}</a> <br />
+    </p>
+  </div>
+  <img src="/assets/logos/migros/migros.svg" alt="migros-logo" class="logo" />
+  <div class="store-info">
+    <div class="store subtitle-1">{{ data?.storeName }}</div>
+    <div class="store mat-caption text-color-grey">{{ data?.storeAddress }}</div>
+  </div>
+</div>

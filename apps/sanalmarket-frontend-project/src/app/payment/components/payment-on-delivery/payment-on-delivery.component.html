@@ -1,0 +1,46 @@
+<mat-radio-group color="primary" (change)="onChangePaymentType($event)">
+  <div class="payment-on-delivery-wrapper">
+    <mat-radio-button
+      class="payment-delivery-option"
+      *ngIf="!isCashDisabled()"
+      [ngClass]="{ active: isSelected('CASH_ON_DELIVERY') }"
+      [value]="'CASH_ON_DELIVERY'"
+    >
+      <div class="radio-container">
+        <span class="subtitle-2"> Kapıda Nakit Ödemek İstiyorum </span>
+        <span class="mat-caption-normal text-color-grey">
+          Bozuk paranız var mı? Ödemenin hızlı gerçekleşmesi için lütfen yanınızda bozuk para bulundurunuz.
+        </span>
+      </div>
+      <sm-instant-discount
+        [isSelected]="isSelected('CASH_ON_DELIVERY')"
+        [paymentType]="'CASH_ON_DELIVERY'"
+        [checkoutId]="checkoutId"
+      ></sm-instant-discount>
+    </mat-radio-button>
+    <mat-radio-button
+      class="payment-delivery-option"
+      *ngIf="!isCreditCardDisabled()"
+      [ngClass]="{ active: isSelected('CREDIT_CARD_ON_DELIVERY') }"
+      [value]="'CREDIT_CARD_ON_DELIVERY'"
+    >
+      <div class="radio-container">
+        <span class="subtitle-2"> Kredi Kartı/Banka Kartı ile Ödemek İstiyorum </span>
+      </div>
+      <sm-instant-discount
+        [isSelected]="isSelected('CREDIT_CARD_ON_DELIVERY')"
+        [paymentType]="'CREDIT_CARD_ON_DELIVERY'"
+        [checkoutId]="checkoutId"
+      ></sm-instant-discount>
+    </mat-radio-button>
+    <div class="info">
+      <div class="info-bg"></div>
+      <div class="info-content">
+        <fa-icon [icon]="infoIcon" class="text-color-orange"></fa-icon>
+        <span class="mat-caption-normal text-color-orange">
+          Ödeme şekliniz sipariş teslimatı esnasında kapıda değiştirilemez!
+        </span>
+      </div>
+    </div>
+  </div>
+</mat-radio-group>

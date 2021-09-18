@@ -1,0 +1,20 @@
+<div class="cart-dropdown-wrapper">
+  <sm-cart-dropdown-item
+    *ngFor="let cartItem of getCartItemInfos$() | async; trackBy: trackByFn"
+    [cartItem]="cartItem"
+  ></sm-cart-dropdown-item>
+  <div class="minimum-amount-basket-wrapper">
+    <div class="minimum-amount-wrapper" *ngIf="isMinimumAmountBarVisible()">
+      <div class="icon-text-wrapper text-color-error">
+        <fa-icon [icon]="infoIcon"></fa-icon>
+        <span class="mat-caption-normal">
+          Sepet tutarınız minimum {{ getMinimumRequiredRevenue() | feFormatPrice }} TL olmalıdır.
+        </span>
+      </div>
+      <div class="amount-bar-wrapper">
+        <div class="amount-bar" [ngStyle]="{ width: getBasketBarPercentageAmount() }"></div>
+      </div>
+    </div>
+    <button class="subtitle-2" (click)="onClickRouteToBasket()">Sepete Git</button>
+  </div>
+</div>
